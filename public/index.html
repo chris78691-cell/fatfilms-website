@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAT FILMS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;700;900&family=Space+Mono&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: #0a0a0a;
+      color: #e0e0e0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* FULLSCREEN GRID */
+    .fullscreen {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      padding: 24px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 5px;
+      width: 100%;
+      height: 100%;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .quadrant {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quadrant img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 1.2s ease-in-out;
+    }
+
+    .quadrant img.fade-out { opacity: 0; }
+
+    .quadrant {
+      border-radius: 2px;
+      cursor: pointer;
+      transition: transform 0.35s ease-out, filter 0.35s ease-out, box-shadow 0.35s ease-out;
+      z-index: 1;
+    }
+
+    .quadrant:hover {
+      filter: brightness(1.1);
+    }
+
+    /* Per-quadrant zoom: scale + translate inward */
+    .quadrant:nth-child(1).popped { transform: scale(1.15) translate(3%, 3%); }
+    .quadrant:nth-child(2).popped { transform: scale(1.15) translate(-3%, 3%); }
+    .quadrant:nth-child(3).popped { transform: scale(1.15) translate(3%, -3%); }
+    .quadrant:nth-child(4).popped { transform: scale(1.15) translate(-3%, -3%); }
+
+    .quadrant.popped {
+      z-index: 5;
+      box-shadow: 0 0 30px rgba(0,0,0,0.6), 0 0 60px rgba(0,0,0,0.3);
+      filter: brightness(1.05);
+    }
+
+    /* Dim siblings when one is popped */
+    .grid.has-pop .quadrant:not(.popped) {
+      filter: brightness(0.45);
+    }
+
+    /* OVERLAYS — all fixed on top of grid */
+    .overlay-top {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 24px;
+      z-index: 20;
+      overflow: hidden;
+      background: rgba(0,0,0,0.6);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      pointer-events: none;
+    }
+
+    .marquee-track {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      width: max-content;
+      animation: marquee 24s linear infinite;
+    }
+
+    .marquee-track span {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      color: #d0d0d0;
+      letter-spacing: 1.5px;
+      white-space: nowrap;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .hero-title {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 20;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 12vw, 11rem);
+      font-weight: 400;
+      color: #fff;
+      text-align: center;
+      letter-spacing: 10px;
+      text-shadow:
+        3px 3px 6px rgba(0,0,0,0.8),
+        -2px -2px 6px rgba(0,0,0,0.8),
+        0 0 40px rgba(0,0,0,0.9),
+        0 0 80px rgba(0,0,0,0.6);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* SOCIAL LINKS — prominent bottom bar */
+    .socials-overlay {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 36px;
+      padding: 10px 16px;
+      background: rgba(0,0,0,0.6);
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .socials-overlay a {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .socials-overlay a:hover { color: #fff; text-decoration: underline; }
+
+    .socials-overlay svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    /* HAMBURGER BUTTON */
+    .hamburger {
+      position: fixed;
+      top: 32px;
+      left: 28px;
+      z-index: 30;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: rgba(255,255,255,0.85);
+      font-size: 24px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 8px 10px;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .hamburger:hover {
+      color: #fff;
+      background: rgba(0,0,0,0.7);
+    }
+
+    /* SIDEBAR MENU */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 280px;
+      height: 100vh;
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+    }
+
+    .sidebar.open { transform: translateX(0); }
+
+    .sidebar-close {
+      align-self: flex-end;
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 4px 8px;
+      transition: color 0.2s;
+    }
+
+    .sidebar-close:hover { color: #fff; }
+
+    .sidebar-nav {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sidebar-nav button {
+      background: none;
+      border: none;
+      color: #ccc;
+      font-size: 1.1rem;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      text-align: left;
+      padding: 14px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .sidebar-nav button:hover {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+
+    /* BACKDROP — click to close sidebar */
+    .backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 90;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .backdrop.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .modal-overlay.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal {
+      background: #141414;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 32px;
+      max-width: 520px;
+      width: 90%;
+      position: relative;
+      transform: scale(0.95) translateY(10px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.visible .modal {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: #666;
+      font-size: 22px;
+      cursor: pointer;
+      padding: 4px 8px;
+      transition: color 0.2s;
+    }
+
+    .modal-close:hover { color: #fff; }
+
+    .modal h2 {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+
+    .modal p {
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: #999;
+    }
+
+    /* SUGGESTION FORM inside modal */
+    .suggestion-form {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .suggestion-form input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      background: #1a1a1a;
+      color: #e0e0e0;
+      font-size: 0.9rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .suggestion-form input:focus { border-color: #444; }
+    .suggestion-form input::placeholder { color: #444; }
+
+    .suggestion-form button {
+      padding: 12px 24px;
+      background: #fff;
+      color: #0a0a0a;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      white-space: nowrap;
+    }
+
+    .suggestion-form button:hover { background: #ddd; }
+    .suggestion-form button:active { transform: scale(0.97); }
+
+    .confirmation {
+      margin-top: 12px;
+      font-size: 0.85rem;
+      color: #7c7;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .confirmation.show { opacity: 1; }
+
+    /* FILMS MODAL — wider */
+    #films-modal .modal {
+      max-width: 820px;
+      width: 92%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 28px;
+    }
+
+    .films-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 12px;
+    }
+
+    .film-card {
+      background: #1a1a1a;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.25s ease, filter 0.25s ease;
+    }
+
+    .film-card:hover {
+      transform: scale(1.03);
+      filter: brightness(1.15);
+    }
+
+    .film-thumb {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+    }
+
+    .film-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .film-thumb .play-icon {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.3);
+      opacity: 0;
+      transition: opacity 0.25s;
+      font-size: 2.2rem;
+      color: #fff;
+      pointer-events: none;
+    }
+
+    .film-card:hover .play-icon {
+      opacity: 1;
+    }
+
+    .film-card-title {
+      padding: 10px 12px;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* VIDEO PLAYER OVERLAY */
+    .video-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      backdrop-filter: blur(8px);
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .video-overlay.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .video-wrapper {
+      position: relative;
+      width: 80vw;
+      max-width: 900px;
+    }
+
+    .video-title-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .video-film-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(24px, 4vw, 38px);
+      font-weight: 400;
+      color: #fff;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    .video-close {
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 22px;
+      cursor: pointer;
+      padding: 2px 6px;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .video-close:hover { color: #fff; transform: scale(1.1); }
+
+    .video-player-container {
+      position: relative;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      overflow: hidden;
+      background: #000;
+    }
+
+    .video-player-container video {
+      width: 100%;
+      display: block;
+    }
+
+    /* Custom controls */
+    .custom-controls {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 48px;
+      background: rgba(0,0,0,0.75);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 14px;
+      opacity: 1;
+      transition: opacity 0.3s;
+    }
+
+    .custom-controls.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .ctrl-btn {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+      transition: color 0.15s;
+      flex-shrink: 0;
+    }
+
+    .ctrl-btn:hover { color: #ccc; }
+
+    /* Progress bar */
+    .progress-wrap {
+      flex: 1;
+      height: 6px;
+      background: #444;
+      border-radius: 3px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #e04040;
+      border-radius: 3px;
+      width: 0%;
+      position: relative;
+    }
+
+    .progress-handle {
+      position: absolute;
+      right: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 4px rgba(0,0,0,0.5);
+    }
+
+    .time-display {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: #ccc;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Volume */
+    .volume-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .volume-slider {
+      width: 60px;
+      height: 4px;
+      background: #444;
+      border-radius: 2px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .volume-fill {
+      height: 100%;
+      background: #fff;
+      border-radius: 2px;
+      width: 100%;
+    }
+
+    /* Unmute prompt */
+    .unmute-prompt {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.7);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 12px 20px;
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      z-index: 5;
+      transition: background 0.2s;
+      display: none;
+    }
+
+    .unmute-prompt:hover { background: rgba(0,0,0,0.9); }
+
+    /* INTRO ANIMATION */
+    .hero-title {
+      opacity: 0;
+    }
+
+    .hero-title.intro-visible {
+      opacity: 1;
+      transition: opacity 0.8s ease-out;
+    }
+
+    .quadrant {
+      opacity: 0;
+    }
+
+    .quadrant.intro-visible {
+      opacity: 1;
+      transition: opacity 0.8s ease-out, transform 0.35s ease-out, filter 0.35s ease-out, box-shadow 0.35s ease-out;
+    }
+
+    .overlay-top,
+    .hamburger,
+    .socials-overlay {
+      opacity: 0;
+    }
+
+    .overlay-top.intro-visible,
+    .hamburger.intro-visible,
+    .socials-overlay.intro-visible {
+      opacity: 1;
+      transition: opacity 0.5s ease-out;
+    }
+
+    /* Preserve overlay-top specific opacity after intro */
+    .overlay-top.intro-visible {
+      /* color handles the text opacity already */
+    }
+
+    /* MOBILE */
+    @media (max-width: 640px) {
+      .fullscreen {
+        padding: 12px;
+      }
+
+      .hero-title {
+        font-size: clamp(2.5rem, 14vw, 5rem);
+        letter-spacing: 4px;
+      }
+
+      .socials-overlay { gap: 20px; padding: 8px 12px; }
+      .socials-overlay a { font-size: 0.75rem; }
+      .socials-overlay svg { width: 18px; height: 18px; }
+
+      .sidebar { width: 260px; }
+
+      .suggestion-form { flex-direction: column; }
+
+      .films-grid { grid-template-columns: 1fr; }
+
+      .video-wrapper { width: 95vw; }
+      .volume-slider { display: none; }
+    }
+
+    @media (min-width: 641px) and (max-width: 900px) {
+      .films-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- FULLSCREEN 2x2 GRID -->
+<div class="fullscreen">
+  <div class="grid">
+    <div class="quadrant" id="q0"></div>
+    <div class="quadrant" id="q1"></div>
+    <div class="quadrant" id="q2"></div>
+    <div class="quadrant" id="q3"></div>
+  </div>
+</div>
+
+<!-- OVERLAYS -->
+<div class="overlay-top" id="overlay-top">
+  <div class="marquee-track">
+    <span>Token CA will show here when launched &nbsp;&bull;&nbsp; Token CA will show here when launched &nbsp;&bull;&nbsp; Token CA will show here when launched &nbsp;&bull;&nbsp; Token CA will show here when launched &nbsp;&bull;&nbsp; Token CA will show here when launched &nbsp;&bull;&nbsp; </span><span>Token CA will show here when launched &nbsp;&bull;&nbsp; Token CA will show here when launched &nbsp;&bull;&nbsp; Token CA will show here when launched &nbsp;&bull;&nbsp; Token CA will show here when launched &nbsp;&bull;&nbsp; Token CA will show here when launched &nbsp;&bull;&nbsp; </span>
+  </div>
+</div>
+<div class="hero-title">FAT FILMS</div>
+
+<button class="hamburger" id="hamburger-btn" aria-label="Open menu">&#9776;</button>
+
+<div class="socials-overlay">
+  <a href="https://www.instagram.com/fatfilmz" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+    <span>Instagram</span>
+  </a>
+  <a href="https://www.tiktok.com/@dannylarsonator" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.48v-7.15a8.16 8.16 0 005.58 2.18v-3.44a4.85 4.85 0 01-1.99-.58z"/></svg>
+    <span>TikTok</span>
+  </a>
+  <a href="https://x.com/fatfilms_sol" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    <span>X / Twitter</span>
+  </a>
+</div>
+
+<!-- SIDEBAR MENU -->
+<div class="backdrop" id="backdrop"></div>
+<div class="sidebar" id="sidebar">
+  <button class="sidebar-close" id="sidebar-close">&times;</button>
+  <nav class="sidebar-nav">
+    <button id="nav-films">Films</button>
+    <button id="nav-about">About</button>
+    <button id="nav-suggest">Suggest a Film</button>
+  </nav>
+</div>
+
+<!-- ABOUT MODAL -->
+<div class="modal-overlay" id="about-modal">
+  <div class="modal">
+    <button class="modal-close" data-close>&times;</button>
+    <h2>About Fat Films</h2>
+    <p>Fat Films is taking the internet by storm &mdash; recreating iconic scenes from your favourite films and series, but making every character fat. Powered by cutting-edge AI technology, we transform legendary movie moments into hilarious, larger-than-life masterpieces. With millions of views across TikTok and Instagram, Fat Films has become one of the most viral AI entertainment projects on the internet. Now, we're bringing it on-chain.</p>
+  </div>
+</div>
+
+<!-- SUGGEST MODAL -->
+<div class="modal-overlay" id="suggest-modal">
+  <div class="modal">
+    <button class="modal-close" data-close>&times;</button>
+    <h2>What film should we do next?</h2>
+    <div class="suggestion-form">
+      <input type="text" id="suggestion-input" placeholder="e.g. The Dark Knight, Breaking Bad...">
+      <button id="suggestion-btn">Submit</button>
+    </div>
+    <div class="confirmation" id="confirmation">Thanks! We'll check it out &#127916;</div>
+  </div>
+</div>
+
+<!-- FILMS MODAL -->
+<div class="modal-overlay" id="films-modal">
+  <div class="modal">
+    <button class="modal-close" data-close>&times;</button>
+    <h2>Films</h2>
+    <div class="films-grid">
+      <div class="film-card" data-video="videos/american chud.mp4">
+        <div class="film-thumb">
+          <img src="frames/american_chud_00.jpg" alt="American Chud">
+          <div class="play-icon">&#9654;</div>
+        </div>
+        <div class="film-card-title">American Chud</div>
+      </div>
+      <div class="film-card" data-video="videos/baking bad.mp4">
+        <div class="film-thumb">
+          <img src="frames/baking_bad_00.jpg" alt="Baking Bad">
+          <div class="play-icon">&#9654;</div>
+        </div>
+        <div class="film-card-title">Baking Bad</div>
+      </div>
+      <div class="film-card" data-video="videos/Chewlander.mp4">
+        <div class="film-thumb">
+          <img src="frames/Chewlander_00.jpg" alt="Chewlander">
+          <div class="play-icon">&#9654;</div>
+        </div>
+        <div class="film-card-title">Chewlander</div>
+      </div>
+      <div class="film-card" data-video="videos/donnie lardo.mp4">
+        <div class="film-thumb">
+          <img src="frames/donnie_lardo_00.jpg" alt="Donnie Lardo">
+          <div class="play-icon">&#9654;</div>
+        </div>
+        <div class="film-card-title">Donnie Lardo</div>
+      </div>
+      <div class="film-card" data-video="videos/fat club.mp4">
+        <div class="film-thumb">
+          <img src="frames/fat_club_00.jpg" alt="Fat Club">
+          <div class="play-icon">&#9654;</div>
+        </div>
+        <div class="film-card-title">Fat Club</div>
+      </div>
+      <div class="film-card" data-video="videos/fat runner.mp4">
+        <div class="film-thumb">
+          <img src="frames/fat_runner_00.jpg" alt="Fat Runner">
+          <div class="play-icon">&#9654;</div>
+        </div>
+        <div class="film-card-title">Fat Runner</div>
+      </div>
+      <div class="film-card" data-video="videos/fatsy driver.mp4">
+        <div class="film-thumb">
+          <img src="frames/fatsy_driver_00.jpg" alt="Fatsi Driver">
+          <div class="play-icon">&#9654;</div>
+        </div>
+        <div class="film-card-title">Fatsi Driver</div>
+      </div>
+      <div class="film-card" data-video="videos/the bigs.mp4">
+        <div class="film-thumb">
+          <img src="frames/the_bigs_00.jpg" alt="The Bigs">
+          <div class="play-icon">&#9654;</div>
+        </div>
+        <div class="film-card-title">The Bigs</div>
+      </div>
+      <div class="film-card" data-video="videos/The Weight of Wallstreet.mp4">
+        <div class="film-thumb">
+          <img src="frames/The_Weight_of_Wallstreet_00.jpg" alt="The Weight of Wallstreet">
+          <div class="play-icon">&#9654;</div>
+        </div>
+        <div class="film-card-title">The Weight of Wallstreet</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VIDEO PLAYER OVERLAY -->
+<div class="video-overlay" id="video-overlay">
+  <div class="video-wrapper">
+    <div class="video-title-bar">
+      <span class="video-film-title" id="video-film-title"></span>
+      <button class="video-close" id="video-close">&times;</button>
+    </div>
+    <div class="video-player-container" id="video-player-container">
+      <video id="video-player"></video>
+      <button class="unmute-prompt" id="unmute-prompt">Click for sound &#128266;</button>
+      <div class="custom-controls" id="custom-controls">
+        <button class="ctrl-btn" id="ctrl-play">&#9654;</button>
+        <div class="progress-wrap" id="progress-wrap">
+          <div class="progress-fill" id="progress-fill">
+            <div class="progress-handle"></div>
+          </div>
+        </div>
+        <span class="time-display" id="time-display">0:00 / 0:00</span>
+        <div class="volume-wrap">
+          <button class="ctrl-btn" id="ctrl-vol">&#128266;</button>
+          <div class="volume-slider" id="volume-slider">
+            <div class="volume-fill" id="volume-fill"></div>
+          </div>
+        </div>
+        <button class="ctrl-btn" id="ctrl-fs">&#x26F6;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Embedded frame list
+  const frames = ["Chewlander_00.jpg","Chewlander_01.jpg","Chewlander_02.jpg","Chewlander_03.jpg","Chewlander_04.jpg","Chewlander_05.jpg","Chewlander_06.jpg","Chewlander_07.jpg","Chewlander_08.jpg","Chewlander_09.jpg","The_Weight_of_Wallstreet_00.jpg","The_Weight_of_Wallstreet_01.jpg","The_Weight_of_Wallstreet_02.jpg","The_Weight_of_Wallstreet_03.jpg","The_Weight_of_Wallstreet_04.jpg","The_Weight_of_Wallstreet_05.jpg","The_Weight_of_Wallstreet_06.jpg","The_Weight_of_Wallstreet_07.jpg","The_Weight_of_Wallstreet_08.jpg","The_Weight_of_Wallstreet_09.jpg","american_chud_00.jpg","american_chud_01.jpg","american_chud_02.jpg","american_chud_03.jpg","american_chud_04.jpg","american_chud_05.jpg","american_chud_06.jpg","american_chud_07.jpg","american_chud_08.jpg","american_chud_09.jpg","baking_bad_00.jpg","baking_bad_01.jpg","baking_bad_02.jpg","baking_bad_03.jpg","baking_bad_04.jpg","baking_bad_05.jpg","baking_bad_06.jpg","baking_bad_07.jpg","baking_bad_08.jpg","baking_bad_09.jpg","donnie_lardo_00.jpg","donnie_lardo_01.jpg","donnie_lardo_02.jpg","donnie_lardo_03.jpg","donnie_lardo_04.jpg","donnie_lardo_05.jpg","donnie_lardo_06.jpg","donnie_lardo_07.jpg","donnie_lardo_08.jpg","donnie_lardo_09.jpg","fat_club_00.jpg","fat_club_01.jpg","fat_club_02.jpg","fat_club_03.jpg","fat_club_04.jpg","fat_club_05.jpg","fat_club_06.jpg","fat_club_07.jpg","fat_club_08.jpg","fat_club_09.jpg","fat_runner_00.jpg","fat_runner_01.jpg","fat_runner_02.jpg","fat_runner_03.jpg","fat_runner_04.jpg","fat_runner_05.jpg","fat_runner_06.jpg","fat_runner_07.jpg","fat_runner_08.jpg","fat_runner_09.jpg","fatsy_driver_00.jpg","fatsy_driver_01.jpg","fatsy_driver_02.jpg","fatsy_driver_03.jpg","fatsy_driver_04.jpg","fatsy_driver_05.jpg","fatsy_driver_06.jpg","fatsy_driver_07.jpg","fatsy_driver_08.jpg","fatsy_driver_09.jpg","the_bigs_00.jpg","the_bigs_01.jpg","the_bigs_02.jpg","the_bigs_03.jpg","the_bigs_04.jpg","the_bigs_05.jpg","the_bigs_06.jpg","the_bigs_07.jpg","the_bigs_08.jpg","the_bigs_09.jpg"];
+
+  const usedFrames = new Set();
+
+  function pickRandom() {
+    let f;
+    do {
+      f = frames[Math.floor(Math.random() * frames.length)];
+    } while (usedFrames.has(f) && usedFrames.size < frames.length);
+    usedFrames.add(f);
+    if (usedFrames.size >= frames.length - 4) usedFrames.clear();
+    return f;
+  }
+
+  // Initialize quadrants
+  const quadrants = [0, 1, 2, 3].map(i => document.getElementById('q' + i));
+
+  quadrants.forEach(q => {
+    const img = document.createElement('img');
+    img.src = 'frames/' + pickRandom();
+    img.alt = 'Fat Films scene';
+    q.appendChild(img);
+  });
+
+  // Swap with crossfade
+  function swapFrame(q) {
+    const oldImg = q.querySelector('img:not(.fade-out)');
+    const newImg = document.createElement('img');
+    newImg.src = 'frames/' + pickRandom();
+    newImg.alt = 'Fat Films scene';
+    newImg.style.opacity = '0';
+    q.appendChild(newImg);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        newImg.style.opacity = '1';
+        if (oldImg) oldImg.classList.add('fade-out');
+        setTimeout(() => { if (oldImg) oldImg.remove(); }, 1300);
+      });
+    });
+  }
+
+  // Pauseable timers (started after intro)
+  const timers = {};
+
+  function startTimers() {
+    quadrants.forEach((q, i) => {
+      timers[i] = { paused: false };
+
+      (function loop() {
+        const delay = 2000 + Math.random() * 3000;
+        setTimeout(() => {
+          if (!timers[i].paused) swapFrame(q);
+          loop();
+        }, delay);
+      })();
+    });
+  }
+
+  // Click-to-pop
+  const grid = document.querySelector('.grid');
+  let poppedIndex = null;
+
+  function unpop() {
+    if (poppedIndex === null) return;
+    quadrants[poppedIndex].classList.remove('popped');
+    grid.classList.remove('has-pop');
+    timers[poppedIndex].paused = false;
+    poppedIndex = null;
+  }
+
+  quadrants.forEach((q, i) => {
+    q.addEventListener('click', () => {
+      if (poppedIndex !== null) {
+        // Something is popped — unzoom it
+        unpop();
+      } else {
+        // Nothing popped — pop this one
+        q.classList.add('popped');
+        grid.classList.add('has-pop');
+        timers[i].paused = true;
+        poppedIndex = i;
+      }
+    });
+  });
+
+  // --- INTRO ANIMATION ---
+  const heroTitle = document.querySelector('.hero-title');
+  const overlayTop = document.querySelector('.overlay-top');
+  const hamburgerBtn = document.getElementById('hamburger-btn');
+  const socialsOverlay = document.querySelector('.socials-overlay');
+
+  // Step 1: Title fades in at 300ms
+  setTimeout(() => {
+    heroTitle.classList.add('intro-visible');
+  }, 300);
+
+  // Step 2: Quadrants fade in staggered starting at 1100ms
+  quadrants.forEach((q, i) => {
+    setTimeout(() => {
+      q.classList.add('intro-visible');
+    }, 1100 + i * 150);
+  });
+
+  // Step 3: UI elements fade in at 1900ms
+  setTimeout(() => {
+    overlayTop.classList.add('intro-visible');
+    hamburgerBtn.classList.add('intro-visible');
+    socialsOverlay.classList.add('intro-visible');
+  }, 1900);
+
+  // Step 4: Start frame swap timers after intro completes (~2400ms)
+  setTimeout(startTimers, 2400);
+
+  // --- SIDEBAR ---
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('backdrop');
+
+  function openSidebar() {
+    sidebar.classList.add('open');
+    backdrop.classList.add('visible');
+  }
+
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('visible');
+  }
+
+  document.getElementById('hamburger-btn').addEventListener('click', openSidebar);
+  document.getElementById('sidebar-close').addEventListener('click', closeSidebar);
+  backdrop.addEventListener('click', closeSidebar);
+
+  // --- MODALS ---
+  const filmsModal = document.getElementById('films-modal');
+  const aboutModal = document.getElementById('about-modal');
+  const suggestModal = document.getElementById('suggest-modal');
+  const allModals = [filmsModal, aboutModal, suggestModal];
+
+  function openModal(modal) {
+    closeSidebar();
+    modal.classList.add('visible');
+  }
+
+  function closeModal(modal) {
+    modal.classList.remove('visible');
+  }
+
+  document.getElementById('nav-films').addEventListener('click', () => openModal(filmsModal));
+  document.getElementById('nav-about').addEventListener('click', () => openModal(aboutModal));
+  document.getElementById('nav-suggest').addEventListener('click', () => openModal(suggestModal));
+
+  // Close modals — X button or click outside
+  document.querySelectorAll('.modal-close').forEach(btn => {
+    btn.addEventListener('click', () => {
+      closeModal(btn.closest('.modal-overlay'));
+    });
+  });
+
+  allModals.forEach(modal => {
+    modal.addEventListener('click', e => {
+      if (e.target === modal) closeModal(modal);
+    });
+  });
+
+  // --- VIDEO PLAYER ---
+  const videoOverlay = document.getElementById('video-overlay');
+  const videoPlayer = document.getElementById('video-player');
+  const videoCloseBtn = document.getElementById('video-close');
+  const videoFilmTitle = document.getElementById('video-film-title');
+  const playerContainer = document.getElementById('video-player-container');
+  const controls = document.getElementById('custom-controls');
+  const ctrlPlay = document.getElementById('ctrl-play');
+  const progressWrap = document.getElementById('progress-wrap');
+  const progressFill = document.getElementById('progress-fill');
+  const timeDisplay = document.getElementById('time-display');
+  const ctrlVol = document.getElementById('ctrl-vol');
+  const volumeSlider = document.getElementById('volume-slider');
+  const volumeFill = document.getElementById('volume-fill');
+  const ctrlFs = document.getElementById('ctrl-fs');
+  const unmutePrompt = document.getElementById('unmute-prompt');
+
+  let hideTimer = null;
+
+  function fmtTime(s) {
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return m + ':' + String(sec).padStart(2, '0');
+  }
+
+  // Open video from film card — films modal stays open behind
+  document.querySelectorAll('.film-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const src = card.getAttribute('data-video');
+      const title = card.querySelector('.film-card-title').textContent;
+      videoFilmTitle.textContent = title;
+      videoPlayer.src = src;
+      unmutePrompt.style.display = 'none';
+      videoOverlay.classList.add('visible');
+
+      // Autoplay with sound; fall back to muted if blocked
+      videoPlayer.muted = false;
+      const playPromise = videoPlayer.play();
+      if (playPromise) {
+        playPromise.catch(() => {
+          videoPlayer.muted = true;
+          videoPlayer.play();
+          unmutePrompt.style.display = 'block';
+        });
+      }
+    });
+  });
+
+  // Unmute prompt
+  unmutePrompt.addEventListener('click', () => {
+    videoPlayer.muted = false;
+    unmutePrompt.style.display = 'none';
+  });
+
+  // Close video → back to films grid
+  function closeVideo() {
+    videoPlayer.pause();
+    videoPlayer.removeAttribute('src');
+    videoPlayer.load();
+    videoOverlay.classList.remove('visible');
+    // Films modal stays visible — reopen it if it was hidden
+    if (!filmsModal.classList.contains('visible')) {
+      filmsModal.classList.add('visible');
+    }
+  }
+
+  videoCloseBtn.addEventListener('click', closeVideo);
+  videoOverlay.addEventListener('click', e => {
+    if (e.target === videoOverlay) closeVideo();
+  });
+
+  // --- Custom controls logic ---
+
+  // Play / Pause
+  ctrlPlay.addEventListener('click', () => {
+    if (videoPlayer.paused) videoPlayer.play();
+    else videoPlayer.pause();
+  });
+
+  videoPlayer.addEventListener('play', () => { ctrlPlay.innerHTML = '&#10074;&#10074;'; });
+  videoPlayer.addEventListener('pause', () => { ctrlPlay.innerHTML = '&#9654;'; });
+
+  // Progress
+  videoPlayer.addEventListener('timeupdate', () => {
+    if (!videoPlayer.duration) return;
+    const pct = (videoPlayer.currentTime / videoPlayer.duration) * 100;
+    progressFill.style.width = pct + '%';
+    timeDisplay.textContent = fmtTime(videoPlayer.currentTime) + ' / ' + fmtTime(videoPlayer.duration);
+  });
+
+  // --- Draggable slider helper (mouse + touch) ---
+  function makeDraggable(el, onUpdate) {
+    let dragging = false;
+
+    function getX(e) {
+      return e.touches ? e.touches[0].clientX : e.clientX;
+    }
+
+    function update(e) {
+      const rect = el.getBoundingClientRect();
+      const pct = Math.max(0, Math.min(1, (getX(e) - rect.left) / rect.width));
+      onUpdate(pct);
+    }
+
+    function onDown(e) {
+      dragging = true;
+      update(e);
+      e.preventDefault();
+    }
+
+    function onMove(e) {
+      if (!dragging) return;
+      update(e);
+    }
+
+    function onUp() { dragging = false; }
+
+    el.addEventListener('mousedown', onDown);
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+
+    el.addEventListener('touchstart', onDown, { passive: false });
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('touchend', onUp);
+  }
+
+  // Progress bar — draggable
+  makeDraggable(progressWrap, pct => {
+    if (videoPlayer.duration) {
+      videoPlayer.currentTime = pct * videoPlayer.duration;
+    }
+  });
+
+  // Volume slider — draggable
+  makeDraggable(volumeSlider, pct => {
+    videoPlayer.volume = pct;
+    videoPlayer.muted = false;
+    updateVolUI();
+  });
+
+  // Volume toggle mute
+  ctrlVol.addEventListener('click', () => {
+    videoPlayer.muted = !videoPlayer.muted;
+    updateVolUI();
+  });
+
+  function updateVolUI() {
+    const vol = videoPlayer.muted ? 0 : videoPlayer.volume;
+    volumeFill.style.width = (vol * 100) + '%';
+    if (videoPlayer.muted || vol === 0) ctrlVol.innerHTML = '&#128264;';
+    else if (vol < 0.5) ctrlVol.innerHTML = '&#128265;';
+    else ctrlVol.innerHTML = '&#128266;';
+  }
+
+  videoPlayer.addEventListener('volumechange', updateVolUI);
+
+  // Fullscreen
+  ctrlFs.addEventListener('click', () => {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else playerContainer.requestFullscreen();
+  });
+
+  // Auto-hide controls
+  playerContainer.addEventListener('mousemove', () => {
+    controls.classList.remove('hidden');
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => {
+      if (!videoPlayer.paused) controls.classList.add('hidden');
+    }, 2500);
+  });
+
+  playerContainer.addEventListener('mouseleave', () => {
+    hideTimer = setTimeout(() => {
+      if (!videoPlayer.paused) controls.classList.add('hidden');
+    }, 1000);
+  });
+
+  // Click video to toggle play
+  videoPlayer.addEventListener('click', () => {
+    if (videoPlayer.paused) videoPlayer.play();
+    else videoPlayer.pause();
+  });
+
+  // Show controls when paused
+  videoPlayer.addEventListener('pause', () => {
+    controls.classList.remove('hidden');
+    clearTimeout(hideTimer);
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      if (videoOverlay.classList.contains('visible')) {
+        closeVideo();
+      } else {
+        closeSidebar();
+        allModals.forEach(m => closeModal(m));
+      }
+    }
+  });
+
+  // Suggestion form
+  const btn = document.getElementById('suggestion-btn');
+  const input = document.getElementById('suggestion-input');
+  const conf = document.getElementById('confirmation');
+
+  btn.addEventListener('click', () => {
+    if (!input.value.trim()) return;
+    conf.classList.add('show');
+    input.value = '';
+    setTimeout(() => conf.classList.remove('show'), 3000);
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') btn.click();
+  });
+</script>
+
+</body>
+</html>
