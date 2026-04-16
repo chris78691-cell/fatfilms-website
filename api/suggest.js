@@ -20,13 +20,34 @@ function getClientIp(req) {
   return req.headers['x-real-ip'] || req.socket?.remoteAddress || 'unknown';
 }
 
+const TMDB_BASE = 'https://api.themoviedb.org/3';
+const QUALITY_VOTE_COUNT = 50;
+
+async function searchTmdb(endpoint, query) {
+  const url = `${TMDB_BASE}${endpoint}?query=${encodeURIComponent(query)}&include_adult=false&language=en-US&page=1`;
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
+      Accept: 'application/json'
+    }
+  });
+  if (!res.ok) throw new Error(`TMDB ${endpoint} returned ${res.status}`);
+  return res.json();
+}
+
 function pickBestMatch(results) {
-  const candidates = (results || []).filter(r =>
-    (r.media_type === 'movie' || r.media_type === 'tv') && (r.title || r.name)
+  const valid = (results || []).filter(r => r.title || r.name);
+  if (valid.length === 0) return null;
+
+  // Prefer results that clear a quality bar (vote_count >= 50) to avoid
+  // obscure documentaries, specials, and amateur productions stealing the top.
+  const quality = valid.filter(r => (r.vote_count || 0) >= QUALITY_VOTE_COUNT);
+  const pool = quality.length > 0 ? quality : valid;
+
+  // Highest popularity wins.
+  return pool.reduce((best, cur) =>
+    (cur.popularity || 0) > (best.popularity || 0) ? cur : best
   );
-  if (candidates.length === 0) return null;
-  // TMDB orders by popularity by default; take the first valid match.
-  return candidates[0];
 }
 
 export default async function handler(req, res) {
@@ -62,27 +83,22 @@ export default async function handler(req, res) {
     // bad-words occasionally throws on odd characters; fall through.
   }
 
-  // TMDB multi-search
-  let tmdbJson;
+  // Query movie and TV endpoints in parallel and merge — more control than multi-search
+  let movieResults, tvResults;
   try {
-    const tmdbRes = await fetch(
-      `https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(title)}&include_adult=false&language=en-US&page=1`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
-          Accept: 'application/json'
-        }
-      }
-    );
-    if (!tmdbRes.ok) {
-      return res.status(502).json({ error: "Couldn't reach TMDB. Try again." });
-    }
-    tmdbJson = await tmdbRes.json();
+    const [movieJson, tvJson] = await Promise.all([
+      searchTmdb('/search/movie', title),
+      searchTmdb('/search/tv', title)
+    ]);
+    movieResults = (movieJson.results || []).map(r => ({ ...r, media_type: 'movie' }));
+    tvResults = (tvJson.results || []).map(r => ({ ...r, media_type: 'tv' }));
   } catch (e) {
+    console.error('TMDB search error:', e);
     return res.status(502).json({ error: "Couldn't reach TMDB. Try again." });
   }
 
-  const best = pickBestMatch(tmdbJson.results);
+  const combined = [...movieResults, ...tvResults];
+  const best = pickBestMatch(combined);
   if (!best) {
     return res.status(404).json({
       error: "Couldn't find that film or show — check your spelling?"
@@ -90,6 +106,7 @@ export default async function handler(req, res) {
   }
 
   const tmdbId = best.id;
+  const mediaType = best.media_type;
   const canonicalTitle = best.title || best.name;
   const posterUrl = best.poster_path
     ? `https://image.tmdb.org/t/p/w200${best.poster_path}`
@@ -121,6 +138,7 @@ export default async function handler(req, res) {
       .from('suggestions')
       .insert({
         tmdb_id: tmdbId,
+        media_type: mediaType,
         title: canonicalTitle,
         poster_url: posterUrl,
         vote_count: 1
@@ -139,7 +157,8 @@ export default async function handler(req, res) {
     success: true,
     title: canonicalTitle,
     poster_url: posterUrl,
-    tmdb_id: tmdbId
+    tmdb_id: tmdbId,
+    media_type: mediaType
   });
 }
 
