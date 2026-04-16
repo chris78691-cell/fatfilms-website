@@ -39,15 +39,17 @@ function pickBestMatch(results) {
   const valid = (results || []).filter(r => r.title || r.name);
   if (valid.length === 0) return null;
 
-  // Prefer results that clear a quality bar (vote_count >= 50) to avoid
-  // obscure documentaries, specials, and amateur productions stealing the top.
+  // Prefer results that clear a quality bar (vote_count >= 50) to strip out
+  // obvious low-quality results up front.
   const quality = valid.filter(r => (r.vote_count || 0) >= QUALITY_VOTE_COUNT);
   const pool = quality.length > 0 ? quality : valid;
 
-  // Highest popularity wins.
-  return pool.reduce((best, cur) =>
-    (cur.popularity || 0) > (best.popularity || 0) ? cur : best
-  );
+  // Composite score: vote_count * popularity. Heavily favours mainstream titles
+  // with both high lifetime engagement AND current popularity, while still
+  // letting newer trending things beat old obscure ones.
+  const score = r => (r.vote_count || 0) * (r.popularity || 0);
+
+  return pool.reduce((best, cur) => (score(cur) > score(best) ? cur : best));
 }
 
 export default async function handler(req, res) {
