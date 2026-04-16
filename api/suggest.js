@@ -103,7 +103,7 @@ export default async function handler(req, res) {
   const best = pickBestMatch(combined);
   if (!best) {
     return res.status(404).json({
-      error: "Couldn't find that film or show — check your spelling?"
+      error: "Couldn't find that film or show, check your spelling?"
     });
   }
 
@@ -155,12 +155,24 @@ export default async function handler(req, res) {
   recent.push(now);
   rateLimit.set(ip, recent);
 
+  // Fetch the refreshed top 15 so the client doesn't need a follow-up request
+  const { data: leaderboard, error: lbErr } = await supabase
+    .from('suggestions')
+    .select('tmdb_id, title, poster_url, vote_count')
+    .order('vote_count', { ascending: false })
+    .limit(15);
+
+  if (lbErr) {
+    console.error('Supabase leaderboard-after-upsert error:', lbErr);
+  }
+
   return res.status(200).json({
     success: true,
     title: canonicalTitle,
     poster_url: posterUrl,
     tmdb_id: tmdbId,
-    media_type: mediaType
+    media_type: mediaType,
+    leaderboard: leaderboard || []
   });
 }
 
