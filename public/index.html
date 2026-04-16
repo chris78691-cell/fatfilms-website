@@ -439,6 +439,29 @@
       max-height: 360px;
       overflow-y: auto;
       padding-right: 4px;
+      /* Firefox */
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.2) rgba(255,255,255,0.05);
+    }
+
+    /* WebKit/Blink (Chrome, Safari, Edge) — scoped to leaderboard only */
+    .leaderboard-list::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    .leaderboard-list::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.05);
+      border-radius: 4px;
+    }
+
+    .leaderboard-list::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.2);
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    .leaderboard-list::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,255,255,0.35);
     }
 
     .leaderboard-item {
