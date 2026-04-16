@@ -399,12 +399,127 @@
     .confirmation {
       margin-top: 12px;
       font-size: 0.85rem;
-      color: #7c7;
+      min-height: 1.2em;
       opacity: 0;
       transition: opacity 0.3s;
     }
 
     .confirmation.show { opacity: 1; }
+    .confirmation.success { color: #7c7; }
+    .confirmation.error { color: #e06868; }
+
+    /* SUGGEST MODAL — wider to fit leaderboard */
+    #suggest-modal .modal {
+      max-width: 620px;
+      width: 92%;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    /* LEADERBOARD */
+    .leaderboard {
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .leaderboard h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+      color: #fff;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+
+    .leaderboard-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 360px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 10px;
+      background: #1a1a1a;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+
+    .leaderboard-item:hover { background: #222; }
+
+    .lb-rank {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      color: #888;
+      width: 22px;
+      flex-shrink: 0;
+      text-align: center;
+    }
+
+    .lb-poster {
+      width: 40px;
+      height: 60px;
+      flex-shrink: 0;
+      background: #222;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .lb-poster img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .lb-poster.empty {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #444;
+      font-size: 18px;
+    }
+
+    .lb-title {
+      flex: 1;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #e0e0e0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .lb-votes {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      color: #888;
+      background: rgba(255,255,255,0.06);
+      padding: 4px 10px;
+      border-radius: 12px;
+      flex-shrink: 0;
+    }
+
+    .leaderboard-empty {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+      font-size: 0.85rem;
+    }
+
+    .leaderboard-loading {
+      text-align: center;
+      padding: 20px;
+      color: #555;
+      font-size: 0.85rem;
+    }
 
     /* FILMS MODAL — wider */
     #films-modal .modal {
@@ -796,7 +911,14 @@
       <input type="text" id="suggestion-input" placeholder="e.g. The Dark Knight, Breaking Bad...">
       <button id="suggestion-btn">Submit</button>
     </div>
-    <div class="confirmation" id="confirmation">Thanks! We'll check it out &#127916;</div>
+    <div class="confirmation" id="confirmation"></div>
+
+    <div class="leaderboard">
+      <h3>Top Suggestions</h3>
+      <div class="leaderboard-list" id="leaderboard-list">
+        <div class="leaderboard-loading">Loading...</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1279,21 +1401,98 @@
     }
   });
 
-  // Suggestion form
-  const btn = document.getElementById('suggestion-btn');
-  const input = document.getElementById('suggestion-input');
+  // --- Suggestion form + leaderboard ---
+  const suggestBtn = document.getElementById('suggestion-btn');
+  const suggestInput = document.getElementById('suggestion-input');
   const conf = document.getElementById('confirmation');
+  const leaderboardList = document.getElementById('leaderboard-list');
 
-  btn.addEventListener('click', () => {
-    if (!input.value.trim()) return;
-    conf.classList.add('show');
-    input.value = '';
-    setTimeout(() => conf.classList.remove('show'), 3000);
+  function showMessage(text, kind) {
+    conf.textContent = text;
+    conf.className = 'confirmation show ' + kind;
+    clearTimeout(showMessage._timer);
+    showMessage._timer = setTimeout(() => {
+      conf.classList.remove('show');
+    }, 4000);
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+
+  function renderLeaderboard(items) {
+    if (!items || items.length === 0) {
+      leaderboardList.innerHTML = '<div class="leaderboard-empty">No suggestions yet — be the first!</div>';
+      return;
+    }
+    const top = items.slice(0, 15);
+    leaderboardList.innerHTML = top.map((item, i) => {
+      const rank = i + 1;
+      const poster = item.poster_url
+        ? `<div class="lb-poster"><img src="${escapeHtml(item.poster_url)}" alt="" loading="lazy"></div>`
+        : `<div class="lb-poster empty">&#127916;</div>`;
+      return `
+        <div class="leaderboard-item">
+          <div class="lb-rank">${rank}</div>
+          ${poster}
+          <div class="lb-title">${escapeHtml(item.title || 'Untitled')}</div>
+          <div class="lb-votes">${item.vote_count} vote${item.vote_count === 1 ? '' : 's'}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  async function loadLeaderboard() {
+    leaderboardList.innerHTML = '<div class="leaderboard-loading">Loading...</div>';
+    try {
+      const res = await fetch('/api/leaderboard');
+      if (!res.ok) throw new Error('Failed');
+      const data = await res.json();
+      renderLeaderboard(data.suggestions);
+    } catch (e) {
+      leaderboardList.innerHTML = '<div class="leaderboard-empty">Couldn\u2019t load leaderboard.</div>';
+    }
+  }
+
+  async function submitSuggestion() {
+    const title = suggestInput.value.trim();
+    if (!title) return;
+
+    suggestBtn.disabled = true;
+    suggestBtn.textContent = 'Sending...';
+
+    try {
+      const res = await fetch('/api/suggest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title })
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok && data.success) {
+        showMessage(`\u2705 Thanks! Voted for \u201C${data.title}\u201D`, 'success');
+        suggestInput.value = '';
+        loadLeaderboard();
+      } else {
+        showMessage(data.error || 'Something went wrong. Try again.', 'error');
+      }
+    } catch (e) {
+      showMessage('Network error. Try again.', 'error');
+    } finally {
+      suggestBtn.disabled = false;
+      suggestBtn.textContent = 'Submit';
+    }
+  }
+
+  suggestBtn.addEventListener('click', submitSuggestion);
+  suggestInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') submitSuggestion();
   });
 
-  input.addEventListener('keydown', e => {
-    if (e.key === 'Enter') btn.click();
-  });
+  // Refresh leaderboard whenever the suggest modal opens
+  document.getElementById('nav-suggest').addEventListener('click', loadLeaderboard);
 </script>
 
 </body>
