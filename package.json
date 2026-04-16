@@ -1,0 +1,10 @@
+{
+  "name": "fat-films-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "bad-words": "^3.0.4"
+  }
+}
