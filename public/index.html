@@ -1472,9 +1472,13 @@
       const data = await res.json().catch(() => ({}));
 
       if (res.ok && data.success) {
-        showMessage(`\u2705 Thanks! Voted for \u201C${data.title}\u201D`, 'success');
+        showMessage(`\u2705 Thanks! Added \u201C${data.title}\u201D to the leaderboard`, 'success');
         suggestInput.value = '';
-        loadLeaderboard();
+        if (Array.isArray(data.leaderboard)) {
+          renderLeaderboard(data.leaderboard);
+        } else {
+          loadLeaderboard();
+        }
       } else {
         showMessage(data.error || 'Something went wrong. Try again.', 'error');
       }
