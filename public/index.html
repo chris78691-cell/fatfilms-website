@@ -575,6 +575,33 @@
       background: rgba(255,255,255,0.35);
     }
 
+    /* "Access Google Drive" pill button in the Films modal header */
+    .drive-btn {
+      position: absolute;
+      top: 14px;
+      right: 52px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+
+    .drive-btn:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.4);
+      color: #fff;
+    }
+
     .films-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -876,6 +903,12 @@
 
       .sidebar { width: 260px; }
 
+      /* On mobile the pill would crash into the X — drop it under the title */
+      .drive-btn {
+        position: static;
+        margin: 4px 0 16px;
+      }
+
       .suggestion-form { flex-direction: column; }
 
       .films-grid { grid-template-columns: 1fr; }
@@ -921,7 +954,7 @@
     <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.48v-7.15a8.16 8.16 0 005.58 2.18v-3.44a4.85 4.85 0 01-1.99-.58z"/></svg>
     <span>TikTok</span>
   </a>
-  <a href="https://x.com/FatFilms2" target="_blank" rel="noopener">
+  <a href="https://x.com/fatfilmsparody" target="_blank" rel="noopener">
     <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
     <span>X / Twitter</span>
   </a>
@@ -972,6 +1005,7 @@
   <div class="modal">
     <button class="modal-close" data-close>&times;</button>
     <h2>Films</h2>
+    <a class="drive-btn" href="https://drive.google.com/drive/folders/16WIRZ0H1-IRm523nEcHoK_8fCj4WIUVq?usp=sharing" target="_blank" rel="noopener">Access Google Drive</a>
     <div class="films-grid">
       <div class="film-card" data-video="videos/american chud.mp4">
         <div class="film-thumb">
