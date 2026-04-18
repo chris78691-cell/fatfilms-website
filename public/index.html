@@ -24,11 +24,13 @@
       position: fixed;
       inset: 0;
       width: 100vw;
-      height: 100vh;
+      height: 100vh; /* fallback for older browsers */
+      height: 100dvh; /* stable on mobile with dynamic toolbars */
       padding: 24px;
     }
 
     .grid {
+      position: relative;
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 1fr 1fr;
@@ -145,7 +147,7 @@
     }
 
     .hero-title {
-      position: fixed;
+      position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
@@ -515,9 +517,8 @@
       font-size: 0.9rem;
       font-weight: 600;
       color: #e0e0e0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      word-break: break-word;
+      line-height: 1.35;
     }
 
     .lb-votes {
@@ -551,6 +552,27 @@
       max-height: 85vh;
       overflow-y: auto;
       padding: 28px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.2) rgba(255,255,255,0.05);
+    }
+
+    #films-modal .modal::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    #films-modal .modal::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.05);
+      border-radius: 4px;
+    }
+
+    #films-modal .modal::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.2);
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    #films-modal .modal::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,255,255,0.35);
     }
 
     .films-grid {
@@ -877,6 +899,7 @@
     <div class="quadrant" id="q2"></div>
     <div class="quadrant" id="q3"></div>
   </div>
+  <div class="hero-title">FAT FILMS</div>
 </div>
 
 <!-- OVERLAYS -->
@@ -886,7 +909,6 @@
     <span>GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; </span><span>GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; </span>
   </div>
 </div>
-<div class="hero-title">FAT FILMS</div>
 
 <button class="hamburger" id="hamburger-btn" aria-label="Open menu">&#9776;</button>
 
@@ -921,7 +943,7 @@
   <div class="modal">
     <button class="modal-close" data-close>&times;</button>
     <h2>About Fat Films</h2>
-    <p>Fat Films is taking the internet by storm &mdash; recreating iconic scenes from your favourite films and series, but making every character fat. Powered by cutting-edge AI technology, we transform legendary movie moments into hilarious, larger-than-life masterpieces. With millions of views across TikTok and Instagram, Fat Films has become one of the most viral AI entertainment projects on the internet. Now, we're bringing it on-chain.</p>
+    <p>Fat Films is taking the internet by storm, recreating iconic scenes from your favourite films and series, but making every character fat. Powered by cutting-edge AI technology, we transform legendary movie moments into hilarious, larger-than-life masterpieces. With millions of views across TikTok and Instagram, Fat Films has become one of the most viral AI entertainment projects on the internet. Now, we're bringing it on-chain.</p>
   </div>
 </div>
 
@@ -964,6 +986,13 @@
           <div class="play-icon">&#9654;</div>
         </div>
         <div class="film-card-title">Baking Bad</div>
+      </div>
+      <div class="film-card" data-video="videos/Bigger Things.mp4">
+        <div class="film-thumb">
+          <img src="frames/Bigger_Things_00.jpg" alt="Bigger Things">
+          <div class="play-icon">&#9654;</div>
+        </div>
+        <div class="film-card-title">Bigger Things</div>
       </div>
       <div class="film-card" data-video="videos/Chewlander.mp4">
         <div class="film-thumb">
@@ -1064,7 +1093,7 @@
 
 <script>
   // Embedded frame list
-  const frames = ["Chewlander_00.jpg","Chewlander_01.jpg","Chewlander_02.jpg","Chewlander_03.jpg","Chewlander_04.jpg","Chewlander_05.jpg","Chewlander_06.jpg","Chewlander_07.jpg","Chewlander_08.jpg","Chewlander_09.jpg","The_Weight_of_Wallstreet_00.jpg","The_Weight_of_Wallstreet_01.jpg","The_Weight_of_Wallstreet_02.jpg","The_Weight_of_Wallstreet_03.jpg","The_Weight_of_Wallstreet_04.jpg","The_Weight_of_Wallstreet_05.jpg","The_Weight_of_Wallstreet_06.jpg","The_Weight_of_Wallstreet_07.jpg","The_Weight_of_Wallstreet_08.jpg","The_Weight_of_Wallstreet_09.jpg","american_chud_00.jpg","american_chud_01.jpg","american_chud_02.jpg","american_chud_03.jpg","american_chud_04.jpg","american_chud_05.jpg","american_chud_06.jpg","american_chud_07.jpg","american_chud_08.jpg","american_chud_09.jpg","baking_bad_00.jpg","baking_bad_01.jpg","baking_bad_02.jpg","baking_bad_03.jpg","baking_bad_04.jpg","baking_bad_05.jpg","baking_bad_06.jpg","baking_bad_07.jpg","baking_bad_08.jpg","baking_bad_09.jpg","donnie_lardo_00.jpg","donnie_lardo_01.jpg","donnie_lardo_02.jpg","donnie_lardo_03.jpg","donnie_lardo_04.jpg","donnie_lardo_05.jpg","donnie_lardo_06.jpg","donnie_lardo_07.jpg","donnie_lardo_08.jpg","donnie_lardo_09.jpg","fat_club_00.jpg","fat_club_01.jpg","fat_club_02.jpg","fat_club_03.jpg","fat_club_04.jpg","fat_club_05.jpg","fat_club_06.jpg","fat_club_07.jpg","fat_club_08.jpg","fat_club_09.jpg","fat_runner_00.jpg","fat_runner_01.jpg","fat_runner_02.jpg","fat_runner_03.jpg","fat_runner_04.jpg","fat_runner_05.jpg","fat_runner_06.jpg","fat_runner_07.jpg","fat_runner_08.jpg","fat_runner_09.jpg","fatsy_driver_00.jpg","fatsy_driver_01.jpg","fatsy_driver_02.jpg","fatsy_driver_03.jpg","fatsy_driver_04.jpg","fatsy_driver_05.jpg","fatsy_driver_06.jpg","fatsy_driver_07.jpg","fatsy_driver_08.jpg","fatsy_driver_09.jpg","interbelly_00.jpg","interbelly_01.jpg","interbelly_02.jpg","interbelly_03.jpg","interbelly_04.jpg","interbelly_05.jpg","interbelly_06.jpg","interbelly_07.jpg","interbelly_08.jpg","interbelly_09.jpg","squid_gain_00.jpg","squid_gain_01.jpg","squid_gain_02.jpg","squid_gain_03.jpg","squid_gain_04.jpg","squid_gain_05.jpg","squid_gain_06.jpg","squid_gain_07.jpg","squid_gain_08.jpg","squid_gain_09.jpg","the_bigs_00.jpg","the_bigs_01.jpg","the_bigs_02.jpg","the_bigs_03.jpg","the_bigs_04.jpg","the_bigs_05.jpg","the_bigs_06.jpg","the_bigs_07.jpg","the_bigs_08.jpg","the_bigs_09.jpg"];
+  const frames = ["Bigger_Things_00.jpg","Bigger_Things_01.jpg","Bigger_Things_02.jpg","Bigger_Things_03.jpg","Bigger_Things_04.jpg","Bigger_Things_05.jpg","Bigger_Things_06.jpg","Bigger_Things_07.jpg","Bigger_Things_08.jpg","Bigger_Things_09.jpg","Chewlander_00.jpg","Chewlander_01.jpg","Chewlander_02.jpg","Chewlander_03.jpg","Chewlander_04.jpg","Chewlander_05.jpg","Chewlander_06.jpg","Chewlander_07.jpg","Chewlander_08.jpg","Chewlander_09.jpg","The_Weight_of_Wallstreet_00.jpg","The_Weight_of_Wallstreet_01.jpg","The_Weight_of_Wallstreet_02.jpg","The_Weight_of_Wallstreet_03.jpg","The_Weight_of_Wallstreet_04.jpg","The_Weight_of_Wallstreet_05.jpg","The_Weight_of_Wallstreet_06.jpg","The_Weight_of_Wallstreet_07.jpg","The_Weight_of_Wallstreet_08.jpg","The_Weight_of_Wallstreet_09.jpg","american_chud_00.jpg","american_chud_01.jpg","american_chud_02.jpg","american_chud_03.jpg","american_chud_04.jpg","american_chud_05.jpg","american_chud_06.jpg","american_chud_07.jpg","american_chud_08.jpg","american_chud_09.jpg","baking_bad_00.jpg","baking_bad_01.jpg","baking_bad_02.jpg","baking_bad_03.jpg","baking_bad_04.jpg","baking_bad_05.jpg","baking_bad_06.jpg","baking_bad_07.jpg","baking_bad_08.jpg","baking_bad_09.jpg","donnie_lardo_00.jpg","donnie_lardo_01.jpg","donnie_lardo_02.jpg","donnie_lardo_03.jpg","donnie_lardo_04.jpg","donnie_lardo_05.jpg","donnie_lardo_06.jpg","donnie_lardo_07.jpg","donnie_lardo_08.jpg","donnie_lardo_09.jpg","fat_club_00.jpg","fat_club_01.jpg","fat_club_02.jpg","fat_club_03.jpg","fat_club_04.jpg","fat_club_05.jpg","fat_club_06.jpg","fat_club_07.jpg","fat_club_08.jpg","fat_club_09.jpg","fat_runner_00.jpg","fat_runner_01.jpg","fat_runner_02.jpg","fat_runner_03.jpg","fat_runner_04.jpg","fat_runner_05.jpg","fat_runner_06.jpg","fat_runner_07.jpg","fat_runner_08.jpg","fat_runner_09.jpg","fatsy_driver_00.jpg","fatsy_driver_01.jpg","fatsy_driver_02.jpg","fatsy_driver_03.jpg","fatsy_driver_04.jpg","fatsy_driver_05.jpg","fatsy_driver_06.jpg","fatsy_driver_07.jpg","fatsy_driver_08.jpg","fatsy_driver_09.jpg","interbelly_00.jpg","interbelly_01.jpg","interbelly_02.jpg","interbelly_03.jpg","interbelly_04.jpg","interbelly_05.jpg","interbelly_06.jpg","interbelly_07.jpg","interbelly_08.jpg","interbelly_09.jpg","squid_gain_00.jpg","squid_gain_01.jpg","squid_gain_02.jpg","squid_gain_03.jpg","squid_gain_04.jpg","squid_gain_05.jpg","squid_gain_06.jpg","squid_gain_07.jpg","squid_gain_08.jpg","squid_gain_09.jpg","the_bigs_00.jpg","the_bigs_01.jpg","the_bigs_02.jpg","the_bigs_03.jpg","the_bigs_04.jpg","the_bigs_05.jpg","the_bigs_06.jpg","the_bigs_07.jpg","the_bigs_08.jpg","the_bigs_09.jpg"];
 
   const usedFrames = new Set();
 
@@ -1535,6 +1564,8 @@
   // Refresh leaderboard whenever the suggest modal opens
   document.getElementById('nav-suggest').addEventListener('click', loadLeaderboard);
 </script>
+
+<script defer src="/_vercel/insights/script.js"></script>
 
 </body>
 </html>
