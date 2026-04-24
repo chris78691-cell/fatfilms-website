@@ -16,6 +16,7 @@
   <meta name="twitter:description" content="What if everyone was fat? AI movie edits with millions of views.">
   <meta name="google-site-verification" content="TizUvxnu-crJd_PCyDW-8FBZYRmGv23YCelZvU0YFJ0" />
   <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;900&family=Space+Mono&display=swap" rel="stylesheet">
@@ -271,7 +272,24 @@
     .btn-info:hover { background: rgba(120,120,120,0.75); }
 
     /* ========== ROWS ========== */
-    .rows-wrap { padding: 20px 0 100px; margin-top: -60px; position: relative; z-index: 3; }
+    .rows-wrap { padding: 20px 0 20px; margin-top: -60px; position: relative; z-index: 3; }
+
+    /* Small SEO-focused blurb at the very bottom of the document. Quiet
+       visual weight; the 80px bottom padding keeps it clear of the fixed
+       socials footer. */
+    .seo-blurb {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 20px 80px;
+      text-align: center;
+      color: rgba(255,255,255,0.3);
+      font-size: 12px;
+      line-height: 1.6;
+      letter-spacing: 0.2px;
+    }
+    @media (max-width: 640px) {
+      .seo-blurb { font-size: 11px; padding: 20px 16px 72px; }
+    }
     .row { margin-bottom: 36px; padding: 0 40px; position: relative; }
     .row-title {
       font-size: 1.25rem; font-weight: 700;
@@ -844,6 +862,11 @@
 <!-- ========== ROWS ========== -->
 <div class="rows-wrap" id="rows-wrap"></div>
 
+<!-- SEO blurb — sits at the true bottom of the document, above the fixed socials. -->
+<section class="seo-blurb">
+  <p data-i18n="ui.seoBlurb">Fat Films is a viral AI entertainment project recreating iconic scenes from popular films and TV shows, reimagining every character as FAT. With millions of views across TikTok and Instagram, Fat Films has become one of the most popular AI video projects on the internet. Watch all Fat Films originals, suggest new films, and join the community at fatfilms.org. Fat Films has a community Solana token, $fatfilms, launched on Pumpfun.</p>
+</section>
+
 <!-- ========== FOOTER ========== -->
 <footer class="footer" id="news">
   <div class="socials">
@@ -1063,6 +1086,7 @@ const TRANSLATIONS = {
       thanksAdded:'Thanks! Added "{title}" to the leaderboard',
       menu:'Menu', likeTip:'Like', infoTip:'Info', favoriteTip:'Favorite', castTip:'Cast', downloadTip:'Download watermarked version',
       castSuffix:'Cast', votes:'votes', vote:'vote',
+      seoBlurb:"Fat Films is a viral AI entertainment project recreating iconic scenes from popular films and TV shows, reimagining every character as FAT. With millions of views across TikTok and Instagram, Fat Films has become one of the most popular AI video projects on the internet. Watch all Fat Films originals, suggest new films, and join the community at fatfilms.org. Fat Films has a community Solana token, $fatfilms, launched on Pumpfun.",
     },
     descriptions: {
       'american-chud':"Patrick Ateman is a wealthy Wall Street investment banker with an impeccable morning skincare routine and an insatiable appetite. By day he obsesses over business cards and restaurant reservations. By night, things get a lot messier.",
@@ -1103,6 +1127,7 @@ const TRANSLATIONS = {
       thanksAdded:'¡Gracias! Añadimos "{title}" a la lista',
       menu:'Menú', likeTip:'Me gusta', infoTip:'Info', favoriteTip:'Favorito', castTip:'Reparto', downloadTip:'Descargar versión con marca de agua',
       castSuffix:'Reparto', votes:'votos', vote:'voto',
+      seoBlurb:"Fat Films es un proyecto viral de entretenimiento con IA que recrea escenas icónicas de películas y series populares, reimaginando a cada personaje como GORDO. Con millones de visualizaciones en TikTok e Instagram, Fat Films se ha convertido en uno de los proyectos de vídeo con IA más populares de internet. Ve todos los originales de Fat Films, sugiere nuevas películas y únete a la comunidad en fatfilms.org. Fat Films tiene un token comunitario en Solana, $fatfilms, lanzado en Pumpfun.",
     },
     descriptions: {
       'american-chud':"Patrick Ateman es un adinerado banquero de inversiones de Wall Street con una rutina de skincare matutina impecable y un apetito insaciable. De día se obsesiona con tarjetas de visita y reservas en restaurantes. De noche, las cosas se ponen mucho más sucias.",
@@ -1143,6 +1168,7 @@ const TRANSLATIONS = {
       thanksAdded:'Merci ! Nous avons ajouté « {title} » au classement',
       menu:'Menu', likeTip:'J\u2019aime', infoTip:'Infos', favoriteTip:'Favori', castTip:'Distribution', downloadTip:'Télécharger la version filigranée',
       castSuffix:'Distribution', votes:'votes', vote:'vote',
+      seoBlurb:"Fat Films est un projet viral de divertissement par IA qui recrée des scènes iconiques de films et séries populaires, en réimaginant chaque personnage en version GROS. Avec des millions de vues sur TikTok et Instagram, Fat Films est devenu l\u2019un des projets vidéo IA les plus populaires d\u2019Internet. Regardez tous les originaux Fat Films, suggérez de nouveaux films et rejoignez la communauté sur fatfilms.org. Fat Films dispose d\u2019un token communautaire Solana, $fatfilms, lancé sur Pumpfun.",
     },
     descriptions: {
       'american-chud':"Patrick Ateman est un riche banquier d\u2019affaires de Wall Street avec une routine soin du matin impeccable et un appétit insatiable. Le jour, il s\u2019obsède pour ses cartes de visite et ses réservations. La nuit, ça devient beaucoup plus crade.",
@@ -1183,6 +1209,7 @@ const TRANSLATIONS = {
       thanksAdded:'Grazie! Abbiamo aggiunto "{title}" alla classifica',
       menu:'Menu', likeTip:'Mi piace', infoTip:'Info', favoriteTip:'Preferito', castTip:'Cast', downloadTip:'Scarica versione con filigrana',
       castSuffix:'Cast', votes:'voti', vote:'voto',
+      seoBlurb:"Fat Films è un progetto virale di intrattenimento basato sull\u2019IA che ricrea scene iconiche di film e serie TV popolari, reimmaginando ogni personaggio in versione GRASSO. Con milioni di visualizzazioni su TikTok e Instagram, Fat Films è diventato uno dei progetti video con IA più popolari di Internet. Guarda tutti gli originali Fat Films, suggerisci nuovi film e unisciti alla community su fatfilms.org. Fat Films ha un token comunitario su Solana, $fatfilms, lanciato su Pumpfun.",
     },
     descriptions: {
       'american-chud':"Patrick Ateman è un ricco banchiere d\u2019investimento di Wall Street con una meticolosa skincare mattutina e un appetito insaziabile. Di giorno si ossessiona per biglietti da visita e prenotazioni al ristorante. Di notte le cose si fanno molto più disordinate.",
@@ -1223,6 +1250,7 @@ const TRANSLATIONS = {
       thanksAdded:'Danke! \u201E{title}\u201C wurde zur Liste hinzugefügt',
       menu:'Menü', likeTip:'Gefällt mir', infoTip:'Info', favoriteTip:'Favorit', castTip:'Besetzung', downloadTip:'Version mit Wasserzeichen herunterladen',
       castSuffix:'Besetzung', votes:'Stimmen', vote:'Stimme',
+      seoBlurb:"Fat Films ist ein virales KI-Entertainment-Projekt, das ikonische Szenen aus bekannten Filmen und Serien nachstellt und jeden Charakter FETT neu interpretiert. Mit Millionen von Aufrufen auf TikTok und Instagram ist Fat Films zu einem der beliebtesten KI-Videoprojekte im Internet geworden. Schau dir alle Fat Films Originals an, schlage neue Filme vor und tritt der Community auf fatfilms.org bei. Fat Films hat einen Community-Solana-Token, $fatfilms, gelauncht auf Pumpfun.",
     },
     descriptions: {
       'american-chud':"Patrick Ateman ist ein vermögender Wall-Street-Investmentbanker mit einer makellosen Morgenroutine für die Haut und unstillbarem Appetit. Tagsüber obsessiv wegen Visitenkarten und Restaurantreservierungen. Nachts wird es deutlich schmutziger.",
@@ -1263,6 +1291,7 @@ const TRANSLATIONS = {
       thanksAdded:'谢谢!已把"{title}"加入榜单',
       menu:'菜单', likeTip:'点赞', infoTip:'详情', favoriteTip:'收藏', castTip:'演员', downloadTip:'下载带水印版本',
       castSuffix:'演员', votes:'票', vote:'票',
+      seoBlurb:"Fat Films 是一个病毒式 AI 娱乐项目,用 AI 重现热门电影和电视剧中的经典场景,将每个角色重新想象为 \u201C胖\u201D 版本。凭借在 TikTok 和 Instagram 上数百万的观看量,Fat Films 已成为互联网上最受欢迎的 AI 视频项目之一。访问 fatfilms.org 观看所有 Fat Films 原创作品、建议新电影并加入社区。Fat Films 拥有一个社区 Solana 代币 $fatfilms,于 Pumpfun 发行。",
     },
     descriptions: {
       'american-chud':"Patrick Ateman 是华尔街一位富有的投资银行家,拥有一套一丝不苟的晨间护肤流程和永不满足的食欲。白天他沉迷于名片和餐厅预订。到了夜晚,一切变得油腻混乱得多。",
@@ -1303,6 +1332,7 @@ const TRANSLATIONS = {
       thanksAdded:'ありがとう!「{title}」をランキングに追加しました',
       menu:'メニュー', likeTip:'いいね', infoTip:'詳細', favoriteTip:'お気に入り', castTip:'キャスト', downloadTip:'ウォーターマーク版をダウンロード',
       castSuffix:'キャスト', votes:'票', vote:'票',
+      seoBlurb:"Fat Films は、人気映画やテレビシリーズのアイコニックなシーンを AI で再現し、すべてのキャラクターを「太った」バージョンとして再想像するバイラル AI エンタメプロジェクトです。TikTok と Instagram で数百万回再生され、Fat Films はインターネット上で最も人気のある AI 動画プロジェクトの一つとなりました。fatfilms.org ですべての Fat Films オリジナル作品を視聴し、新作映画をリクエストして、コミュニティに参加しよう。Fat Films は Pumpfun で立ち上げられたコミュニティ Solana トークン $fatfilms を保有しています。",
     },
     descriptions: {
       'american-chud':"Patrick Ateman は、完璧な朝のスキンケアルーティンと飽くなき食欲を持つ、ウォール街の裕福な投資銀行家。昼間は名刺とレストランの予約に取り憑かれている。夜になると、事態はもっと脂っこく荒れる。",
@@ -1343,6 +1373,7 @@ const TRANSLATIONS = {
       thanksAdded:'감사합니다! "{title}"을(를) 리더보드에 추가했어요',
       menu:'메뉴', likeTip:'좋아요', infoTip:'정보', favoriteTip:'즐겨찾기', castTip:'출연진', downloadTip:'워터마크 버전 다운로드',
       castSuffix:'출연진', votes:'표', vote:'표',
+      seoBlurb:"Fat Films는 인기 영화와 TV 시리즈의 상징적인 장면을 AI로 재현하고, 모든 캐릭터를 뚱뚱한 버전으로 재상상하는 바이럴 AI 엔터테인먼트 프로젝트입니다. TikTok과 Instagram에서 수백만 조회수를 기록하며 Fat Films는 인터넷에서 가장 인기 있는 AI 영상 프로젝트 중 하나가 되었습니다. fatfilms.org에서 모든 Fat Films 오리지널을 시청하고, 새 영화를 제안하며 커뮤니티에 참여하세요. Fat Films는 Pumpfun에서 출시된 커뮤니티 Solana 토큰 $fatfilms를 보유하고 있습니다.",
     },
     descriptions: {
       'american-chud':"Patrick Ateman은 완벽한 아침 스킨케어 루틴과 끝없는 식욕을 지닌 월스트리트의 부유한 투자 은행가입니다. 낮에는 명함과 레스토랑 예약에 집착하죠. 밤에는 훨씬 더 기름지고 엉망이 됩니다.",
@@ -1383,6 +1414,7 @@ const TRANSLATIONS = {
       thanksAdded:'شكرًا! تمت إضافة "{title}" إلى القائمة',
       menu:'القائمة', likeTip:'إعجاب', infoTip:'معلومات', favoriteTip:'مفضل', castTip:'طاقم', downloadTip:'تحميل النسخة بالعلامة المائية',
       castSuffix:'طاقم العمل', votes:'أصوات', vote:'صوت',
+      seoBlurb:"Fat Films هو مشروع ترفيه فيروسي قائم على الذكاء الاصطناعي يُعيد إنشاء مشاهد شهيرة من الأفلام والمسلسلات الشعبية، ويُعيد تخيّل كل شخصية بنسخة سمينة. بفضل ملايين المشاهدات عبر TikTok و Instagram، أصبح Fat Films أحد أشهر مشاريع الفيديو بالذكاء الاصطناعي على الإنترنت. شاهد جميع أفلام Fat Films الأصلية، واقترح أفلاماً جديدة، وانضم إلى المجتمع على fatfilms.org. يمتلك Fat Films رمزاً مجتمعياً على Solana، $fatfilms، تم إطلاقه على Pumpfun.",
     },
     descriptions: {
       'american-chud':"باتريك أتيمان مصرفي استثماري ثري في وول ستريت، يتبع روتينًا صباحيًا مثاليًا للعناية بالبشرة، ولديه شهية لا تُشبَع. في النهار يتعلّق بهوَس ببطاقات العمل وحجوزات المطاعم. في الليل، تصبح الأمور أكثر دهنية وفوضى.",
