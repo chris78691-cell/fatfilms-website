@@ -951,6 +951,11 @@ document.getElementById('hamburger').addEventListener('click', () => {
 const heroVideo = document.getElementById('hero-video');
 let currentHeroFilm = null;
 
+// Hero play/pause orchestration state MUST be declared before setHero runs —
+// queueHeroPlay reads heroBlocked and `let` has a temporal dead zone.
+let heroScrollTimer = null;
+let heroBlocked = false;
+
 function setHero(film) {
   currentHeroFilm = film;
   const bg = document.getElementById('hero-bg');
@@ -969,12 +974,9 @@ function setHero(film) {
 }
 setHero(FILMS[Math.floor(Math.random() * FILMS.length)]);
 
-// --- Hero video play/pause orchestration -------------------------------
 // The hero plays a muted loop as the background UNLESS the user is actively
 // scrolling or a modal/player is open. We pause during those to keep the
 // page feeling calm and avoid wasted bandwidth.
-let heroScrollTimer = null;
-let heroBlocked = false;
 
 function anyModalOpen() {
   if (document.querySelector('.modal-bg.show')) return true;
