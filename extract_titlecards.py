@@ -1,12 +1,22 @@
 """
 Extract a single "title card" frame from each film.
 
-Heuristic: sample frames across the first ~5 seconds of each video, score each
-by Canny edge density in the middle horizontal band (where title text tends to
-sit), and keep the highest-scoring frame. Saves to public/titlecards/ as
-<safe_name>.jpg.
+Heuristic:
+- Sample every 0.25s across the first 10s and last 10s of each video (title
+  cards sit either at the intro or the end credits).
+- Score each frame by Canny edge density in the middle horizontal band plus
+  a bonus for high-contrast luminance (bright text on dark / dark on bright).
+- Keep the frame with the best score.
 
-Run after the frame-extraction script is already in place.
+Crucially, we do NOT auto-crop black borders here — title cards are often
+white text on a black backdrop, and the border detector in extract_frames.py
+was eating the text. Save the raw frame instead.
+
+Optional MANUAL_OVERRIDES at the bottom lets you pin specific timestamps
+when the heuristic picks the wrong frame for a particular film.
+
+Usage:
+    python extract_titlecards.py
 """
 import cv2
 import numpy as np
@@ -15,8 +25,6 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 OUTPUT_DIR = PROJECT_ROOT / "public" / "titlecards"
-BLACK_THRESHOLD = 20
-BORDER_RATIO = 0.98
 
 VIDEOS = [
     "american chud.mp4",
@@ -37,92 +45,87 @@ VIDEOS = [
     "The Weight of Wallstreet.mp4",
 ]
 
-
-def detect_crop(frame):
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    h, w = gray.shape
-    top = 0
-    for y in range(h):
-        if np.mean(gray[y, :] < BLACK_THRESHOLD) < BORDER_RATIO:
-            top = y; break
-    bottom = h
-    for y in range(h - 1, -1, -1):
-        if np.mean(gray[y, :] < BLACK_THRESHOLD) < BORDER_RATIO:
-            bottom = y + 1; break
-    left = 0
-    for x in range(w):
-        if np.mean(gray[:, x] < BLACK_THRESHOLD) < BORDER_RATIO:
-            left = x; break
-    right = w
-    for x in range(w - 1, -1, -1):
-        if np.mean(gray[:, x] < BLACK_THRESHOLD) < BORDER_RATIO:
-            right = x + 1; break
-    if (bottom - top) < h * 0.5: top, bottom = 0, h
-    if (right - left) < w * 0.5: left, right = 0, w
-    return frame[top:bottom, left:right]
+# {filename: timestamp_seconds} — hardcoded when the heuristic picks wrong.
+MANUAL_OVERRIDES: dict[str, float] = {}
 
 
-def text_score(frame):
+def score_frame(frame: np.ndarray) -> float:
     """Higher = more likely to contain title text.
 
-    Focus on the middle horizontal third where title cards sit, and compute
-    edge density via Canny. Title cards are usually high-contrast lettering
-    on a solid backdrop; dense edges in that band are a reliable proxy.
+    Combines edge density in the middle horizontal band (text sits there) with
+    a lightweight "strong contrast" signal from luminance standard deviation in
+    the same band. Title cards tend to be high-contrast text on solid backgrounds.
     """
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     h, w = gray.shape
-    band = gray[h // 3: (2 * h) // 3, :]
+    # Wider band: middle 60 % of the height catches text that's not perfectly centered.
+    y0, y1 = int(h * 0.2), int(h * 0.8)
+    band = gray[y0:y1, :]
     edges = cv2.Canny(band, 80, 160)
-    return edges.mean()
+    edge_score = float(edges.mean())
+    contrast_score = float(band.std()) / 4.0  # normalise
+    return edge_score + contrast_score
 
 
-def pick_titlecard(video_path):
+def extract_at(cap, pos: int):
+    cap.set(cv2.CAP_PROP_POS_FRAMES, pos)
+    ret, frame = cap.read()
+    return frame if ret else None
+
+
+def pick_titlecard(video_path: Path):
     cap = cv2.VideoCapture(str(video_path))
     if not cap.isOpened():
         return None
 
     fps = cap.get(cv2.CAP_PROP_FPS) or 24.0
     total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    duration = total / fps if fps > 0 else 0
 
-    # Sample densely across the first ~5 seconds (title cards live early).
-    sample_times = [round(t, 2) for t in np.arange(0.5, 5.5, 0.5)]
-    positions = [min(int(t * fps), total - 1) for t in sample_times]
+    # Manual override wins.
+    ov = MANUAL_OVERRIDES.get(video_path.name)
+    if ov is not None:
+        frame = extract_at(cap, int(ov * fps))
+        cap.release()
+        return (frame, float("inf")) if frame is not None else None
 
-    best_frame = None
-    best_score = -1
+    # Sample every 0.25s across the first 10 s and last 10 s.
+    early = [t for t in np.arange(0.0, min(10.0, duration), 0.25)]
+    late = [t for t in np.arange(max(duration - 10.0, 0.0), duration, 0.25)]
+    times = sorted(set(early + late))
+    positions = [min(int(t * fps), total - 1) for t in times]
+
+    best_frame, best_score = None, -1.0
     for pos in positions:
-        cap.set(cv2.CAP_PROP_POS_FRAMES, pos)
-        ret, frame = cap.read()
-        if not ret:
+        frame = extract_at(cap, pos)
+        if frame is None:
             continue
-        cropped = detect_crop(frame)
-        score = text_score(cropped)
-        if score > best_score:
-            best_score = score
-            best_frame = cropped
+        s = score_frame(frame)
+        if s > best_score:
+            best_score = s
+            best_frame = frame
 
     cap.release()
-    return best_frame, best_score
+    return (best_frame, best_score) if best_frame is not None else None
 
 
-def main():
+def main() -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
     for name in VIDEOS:
         path = PROJECT_ROOT / name
         if not path.exists():
-            print(f"  MISSING: {name}")
+            print(f"  MISSING:  {name}")
             continue
         result = pick_titlecard(path)
         if result is None or result[0] is None:
-            print(f"  FAIL:    {name}")
+            print(f"  FAIL:     {name}")
             continue
         frame, score = result
         safe = os.path.splitext(name)[0].replace(" ", "_").replace(".", "_")
         out = OUTPUT_DIR / f"{safe}.jpg"
-        cv2.imwrite(str(out), frame, [cv2.IMWRITE_JPEG_QUALITY, 85])
-        print(f"  OK:      {name}  ->  {out.name}  (score {score:.1f})")
-
+        cv2.imwrite(str(out), frame, [cv2.IMWRITE_JPEG_QUALITY, 88])
+        tag = "override" if score == float("inf") else f"score {score:.1f}"
+        print(f"  OK:       {name}  ->  {out.name}  ({tag})")
     print(f"\nOutput: {OUTPUT_DIR}")
 
 

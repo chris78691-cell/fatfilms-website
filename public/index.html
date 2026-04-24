@@ -35,7 +35,18 @@
       font-family: 'Inter', system-ui, sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.2) rgba(0,0,0,0.35);
     }
+    /* Dark-themed main scrollbar to match the rest of the UI */
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.35); }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.15);
+      border-radius: 5px;
+      border: 2px solid rgba(0,0,0,0.35);
+    }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
     body.locked { overflow: hidden; }
     a { color: inherit; text-decoration: none; }
     button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
@@ -203,8 +214,18 @@
       background-size: cover; background-position: center;
       transition: opacity 0.6s;
     }
-    .hero-bg::after {
-      content: ''; position: absolute; inset: 0;
+    .hero-video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      pointer-events: none;
+    }
+    .hero-video.playing { opacity: 1; }
+    .hero-gradient {
+      position: absolute; inset: 0;
+      pointer-events: none;
       background: linear-gradient(180deg, rgba(10,10,10,0) 0%, rgba(10,10,10,0.3) 40%, rgba(10,10,10,0.95) 100%),
                   linear-gradient(90deg, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.3) 60%, rgba(10,10,10,0) 100%);
     }
@@ -250,7 +271,7 @@
     .btn-info:hover { background: rgba(120,120,120,0.75); }
 
     /* ========== ROWS ========== */
-    .rows-wrap { padding: 20px 0 60px; margin-top: -60px; position: relative; z-index: 3; }
+    .rows-wrap { padding: 20px 0 100px; margin-top: -60px; position: relative; z-index: 3; }
     .row { margin-bottom: 36px; padding: 0 40px; position: relative; }
     .row-title {
       font-size: 1.25rem; font-weight: 700;
@@ -466,10 +487,13 @@
     .player-inner {
       position: relative;
       width: 92vw; max-width: 1100px;
+      max-height: 92vh;
+      display: flex; flex-direction: column;
     }
     .player-head {
       display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 10px;
+      flex-shrink: 0;
     }
     .player-title {
       font-family: 'Bebas Neue', sans-serif;
@@ -482,8 +506,14 @@
       position: relative; border-radius: 8px; overflow: hidden;
       background: #000; border: 1px solid rgba(255,255,255,0.1);
       box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+      flex: 1; min-height: 0;
+      display: flex; align-items: center; justify-content: center;
     }
-    .player-wrap video { width: 100%; display: block; }
+    .player-wrap video {
+      max-width: 100%; max-height: 100%;
+      width: auto; height: auto;
+      display: block;
+    }
     .player-controls {
       position: absolute; bottom: 0; left: 0; right: 0; height: 48px;
       background: rgba(0,0,0,0.75);
@@ -546,17 +576,22 @@
       z-index: 10;
     }
 
-    /* ========== FOOTER ========== */
+    /* ========== FOOTER — fixed at the bottom, always visible ========== */
     .footer {
-      padding: 50px 40px 30px;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      padding: 10px 20px;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       border-top: 1px solid var(--border);
       text-align: center;
+      z-index: 50;
     }
-    .socials { display: flex; justify-content: center; gap: 36px; flex-wrap: wrap; }
-    .socials a { display: inline-flex; align-items: center; gap: 7px; color: #aaa; font-size: 0.9rem; font-weight: 600; transition: color 0.15s; }
+    .socials { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; }
+    .socials a { display: inline-flex; align-items: center; gap: 7px; color: #bbb; font-size: 0.85rem; font-weight: 600; transition: color 0.15s; }
     .socials a:hover { color: #fff; }
-    .socials svg { width: 20px; height: 20px; fill: currentColor; }
-    .footer-copy { margin-top: 20px; font-size: 0.75rem; color: #666; }
+    .socials svg { width: 18px; height: 18px; fill: currentColor; }
 
     /* ========== MOBILE ========== */
     @media (max-width: 900px) {
@@ -645,6 +680,8 @@
 <!-- ========== HERO ========== -->
 <section class="hero" id="hero">
   <div class="hero-bg" id="hero-bg"></div>
+  <video class="hero-video" id="hero-video" muted loop playsinline preload="metadata"></video>
+  <div class="hero-gradient"></div>
   <div class="hero-content">
     <h1 class="hero-title" id="hero-title"></h1>
     <p class="hero-desc" id="hero-desc"></p>
@@ -680,7 +717,6 @@
       X / Twitter
     </a>
   </div>
-  <div class="footer-copy">&copy; Fat Films. A parody project. All film references are jokes.</div>
 </footer>
 
 <!-- ========== INFO / CAST MODALS ========== -->
@@ -815,11 +851,12 @@ const FILMS = [
 
 const BY_SLUG = Object.fromEntries(FILMS.map(f => [f.slug, f]));
 
+// Each film appears in exactly one category (16 films / 4 categories = 4 each).
 const BASE_CATEGORIES = [
-  { title: 'Biggest Hits', slugs: ['american-chud','fat-club','bulk-fiction','weight-of-wallstreet','the-fatrix','fat-runner'] },
-  { title: 'Fat Films Exclusives', slugs: FILMS.map(f => f.slug) },
-  { title: 'Freshly Baked', slugs: ['heavy-potter','the-fatrix','chiplash','bulk-fiction','bigger-things'] },
-  { title: 'Heavy Hits', slugs: ['interbelly','fat-runner','chiplash','weight-of-wallstreet','american-chud','squid-gain'] },
+  { title: 'Biggest Hits', slugs: ['american-chud','fat-club','bulk-fiction','weight-of-wallstreet'] },
+  { title: 'Fat Films Exclusives', slugs: ['donnie-lardo','baking-bad','chewlander','fatsi-driver'] },
+  { title: 'Freshly Baked', slugs: ['heavy-potter','the-fatrix','chiplash','bigger-things'] },
+  { title: 'Heavy Hits', slugs: ['interbelly','fat-runner','squid-gain','the-bigs'] },
 ];
 
 // The "clean" frames for idle mode — a curated pool from public/frames/
@@ -911,15 +948,61 @@ document.getElementById('hamburger').addEventListener('click', () => {
 // ========================================================================
 // HERO
 // ========================================================================
+const heroVideo = document.getElementById('hero-video');
+let currentHeroFilm = null;
+
 function setHero(film) {
+  currentHeroFilm = film;
   const bg = document.getElementById('hero-bg');
   bg.style.backgroundImage = `url("${film.card}")`;
   document.getElementById('hero-title').textContent = film.title;
   document.getElementById('hero-desc').textContent = film.desc;
   document.getElementById('hero-play').onclick = () => openPlayer(film);
   document.getElementById('hero-info').onclick = () => openInfo(film);
+
+  // Swap the hero video source and resume autoplay when appropriate.
+  heroVideo.classList.remove('playing');
+  heroVideo.src = film.video;
+  heroVideo.muted = true;
+  heroVideo.load();
+  queueHeroPlay();
 }
 setHero(FILMS[Math.floor(Math.random() * FILMS.length)]);
+
+// --- Hero video play/pause orchestration -------------------------------
+// The hero plays a muted loop as the background UNLESS the user is actively
+// scrolling or a modal/player is open. We pause during those to keep the
+// page feeling calm and avoid wasted bandwidth.
+let heroScrollTimer = null;
+let heroBlocked = false;
+
+function anyModalOpen() {
+  if (document.querySelector('.modal-bg.show')) return true;
+  if (document.getElementById('player').classList.contains('show')) return true;
+  return false;
+}
+
+function queueHeroPlay() {
+  if (heroBlocked || anyModalOpen()) return;
+  const p = heroVideo.play();
+  if (p) p.then(() => heroVideo.classList.add('playing')).catch(() => {});
+}
+
+function pauseHero() {
+  heroVideo.pause();
+  heroVideo.classList.remove('playing');
+}
+
+window.addEventListener('scroll', () => {
+  heroBlocked = true;
+  pauseHero();
+  clearTimeout(heroScrollTimer);
+  heroScrollTimer = setTimeout(() => {
+    heroBlocked = false;
+    // Only resume if the hero is actually in view.
+    if (window.scrollY < window.innerHeight * 0.6) queueHeroPlay();
+  }, 500);
+}, { passive: true });
 
 // ========================================================================
 // ROWS RENDERING
@@ -1023,19 +1106,22 @@ function wireRows() {
 // ========================================================================
 // MODALS
 // ========================================================================
-function showModal(id) { document.getElementById(id).classList.add('show'); document.body.classList.add('locked'); }
-function hideModal(id) { document.getElementById(id).classList.remove('show'); document.body.classList.remove('locked'); }
+function showModal(id) { document.getElementById(id).classList.add('show'); document.body.classList.add('locked'); pauseHero(); }
+function hideModal(id) {
+  document.getElementById(id).classList.remove('show');
+  if (!anyModalOpen()) document.body.classList.remove('locked');
+  if (!anyModalOpen() && window.scrollY < window.innerHeight * 0.6) queueHeroPlay();
+}
 
 document.querySelectorAll('.modal-bg').forEach(m => {
-  m.addEventListener('click', e => { if (e.target === m) { m.classList.remove('show'); document.body.classList.remove('locked'); } });
-  m.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => { m.classList.remove('show'); document.body.classList.remove('locked'); }));
+  m.addEventListener('click', e => { if (e.target === m) hideModal(m.id); });
+  m.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => hideModal(m.id)));
 });
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
-    document.querySelectorAll('.modal-bg.show').forEach(m => m.classList.remove('show'));
+    document.querySelectorAll('.modal-bg.show').forEach(m => hideModal(m.id));
     if (document.getElementById('player').classList.contains('show')) closePlayer();
-    document.body.classList.remove('locked');
   }
 });
 
@@ -1052,7 +1138,7 @@ function openInfo(film) {
 function openCast(film) {
   document.getElementById('cast-title').textContent = film.title + ' — Cast';
   document.getElementById('cast-list').innerHTML = film.cast.map(
-    ([fake, real]) => `<li>${esc(fake)}<span class="real">(${esc(real)})</span></li>`
+    ([fake]) => `<li>${esc(fake)}</li>`
   ).join('');
   showModal('cast-modal');
 }
@@ -1080,6 +1166,7 @@ function openPlayer(film) {
   currentPlayerFilm = film;
   player.classList.add('show');
   document.body.classList.add('locked');
+  pauseHero();
   playerTitle.textContent = film.title.toUpperCase();
   video.src = film.video;
   unmutePrompt.style.display = 'none';
@@ -1100,12 +1187,17 @@ function closePlayer() {
   video.removeAttribute('src');
   video.load();
   player.classList.remove('show');
-  document.body.classList.remove('locked');
+  if (!anyModalOpen()) document.body.classList.remove('locked');
   currentPlayerFilm = null;
   renderRows();
+  if (window.scrollY < window.innerHeight * 0.6) queueHeroPlay();
 }
 
 document.getElementById('player-close').addEventListener('click', closePlayer);
+// Click anywhere outside the video inner area also closes the player.
+player.addEventListener('click', e => {
+  if (e.target === player) closePlayer();
+});
 unmutePrompt.addEventListener('click', () => { video.muted = false; unmutePrompt.style.display = 'none'; });
 
 ctrlPlay.addEventListener('click', () => video.paused ? video.play() : video.pause());
@@ -1244,7 +1336,11 @@ searchInput.addEventListener('input', () => {
 });
 
 document.addEventListener('click', (e) => {
-  if (!searchWrap.contains(e.target)) searchDropdown.classList.remove('show');
+  if (!searchWrap.contains(e.target)) {
+    searchDropdown.classList.remove('show');
+    searchWrap.classList.remove('open');
+    searchInput.value = '';
+  }
 });
 
 // ========================================================================
