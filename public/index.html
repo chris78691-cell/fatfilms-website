@@ -733,8 +733,22 @@
       }
       .nav-menu.mobile-open button, .nav-menu.mobile-open a { padding: 10px 6px; }
       .nav-menu.mobile-open .drop-wrap { width: 100%; }
-      .nav-menu.mobile-open .drop-menu { position: static; display: block; margin-top: 4px; background: rgba(255,255,255,0.03); border: none; padding: 4px 6px; }
+      /* Mobile-only: disable the desktop hover-expand on touch devices... */
+      .drop-wrap:hover .drop-menu, .drop-menu:hover { display: none; }
+      /* ...and hide sub-menus by default inside the hamburger drawer. */
+      .nav-menu.mobile-open .drop-menu { display: none; }
+      /* Sub-menu expands only when its wrapper is marked .expanded (tap-to-open). */
+      .nav-menu.mobile-open .drop-wrap.expanded .drop-menu {
+        display: block; position: static; margin-top: 4px;
+        background: rgba(255,255,255,0.03); border: none; padding: 4px 6px;
+      }
+      .nav-menu.mobile-open .drop-wrap > button svg { transition: transform 0.2s; }
+      .nav-menu.mobile-open .drop-wrap.expanded > button svg { transform: rotate(180deg); }
+
       .hamburger { display: inline-flex; }
+      /* Push the search icon to the far right; without this, the missing
+         nav-menu would let search sit next to the hamburger. */
+      .nav-right { margin-left: auto; }
       .hero-content { padding: 60px 20px 80px; }
       .row { padding: 0 16px; }
       .card { width: clamp(150px, 42vw, 240px); }
@@ -1617,9 +1631,31 @@ window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 40);
 });
 
-// Hamburger
+// Hamburger — toggles the mobile drawer. When the drawer closes, collapse
+// any expanded sub-menus so the next open starts fresh.
+const mobileNav = document.getElementById('nav-menu');
 document.getElementById('hamburger').addEventListener('click', () => {
-  document.getElementById('nav-menu').classList.toggle('mobile-open');
+  const willOpen = !mobileNav.classList.contains('mobile-open');
+  mobileNav.classList.toggle('mobile-open');
+  if (!willOpen) {
+    mobileNav.querySelectorAll('.drop-wrap.expanded').forEach(w => w.classList.remove('expanded'));
+  }
+});
+
+// Mobile only: tapping the Genres / Language parent button toggles its
+// sub-menu open/closed. On desktop the hover rule still controls this and
+// these clicks are harmless (hover already revealed the menu).
+document.querySelectorAll('#nav-menu .drop-wrap > button').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    if (!mobileNav.classList.contains('mobile-open')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const wrap = btn.closest('.drop-wrap');
+    // Accordion-style: close siblings when opening a new one.
+    const wasExpanded = wrap.classList.contains('expanded');
+    mobileNav.querySelectorAll('.drop-wrap.expanded').forEach(w => w.classList.remove('expanded'));
+    if (!wasExpanded) wrap.classList.add('expanded');
+  });
 });
 
 // ========================================================================
