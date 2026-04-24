@@ -354,7 +354,11 @@
     }
 
     .card-hover {
-      position: absolute; left: 0; right: 0; bottom: -60px;
+      position: absolute; left: 0; right: 0;
+      /* Sit flush against the card's bottom edge. A negative "bottom" used to
+         leave a few-px dead zone here, which made the overlay fade out while
+         the cursor was crossing it on the way to the buttons. */
+      top: 100%;
       background: rgba(0,0,0,0.85);
       padding: 10px;
       display: flex; gap: 6px; align-items: center;
@@ -769,15 +773,16 @@
     <div class="drop-wrap">
       <button><span data-i18n="ui.language">Language</span> <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></button>
       <div class="drop-menu" id="lang-menu">
-        <button data-lang="en" data-i18n="langs.en">English</button>
-        <button data-lang="es" data-i18n="langs.es">Spanish</button>
-        <button data-lang="fr" data-i18n="langs.fr">French</button>
-        <button data-lang="it" data-i18n="langs.it">Italian</button>
-        <button data-lang="de" data-i18n="langs.de">German</button>
-        <button data-lang="zh" data-i18n="langs.zh">Chinese</button>
-        <button data-lang="ja" data-i18n="langs.ja">Japanese</button>
-        <button data-lang="ko" data-i18n="langs.ko">Korean</button>
-        <button data-lang="ar" data-i18n="langs.ar">Arabic</button>
+        <!-- Each entry is labelled with its own endonym by applyTranslations(). -->
+        <button data-lang="en">English</button>
+        <button data-lang="es">Español</button>
+        <button data-lang="fr">Français</button>
+        <button data-lang="it">Italiano</button>
+        <button data-lang="de">Deutsch</button>
+        <button data-lang="zh">中文</button>
+        <button data-lang="ja">日本語</button>
+        <button data-lang="ko">한국어</button>
+        <button data-lang="ar">العربية</button>
       </div>
     </div>
     <button data-nav="news" data-i18n="ui.news">News</button>
@@ -1429,9 +1434,15 @@ function applyTranslations() {
     });
   });
 
-  // 4. Highlight the active language in the dropdown.
+  // 4. Language dropdown — each entry shows its OWN endonym (Español stays
+  // Español regardless of the active UI language), plus a checkmark on the
+  // currently selected one. Falls back to the button's hardcoded HTML text
+  // if the translation bundle is missing somehow.
   document.querySelectorAll('#lang-menu button[data-lang]').forEach(b => {
-    b.classList.toggle('active', b.dataset.lang === currentLang);
+    const code = b.dataset.lang;
+    const endonym = TRANSLATIONS[code] && TRANSLATIONS[code].langs && TRANSLATIONS[code].langs[code];
+    if (endonym) b.textContent = endonym;
+    b.classList.toggle('active', code === currentLang);
   });
 }
 
