@@ -403,6 +403,86 @@
     .heart-big.liked svg { fill: #ff4d6d; }
     .heart-big.liking { animation: heartbeat 0.4s cubic-bezier(.17,.89,.32,1.49); }
 
+    /* Bookmark / favorite button — outline by default, filled yellow when saved */
+    .fav-btn svg { transition: transform 0.15s; }
+    .fav-btn.saved { color: #ffcf3a; border-color: #ffcf3a !important; }
+    .fav-btn.saved svg { fill: #ffcf3a; }
+    .fav-btn.saving { animation: heartbeat 0.4s cubic-bezier(.17,.89,.32,1.49); }
+
+    .fav-big { display: inline-flex; align-items: center; gap: 8px; }
+    .fav-big svg { width: 18px; height: 18px; transition: transform 0.15s; }
+    .fav-big.saved { background: rgba(255,207,58,0.15); color: #ffcf3a; }
+    .fav-big.saved svg { fill: #ffcf3a; }
+
+    /* Language dropdown — checkmark on the active language */
+    .drop-menu button[data-lang] {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .drop-menu button[data-lang].active { color: #ff4d6d; }
+    .drop-menu button[data-lang].active::after {
+      content: '\2713';  /* ✓ */
+      margin-left: 12px;
+      font-weight: 700;
+    }
+
+    /* Favorites modal — grid of saved cards */
+    #favorites-modal .modal-box { max-width: 820px; width: 92%; max-height: 85vh; overflow-y: auto; }
+    .fav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .fav-grid .card {
+      width: 100%;
+      scroll-snap-align: unset;
+    }
+    .fav-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* News modal — What's New layout */
+    #news-modal .modal-box { max-width: 720px; width: 92%; max-height: 88vh; overflow-y: auto; }
+    .news-screenshot {
+      width: 100%;
+      max-width: 420px;
+      display: block;
+      margin: 18px auto 8px;
+      border-radius: 8px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+    }
+    .news-gifs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .news-gifs img {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+      display: block;
+    }
+    @media (max-width: 640px) {
+      .news-gifs { grid-template-columns: 1fr; }
+    }
+
+    /* RTL — flip only the top-level nav / modal layouts, leave card rows LTR. */
+    html[dir="rtl"] { text-align: right; }
+    html[dir="rtl"] .row,
+    html[dir="rtl"] .row-scroll,
+    html[dir="rtl"] .card,
+    html[dir="rtl"] .hero-content,
+    html[dir="rtl"] .marquee-track,
+    html[dir="rtl"] .card-hover { direction: ltr; }
+    html[dir="rtl"] .hero-content { text-align: left; }
+    html[dir="rtl"] .modal-box { text-align: right; }
+    html[dir="rtl"] .modal-close { right: auto; left: 14px; }
+
     /* ========== MODAL (shared) ========== */
     .modal-bg {
       position: fixed; inset: 0;
@@ -660,7 +740,7 @@
 </div>
 
 <!-- ========== MARQUEE + COPY TOAST ========== -->
-<div class="copy-toast" id="copy-toast">Copied!</div>
+<div class="copy-toast" id="copy-toast" data-i18n="ui.copied">Copied!</div>
 <div class="marquee" id="marquee">
   <div class="marquee-track">
     <span>GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; </span><span>GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; </span>
@@ -670,41 +750,42 @@
 <!-- ========== NAV ========== -->
 <nav class="nav" id="nav">
   <a href="#" class="brand">FAT FILMS</a>
-  <button class="icon-btn hamburger" id="hamburger" aria-label="Menu">
+  <button class="icon-btn hamburger" id="hamburger" data-i18n-attr="aria-label:ui.menu" aria-label="Menu">
     <svg viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
   </button>
   <div class="nav-menu" id="nav-menu">
-    <a href="#home" data-nav="home">Home</a>
-    <button data-nav="suggest">Film Suggestions</button>
-    <button data-nav="favorites">Favorites</button>
+    <a href="#home" data-nav="home" data-i18n="ui.home">Home</a>
+    <button data-nav="suggest" data-i18n="ui.suggestions">Film Suggestions</button>
+    <button data-nav="favorites" data-i18n="ui.favorites">Favorites</button>
     <div class="drop-wrap">
-      <button>Genres <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></button>
+      <button><span data-i18n="ui.genres">Genres</span> <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></button>
       <div class="drop-menu">
-        <button data-genre="Biggest Hits">Biggest Hits</button>
-        <button data-genre="Fat Films Exclusives">Fat Films Exclusives</button>
-        <button data-genre="Freshly Baked">Freshly Baked</button>
-        <button data-genre="Heavy Hits">Heavy Hits</button>
+        <button data-genre="biggestHits" data-i18n="ui.biggestHits">Biggest Hits</button>
+        <button data-genre="exclusives" data-i18n="ui.exclusives">Fat Films Exclusives</button>
+        <button data-genre="freshlyBaked" data-i18n="ui.freshlyBaked">Freshly Baked</button>
+        <button data-genre="heavyHits" data-i18n="ui.heavyHits">Heavy Hits</button>
       </div>
     </div>
     <div class="drop-wrap">
-      <button>Language <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></button>
-      <div class="drop-menu">
-        <button data-lang="Spanish">Spanish</button>
-        <button data-lang="French">French</button>
-        <button data-lang="Italian">Italian</button>
-        <button data-lang="German">German</button>
-        <button data-lang="Chinese">Chinese</button>
-        <button data-lang="Japanese">Japanese</button>
-        <button data-lang="Korean">Korean</button>
-        <button data-lang="Arabic">Arabic</button>
+      <button><span data-i18n="ui.language">Language</span> <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></button>
+      <div class="drop-menu" id="lang-menu">
+        <button data-lang="en" data-i18n="langs.en">English</button>
+        <button data-lang="es" data-i18n="langs.es">Spanish</button>
+        <button data-lang="fr" data-i18n="langs.fr">French</button>
+        <button data-lang="it" data-i18n="langs.it">Italian</button>
+        <button data-lang="de" data-i18n="langs.de">German</button>
+        <button data-lang="zh" data-i18n="langs.zh">Chinese</button>
+        <button data-lang="ja" data-i18n="langs.ja">Japanese</button>
+        <button data-lang="ko" data-i18n="langs.ko">Korean</button>
+        <button data-lang="ar" data-i18n="langs.ar">Arabic</button>
       </div>
     </div>
-    <a href="#news">News</a>
+    <button data-nav="news" data-i18n="ui.news">News</button>
   </div>
   <div class="nav-right">
     <div class="search-wrap" id="search-wrap">
-      <input type="text" class="search-input" id="search-input" placeholder="Search films...">
-      <button class="icon-btn" id="search-btn" aria-label="Search">
+      <input type="text" class="search-input" id="search-input" data-i18n-attr="placeholder:ui.searchPlaceholder" placeholder="Search films...">
+      <button class="icon-btn" id="search-btn" data-i18n-attr="aria-label:ui.search" aria-label="Search">
         <svg viewBox="0 0 24 24"><path d="M15.5 14h-.8l-.3-.3c1-1.1 1.6-2.6 1.6-4.2C16 5.9 13.1 3 9.5 3S3 5.9 3 9.5 5.9 16 9.5 16c1.6 0 3.1-.6 4.2-1.6l.3.3v.8l5 5 1.5-1.5-5-5zm-6 0C7 14 5 12 5 9.5S7 5 9.5 5 14 7 14 9.5 12 14 9.5 14z"/></svg>
       </button>
       <div class="search-dropdown" id="search-dropdown"></div>
@@ -723,11 +804,11 @@
     <div class="hero-actions">
       <button class="btn-play" id="hero-play">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        Play
+        <span data-i18n="ui.play">Play</span>
       </button>
       <button class="btn-info" id="hero-info">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-        More Info
+        <span data-i18n="ui.moreInfo">More Info</span>
       </button>
     </div>
   </div>
@@ -761,11 +842,14 @@
     <h2 id="info-title"></h2>
     <p id="info-desc"></p>
     <div style="display:flex; gap:10px; margin-top:20px; flex-wrap:wrap;">
-      <button class="btn-play" id="info-play"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Play</button>
-      <button class="btn-info" id="info-cast">Cast</button>
-      <button class="btn-info heart-big" id="info-like" title="Like">
+      <button class="btn-play" id="info-play"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span data-i18n="ui.play">Play</span></button>
+      <button class="btn-info" id="info-cast" data-i18n="ui.cast">Cast</button>
+      <button class="btn-info heart-big" id="info-like" data-i18n-attr="title:ui.likeTip" title="Like">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9.5 2 5.5 5.5 4.5 8 3.8 10 5 12 7c2-2 4-3.2 6.5-2.5C22 5.5 23 9.5 21.5 12c-2.5 4.5-9.5 9-9.5 9z"/></svg>
         <span id="info-like-count">0</span>
+      </button>
+      <button class="btn-info fav-big" id="info-fav" data-i18n-attr="title:ui.favoriteTip" title="Favorite">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
       </button>
     </div>
   </div>
@@ -783,17 +867,40 @@
 <div class="modal-bg" id="suggest-modal">
   <div class="modal-box">
     <button class="modal-close" data-close>&times;</button>
-    <h2>Film Suggestions</h2>
-    <p style="font-size:0.9rem; color:#aaa;">What film should we do next?</p>
+    <h2 data-i18n="ui.suggestTitle">Film Suggestions</h2>
+    <p style="font-size:0.9rem; color:#aaa;" data-i18n="ui.suggestPrompt">What film should we do next?</p>
     <div class="suggest-form">
-      <input type="text" id="suggest-input" placeholder="e.g. The Dark Knight, Breaking Bad...">
-      <button id="suggest-btn">Submit</button>
+      <input type="text" id="suggest-input" data-i18n-attr="placeholder:ui.suggestPlaceholder" placeholder="e.g. The Dark Knight, Breaking Bad...">
+      <button id="suggest-btn" data-i18n="ui.submit">Submit</button>
       <div class="suggest-auto" id="suggest-auto"></div>
     </div>
     <div class="msg" id="suggest-msg"></div>
-    <h3>Top Suggestions</h3>
+    <h3 data-i18n="ui.topSuggestions">Top Suggestions</h3>
     <div class="leaderboard-list" id="leaderboard-list">
-      <div style="text-align:center; padding:20px; color:#666; font-size:0.85rem;">Loading...</div>
+      <div style="text-align:center; padding:20px; color:#666; font-size:0.85rem;" data-i18n="ui.loading">Loading...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== FAVORITES MODAL ========== -->
+<div class="modal-bg" id="favorites-modal">
+  <div class="modal-box">
+    <button class="modal-close" data-close>&times;</button>
+    <h2 data-i18n="ui.favorites">Favorites</h2>
+    <div id="fav-grid-container"></div>
+  </div>
+</div>
+
+<!-- ========== NEWS MODAL ========== -->
+<div class="modal-bg" id="news-modal">
+  <div class="modal-box">
+    <button class="modal-close" data-close>&times;</button>
+    <h2 data-i18n="news.title">Fat Films GIFs are here!</h2>
+    <p data-i18n="news.content">You can now find Fat Films GIFs on Instagram and WhatsApp! Search 'fatfilms' in the GIF section when messaging and our custom GIFs will appear. Share the fat love in your chats!</p>
+    <img class="news-screenshot" src="gifscreenshot.jpg" alt="Searching fatfilms in the GIF picker">
+    <div class="news-gifs">
+      <img src="fatsogif.gif" alt="" loading="lazy">
+      <img src="wallstreetgif.gif" alt="" loading="lazy">
     </div>
   </div>
 </div>
@@ -807,7 +914,7 @@
     </div>
     <div class="player-wrap" id="player-wrap">
       <video id="video"></video>
-      <button class="unmute-prompt" id="unmute-prompt">Click for sound &#128266;</button>
+      <button class="unmute-prompt" id="unmute-prompt"><span data-i18n="ui.clickForSound">Click for sound</span> &#128266;</button>
       <div class="player-controls" id="player-controls">
         <button class="ctrl-btn" id="ctrl-play">&#9654;</button>
         <div class="progress-wrap" id="progress-wrap">
@@ -894,15 +1001,457 @@ const FILMS = [
 const BY_SLUG = Object.fromEntries(FILMS.map(f => [f.slug, f]));
 
 // Each film appears in exactly one category (16 films / 4 categories = 4 each).
+// `id` is a stable translation key; the displayed title is resolved via t('ui.' + id).
 const BASE_CATEGORIES = [
-  { title: 'Biggest Hits', slugs: ['american-chud','fat-club','bulk-fiction','weight-of-wallstreet'] },
-  { title: 'Fat Films Exclusives', slugs: ['donnie-lardo','baking-bad','chewlander','fatsi-driver'] },
-  { title: 'Freshly Baked', slugs: ['heavy-potter','the-fatrix','chiplash','bigger-things'] },
-  { title: 'Heavy Hits', slugs: ['interbelly','fat-runner','squid-gain','the-bigs'] },
+  { id: 'biggestHits',  slugs: ['american-chud','fat-club','bulk-fiction','weight-of-wallstreet'] },
+  { id: 'exclusives',   slugs: ['donnie-lardo','baking-bad','chewlander','fatsi-driver'] },
+  { id: 'freshlyBaked', slugs: ['heavy-potter','the-fatrix','chiplash','bigger-things'] },
+  { id: 'heavyHits',    slugs: ['interbelly','fat-runner','squid-gain','the-bigs'] },
 ];
 
 // The "clean" frames for idle mode — a curated pool from public/frames/
 const IDLE_FRAMES = ["american_chud_03.jpg","american_chud_05.jpg","american_chud_07.jpg","baking_bad_02.jpg","baking_bad_04.jpg","baking_bad_06.jpg","Bigger_Things_03.jpg","Bigger_Things_05.jpg","Bigger_Things_07.jpg","Bulk_Fiction_03.jpg","Bulk_Fiction_05.jpg","Bulk_Fiction_07.jpg","Chewlander_03.jpg","Chewlander_05.jpg","Chewlander_07.jpg","Chiplash_03.jpg","Chiplash_05.jpg","Chiplash_07.jpg","donnie_lardo_03.jpg","donnie_lardo_05.jpg","donnie_lardo_07.jpg","fat_club_03.jpg","fat_club_05.jpg","fat_club_07.jpg","fat_runner_03.jpg","fat_runner_05.jpg","fat_runner_07.jpg","fatsy_driver_03.jpg","fatsy_driver_05.jpg","fatsy_driver_07.jpg","Heavy_Potter_03.jpg","Heavy_Potter_05.jpg","Heavy_Potter_07.jpg","interbelly_03.jpg","interbelly_05.jpg","interbelly_07.jpg","squid_gain_03.jpg","squid_gain_05.jpg","squid_gain_07.jpg","the_bigs_03.jpg","the_bigs_05.jpg","the_bigs_07.jpg","The_Fatrix_03.jpg","The_Fatrix_05.jpg","The_Fatrix_07.jpg","The_Weight_of_Wallstreet_03.jpg","The_Weight_of_Wallstreet_05.jpg","The_Weight_of_Wallstreet_07.jpg"];
+
+// ========================================================================
+// I18N — translations for UI, film descriptions, and news.
+// Film titles and cast names intentionally stay in English (parody puns).
+// For each language I've preserved the fat/food/appetite humor where it
+// lands naturally; some English-specific wordplay is adapted rather than
+// translated literally so the comedic tone survives.
+// ========================================================================
+const TRANSLATIONS = {
+  en: {
+    langs: { en:'English', es:'Spanish', fr:'French', it:'Italian', de:'German', zh:'Chinese', ja:'Japanese', ko:'Korean', ar:'Arabic' },
+    ui: {
+      home:'Home', suggestions:'Film Suggestions', favorites:'Favorites', genres:'Genres', language:'Language', news:'News',
+      play:'Play', moreInfo:'More Info', submit:'Submit', cast:'Cast', download:'Download',
+      search:'Search', searchPlaceholder:'Search films...',
+      suggestTitle:'Film Suggestions', suggestPrompt:'What film should we do next?', suggestPlaceholder:'e.g. The Dark Knight, Breaking Bad...', topSuggestions:'Top Suggestions',
+      biggestHits:'Biggest Hits', exclusives:'Fat Films Exclusives', freshlyBaked:'Freshly Baked', heavyHits:'Heavy Hits', yourFavorites:'Your Favorites', becauseYouAte:'Because you ate {title}',
+      notAvailable:'Not available.', suggestIt:'Suggest it', alreadyOnSite:'Already on Fat Films!', alreadySuggested:'Already suggested',
+      noFavorites:'No favorites yet, click the bookmark icon on any film to save it here.',
+      noSuggestions:'No suggestions yet — be the first.',
+      loading:'Loading...', copied:'Copied!', clickForSound:'Click for sound',
+      networkError:'Network error. Try again.', submitError:'Something went wrong. Try again.',
+      thanksAdded:'Thanks! Added "{title}" to the leaderboard',
+      menu:'Menu', likeTip:'Like', infoTip:'Info', favoriteTip:'Favorite', castTip:'Cast', downloadTip:'Download watermarked version',
+      castSuffix:'Cast', votes:'votes', vote:'vote',
+    },
+    descriptions: {
+      'american-chud':"Patrick Ateman is a wealthy Wall Street investment banker with an impeccable morning skincare routine and an insatiable appetite. By day he obsesses over business cards and restaurant reservations. By night, things get a lot messier.",
+      'baking-bad':"A high school chemistry teacher gets a devastating diagnosis and decides to use his skills to cook up something far more profitable than school dinners. Along with his former student, he builds a snack empire that spirals dangerously out of control.",
+      'bigger-things':"When a chunky kid vanishes from the small town of Hawkins, his friends discover something monstrous lurking in a parallel dimension called the Upside Down. Turns out the real stranger thing is how much these kids can eat during a crisis.",
+      'bulk-fiction':"The lives of two heavyweight hitmen, a mob boss's wife with a taste for milkshakes, and a boxer who refuses to go down intertwine across Los Angeles. Non-linear storytelling has never been this filling.",
+      'chewlander':"Derek Chewlander is the world's most famous male model, known for his signature look Blue Meal. When a sinister fashion mogul tries to use him as a weapon, Derek must team up with rival model Hamsel to save the day and look absolutely stuffed doing it.",
+      'chiplash':"A young jazz drummer enrols at one of the most prestigious music conservatories in the country, only to find himself under the tyrannical instruction of Terence Flesher, a conductor who pushes his students well past their breaking point. Not quite my tempo, not quite my portion size.",
+      'donnie-lardo':"A troubled teenager starts sleepwalking and having visions of a giant terrifying rabbit who tells him the world is about to end. Between existential dread and raiding the fridge at 3am, Donnie has a lot on his plate. Literally.",
+      'fat-club':"An insomniac office worker and a mysterious soap salesman form an underground club with one simple rule: nobody talks about Fat Club. What starts as bare-knuckle brawling quickly inflates into something much, much bigger.",
+      'fat-runner':"Officer KD6-3.7 is a blade runner tasked with hunting down rogue replicants in a dystopian 2049. When he uncovers a long-buried secret, he must find former blade runner Rick Deckard, who has been in hiding and apparently eating very well.",
+      'fatsi-driver':"Travis Bickling is a lonely, sleep-deprived cab driver navigating the greasy streets of 1970s New York City. Disgusted by the filth and corruption he sees through his windshield, he embarks on a one-man mission to clean up the city, fuelled entirely by diner food.",
+      'heavy-potter':"An orphan living under the stairs discovers he's actually a wizard and gets whisked away to Hogwarts School of Witchcraft and Wizardry. Between battling the dark lord and demolishing the Great Hall buffet, Heavy's plate is always full.",
+      'interbelly':"In a dying future where crops have failed and humanity faces starvation, a former NASA pilot leads a crew through a wormhole in search of a new home. The mission: find a planet with enough food to feed everyone. Time is relative but hunger is constant.",
+      'squid-gain':"Hundreds of cash-strapped contestants accept a mysterious invitation to compete in a series of deadly childhood games for a massive cash prize. The stakes are enormous. So are the players.",
+      'the-bigs':"A ragtag group of vigilantes take on corrupt superheroes who abuse their powers for fame and profit. Leading the charge is Billy Butcher, a man with a grudge, a plan, and absolutely zero interest in portion control.",
+      'the-fatrix':"A computer hacker discovers that reality as he knows it is actually a simulated world designed to keep humanity docile and well-fed. When offered the choice between a red pill and a blue pill, Neo asks if there is a third option with gravy.",
+      'weight-of-wallstreet':"Based on the true story of Jordan Belfry, a stockbroker who built a massive fortune through fraud, excess, and an appetite for the finer things in life. The money was obscene, the parties were legendary, and the lunch bills were astronomical.",
+    },
+    news: {
+      title:'Fat Films GIFs are here!',
+      content:"You can now find Fat Films GIFs on Instagram and WhatsApp! Search 'fatfilms' in the GIF section when messaging and our custom GIFs will appear. Share the fat love in your chats!",
+    },
+  },
+  es: {
+    langs: { en:'Inglés', es:'Español', fr:'Francés', it:'Italiano', de:'Alemán', zh:'Chino', ja:'Japonés', ko:'Coreano', ar:'Árabe' },
+    ui: {
+      home:'Inicio', suggestions:'Sugerencias', favorites:'Favoritos', genres:'Géneros', language:'Idioma', news:'Novedades',
+      play:'Reproducir', moreInfo:'Más info', submit:'Enviar', cast:'Reparto', download:'Descargar',
+      search:'Buscar', searchPlaceholder:'Buscar películas...',
+      suggestTitle:'Sugerencias de películas', suggestPrompt:'¿Qué película deberíamos hacer a continuación?', suggestPlaceholder:'p. ej. El Caballero Oscuro, Breaking Bad...', topSuggestions:'Las más sugeridas',
+      biggestHits:'Grandes éxitos', exclusives:'Exclusivas de Fat Films', freshlyBaked:'Recién horneadas', heavyHits:'Pesos pesados', yourFavorites:'Tus favoritos', becauseYouAte:'Porque te comiste {title}',
+      notAvailable:'No disponible.', suggestIt:'Sugerirla', alreadyOnSite:'¡Ya está en Fat Films!', alreadySuggested:'Ya sugerida',
+      noFavorites:'Aún no hay favoritos, toca el icono de marcador en cualquier película para guardarla aquí.',
+      noSuggestions:'Aún no hay sugerencias, sé el primero.',
+      loading:'Cargando...', copied:'¡Copiado!', clickForSound:'Haz clic para sonido',
+      networkError:'Error de red. Inténtalo de nuevo.', submitError:'Algo salió mal. Inténtalo de nuevo.',
+      thanksAdded:'¡Gracias! Añadimos "{title}" a la lista',
+      menu:'Menú', likeTip:'Me gusta', infoTip:'Info', favoriteTip:'Favorito', castTip:'Reparto', downloadTip:'Descargar versión con marca de agua',
+      castSuffix:'Reparto', votes:'votos', vote:'voto',
+    },
+    descriptions: {
+      'american-chud':"Patrick Ateman es un adinerado banquero de inversiones de Wall Street con una rutina de skincare matutina impecable y un apetito insaciable. De día se obsesiona con tarjetas de visita y reservas en restaurantes. De noche, las cosas se ponen mucho más sucias.",
+      'baking-bad':"Un profesor de química de instituto recibe un diagnóstico devastador y decide usar sus habilidades para cocinar algo mucho más rentable que los menús escolares. Junto a su antiguo alumno monta un imperio de aperitivos que se sale peligrosamente de control.",
+      'bigger-things':"Cuando un niño rellenito desaparece del pueblecito de Hawkins, sus amigos descubren algo monstruoso acechando en una dimensión paralela llamada el Revés. Resulta que lo más raro es la cantidad que estos críos son capaces de comer en plena crisis.",
+      'bulk-fiction':"Las vidas de dos sicarios con sobrepeso, la esposa de un capo con debilidad por los batidos y un boxeador que se niega a caer se entrelazan por todo Los Ángeles. La narrativa no lineal nunca había sido tan llenadora.",
+      'chewlander':"Derek Chewlander es el modelo masculino más famoso del mundo, conocido por su pose estrella Menú Azul. Cuando un siniestro magnate de la moda intenta usarlo como arma, Derek se alía con su rival Hamsel para salvar el día, todo con el estómago reventando.",
+      'chiplash':"Un joven baterista de jazz entra en uno de los conservatorios más prestigiosos del país y acaba bajo el mando tiránico de Terence Flesher, un director que lleva a sus alumnos mucho más allá del límite. No es mi tempo, no es mi ración.",
+      'donnie-lardo':"Un adolescente problemático empieza a caminar dormido y a tener visiones de un conejo gigante aterrador que le avisa de que el mundo está por acabar. Entre la angustia existencial y los asaltos a la nevera a las 3 de la mañana, Donnie tiene mucho en su plato. Literalmente.",
+      'fat-club':"Un oficinista insomne y un misterioso vendedor de jabón fundan un club clandestino con una sola regla: nadie habla de Fat Club. Lo que empieza como pelea a puño limpio se infla rápido hasta algo muchísimo más grande.",
+      'fat-runner':"El agente KD6-3.7 es un blade runner encargado de cazar replicantes rebeldes en el distópico 2049. Cuando descubre un secreto enterrado, debe encontrar al ex blade runner Rick Deckard, que lleva años escondido y, al parecer, comiendo muy bien.",
+      'fatsi-driver':"Travis Bickling es un taxista solitario y sin dormir que navega las grasientas calles del Nueva York de los 70. Asqueado por la suciedad y la corrupción que ve por el parabrisas, se embarca en una misión en solitario para limpiar la ciudad, alimentado únicamente por comida de diner.",
+      'heavy-potter':"Un huérfano que vive bajo las escaleras descubre que en realidad es un mago y lo llevan al colegio Hogwarts de Magia y Hechicería. Entre batallas contra el señor tenebroso y asaltos al bufé del Gran Comedor, Heavy siempre tiene el plato lleno.",
+      'interbelly':"En un futuro agonizante donde las cosechas han fracasado y la humanidad se muere de hambre, un ex piloto de la NASA lidera a una tripulación por un agujero de gusano en busca de un nuevo hogar. La misión: encontrar un planeta con comida para todos. El tiempo es relativo pero el hambre es constante.",
+      'squid-gain':"Cientos de concursantes sin un duro aceptan una invitación misteriosa para competir en una serie de juegos infantiles mortales por un premio enorme. Lo que está en juego es enorme. Los jugadores también.",
+      'the-bigs':"Un grupo heterogéneo de vigilantes se enfrenta a superhéroes corruptos que abusan de sus poderes por fama y dinero. Al frente va Billy Butcher, un hombre con rencor, un plan y cero interés en controlar porciones.",
+      'the-fatrix':"Un hacker informático descubre que la realidad tal como la conoce es en realidad un mundo simulado diseñado para mantener a la humanidad dócil y bien alimentada. Cuando le ofrecen elegir entre la pastilla roja y la azul, Neo pregunta si hay una tercera opción con salsa.",
+      'weight-of-wallstreet':"Basada en la historia real de Jordan Belfry, un corredor de bolsa que construyó una fortuna masiva con fraude, excesos y un apetito por los placeres más finos. El dinero era obsceno, las fiestas legendarias y las facturas de la comida, astronómicas.",
+    },
+    news: {
+      title:'¡Los GIFs de Fat Films ya están aquí!',
+      content:"¡Ya puedes encontrar los GIFs de Fat Films en Instagram y WhatsApp! Busca 'fatfilms' en la sección de GIFs al enviar mensajes y aparecerán nuestros GIFs personalizados. ¡Comparte el amor gordo en tus chats!",
+    },
+  },
+  fr: {
+    langs: { en:'Anglais', es:'Espagnol', fr:'Français', it:'Italien', de:'Allemand', zh:'Chinois', ja:'Japonais', ko:'Coréen', ar:'Arabe' },
+    ui: {
+      home:'Accueil', suggestions:'Suggestions', favorites:'Favoris', genres:'Genres', language:'Langue', news:'Actus',
+      play:'Lecture', moreInfo:'Plus d\u2019infos', submit:'Envoyer', cast:'Distribution', download:'Télécharger',
+      search:'Rechercher', searchPlaceholder:'Rechercher des films...',
+      suggestTitle:'Suggestions de films', suggestPrompt:'Quel film devrions-nous faire ensuite ?', suggestPlaceholder:'p. ex. The Dark Knight, Breaking Bad...', topSuggestions:'Suggestions populaires',
+      biggestHits:'Les plus gros hits', exclusives:'Exclusivités Fat Films', freshlyBaked:'Fraîchement sortis du four', heavyHits:'Poids lourds', yourFavorites:'Vos favoris', becauseYouAte:'Parce que vous avez mangé {title}',
+      notAvailable:'Non disponible.', suggestIt:'Le suggérer', alreadyOnSite:'Déjà sur Fat Films !', alreadySuggested:'Déjà suggéré',
+      noFavorites:'Aucun favori pour l\u2019instant, cliquez sur l\u2019icône de marque-page d\u2019un film pour l\u2019enregistrer ici.',
+      noSuggestions:'Aucune suggestion pour le moment, soyez le premier.',
+      loading:'Chargement...', copied:'Copié !', clickForSound:'Cliquez pour le son',
+      networkError:'Erreur réseau. Réessayez.', submitError:'Un problème est survenu. Réessayez.',
+      thanksAdded:'Merci ! Nous avons ajouté « {title} » au classement',
+      menu:'Menu', likeTip:'J\u2019aime', infoTip:'Infos', favoriteTip:'Favori', castTip:'Distribution', downloadTip:'Télécharger la version filigranée',
+      castSuffix:'Distribution', votes:'votes', vote:'vote',
+    },
+    descriptions: {
+      'american-chud':"Patrick Ateman est un riche banquier d\u2019affaires de Wall Street avec une routine soin du matin impeccable et un appétit insatiable. Le jour, il s\u2019obsède pour ses cartes de visite et ses réservations. La nuit, ça devient beaucoup plus crade.",
+      'baking-bad':"Un prof de chimie reçoit un diagnostic dévastateur et décide d\u2019utiliser ses compétences pour cuisiner quelque chose de bien plus rentable que les repas de cantine. Avec son ancien élève, il bâtit un empire de goûters qui dérape dangereusement.",
+      'bigger-things':"Quand un gamin bien en chair disparaît de la petite ville de Hawkins, ses amis découvrent une créature monstrueuse tapie dans une dimension parallèle, le Monde à l\u2019Envers. La vraie chose étrange, c\u2019est la quantité que ces gosses peuvent ingurgiter en pleine crise.",
+      'bulk-fiction':"Les vies de deux tueurs à gages costauds, de l\u2019épouse d\u2019un parrain accro aux milkshakes et d\u2019un boxeur qui refuse de tomber s\u2019entremêlent dans Los Angeles. Jamais narration non linéaire n\u2019a été aussi rassasiante.",
+      'chewlander':"Derek Chewlander est le mannequin masculin le plus célèbre du monde, connu pour sa pose signature « Menu Bleu ». Quand un magnat de la mode machiavélique tente d\u2019en faire une arme, Derek s\u2019allie à son rival Hamsel pour sauver la mise, et l\u2019estomac plein.",
+      'chiplash':"Un jeune batteur de jazz intègre l\u2019un des conservatoires les plus prestigieux du pays et se retrouve sous la férule tyrannique de Terence Flesher, un chef qui pousse ses élèves bien au-delà de leurs limites. Pas tout à fait mon tempo, pas tout à fait ma portion.",
+      'donnie-lardo':"Un adolescent tourmenté se met à être somnambule et à voir un lapin géant terrifiant qui lui annonce la fin du monde. Entre angoisse existentielle et razzias sur le frigo à 3 h du matin, Donnie a beaucoup sur son assiette. Littéralement.",
+      'fat-club':"Un employé de bureau insomniaque et un vendeur de savon mystérieux fondent un club clandestin avec une seule règle : on ne parle pas de Fat Club. Ce qui commence en baston à mains nues enfle très vite en quelque chose de bien plus gros.",
+      'fat-runner':"L\u2019officier KD6-3.7 est un blade runner chargé de traquer des réplicants rebelles dans le 2049 dystopique. Quand il exhume un secret enfoui, il doit retrouver l\u2019ancien blade runner Rick Deckard, caché depuis des années et qui mange apparemment très bien.",
+      'fatsi-driver':"Travis Bickling est un chauffeur de taxi solitaire et insomniaque qui sillonne les rues graisseuses du New York des années 70. Écœuré par la crasse et la corruption qu\u2019il voit à travers son pare-brise, il se lance dans une mission solo pour nettoyer la ville, carburant uniquement à la bouffe de diner.",
+      'heavy-potter':"Un orphelin qui vit sous l\u2019escalier découvre qu\u2019il est en fait un sorcier et qu\u2019il file à l\u2019école de Poudlard. Entre bataille contre le seigneur des ténèbres et démolition du buffet de la Grande Salle, l\u2019assiette de Heavy est toujours pleine.",
+      'interbelly':"Dans un futur moribond où les récoltes ont échoué et où l\u2019humanité crève de faim, un ancien pilote de la NASA mène un équipage à travers un trou de ver pour trouver un nouveau foyer. La mission : trouver une planète avec assez de nourriture pour tout le monde. Le temps est relatif, la faim est constante.",
+      'squid-gain':"Des centaines de candidats fauchés acceptent une invitation mystérieuse pour s\u2019affronter dans une série de jeux d\u2019enfance mortels pour une cagnotte colossale. Les enjeux sont énormes. Les joueurs aussi.",
+      'the-bigs':"Un groupe hétéroclite de justiciers s\u2019en prend à des super-héros corrompus qui abusent de leurs pouvoirs pour la gloire et l\u2019argent. À leur tête, Billy Butcher : un homme rancunier, méthodique, et zéro intérêt pour la modération des portions.",
+      'the-fatrix':"Un hacker découvre que la réalité telle qu\u2019il la connaît est en fait un monde simulé conçu pour garder l\u2019humanité docile et bien nourrie. Quand on lui propose de choisir entre la pilule rouge et la pilule bleue, Néo demande s\u2019il existe une troisième option avec sauce.",
+      'weight-of-wallstreet':"D\u2019après l\u2019histoire vraie de Jordan Belfry, un courtier qui a bâti une immense fortune grâce à la fraude, l\u2019excès et un goût pour les meilleurs plaisirs de la vie. L\u2019argent était obscène, les fêtes légendaires et les notes de resto astronomiques.",
+    },
+    news: {
+      title:'Les GIFs Fat Films sont là !',
+      content:"Vous pouvez maintenant trouver les GIFs Fat Films sur Instagram et WhatsApp ! Cherchez « fatfilms » dans la section GIF lors de vos messages et nos GIFs apparaîtront. Partagez l\u2019amour gras dans vos discussions !",
+    },
+  },
+  it: {
+    langs: { en:'Inglese', es:'Spagnolo', fr:'Francese', it:'Italiano', de:'Tedesco', zh:'Cinese', ja:'Giapponese', ko:'Coreano', ar:'Arabo' },
+    ui: {
+      home:'Home', suggestions:'Suggerimenti', favorites:'Preferiti', genres:'Generi', language:'Lingua', news:'Novità',
+      play:'Riproduci', moreInfo:'Altre info', submit:'Invia', cast:'Cast', download:'Scarica',
+      search:'Cerca', searchPlaceholder:'Cerca film...',
+      suggestTitle:'Suggerimenti di film', suggestPrompt:'Che film dovremmo fare dopo?', suggestPlaceholder:'es. Il Cavaliere Oscuro, Breaking Bad...', topSuggestions:'I più suggeriti',
+      biggestHits:'Grandi successi', exclusives:'Esclusive Fat Films', freshlyBaked:'Appena sfornati', heavyHits:'Pesi massimi', yourFavorites:'I tuoi preferiti', becauseYouAte:'Perché hai mangiato {title}',
+      notAvailable:'Non disponibile.', suggestIt:'Suggeriscilo', alreadyOnSite:'Già su Fat Films!', alreadySuggested:'Già suggerito',
+      noFavorites:'Ancora nessun preferito, tocca l\u2019icona segnalibro su un film per salvarlo qui.',
+      noSuggestions:'Ancora nessun suggerimento, sii il primo.',
+      loading:'Caricamento...', copied:'Copiato!', clickForSound:'Clic per l\u2019audio',
+      networkError:'Errore di rete. Riprova.', submitError:'Qualcosa è andato storto. Riprova.',
+      thanksAdded:'Grazie! Abbiamo aggiunto "{title}" alla classifica',
+      menu:'Menu', likeTip:'Mi piace', infoTip:'Info', favoriteTip:'Preferito', castTip:'Cast', downloadTip:'Scarica versione con filigrana',
+      castSuffix:'Cast', votes:'voti', vote:'voto',
+    },
+    descriptions: {
+      'american-chud':"Patrick Ateman è un ricco banchiere d\u2019investimento di Wall Street con una meticolosa skincare mattutina e un appetito insaziabile. Di giorno si ossessiona per biglietti da visita e prenotazioni al ristorante. Di notte le cose si fanno molto più disordinate.",
+      'baking-bad':"Un professore di chimica al liceo riceve una diagnosi devastante e decide di usare le sue competenze per cucinare qualcosa di molto più redditizio della mensa scolastica. Insieme al suo ex studente costruisce un impero di snack che sfugge pericolosamente di mano.",
+      'bigger-things':"Quando un ragazzino paffuto scompare dal paesino di Hawkins, gli amici scoprono qualcosa di mostruoso in una dimensione parallela chiamata il Sottosopra. La cosa davvero strana è quanto riescano a mangiare questi bambini in piena crisi.",
+      'bulk-fiction':"Le vite di due sicari robusti, della moglie di un boss con un debole per i frullati, e di un pugile che si rifiuta di andare al tappeto si intrecciano in tutta Los Angeles. Mai la narrazione non lineare è stata così saziante.",
+      'chewlander':"Derek Chewlander è il modello maschile più famoso del mondo, noto per la sua posa Blue Meal. Quando un sinistro magnate della moda tenta di usarlo come arma, Derek si allea con il rivale Hamsel per salvare la situazione, con la pancia piena da scoppiare.",
+      'chiplash':"Un giovane batterista jazz entra in uno dei conservatori più prestigiosi del paese e finisce sotto l\u2019istruzione tirannica di Terence Flesher, un direttore che spinge i suoi allievi ben oltre il limite. Non è il mio tempo, non è la mia porzione.",
+      'donnie-lardo':"Un adolescente tormentato inizia a camminare nel sonno e ad avere visioni di un enorme coniglio terrificante che gli dice che il mondo sta per finire. Tra angoscia esistenziale e incursioni al frigo alle tre di notte, Donnie ha molto sul piatto. Letteralmente.",
+      'fat-club':"Un impiegato insonne e un misterioso venditore di sapone fondano un club clandestino con una sola regola: nessuno parla di Fat Club. Quel che nasce come rissa a mani nude si gonfia rapidamente in qualcosa di molto, molto più grande.",
+      'fat-runner':"L\u2019agente KD6-3.7 è un blade runner incaricato di dare la caccia a replicanti fuorilegge nel distopico 2049. Quando scopre un segreto sepolto da tempo, deve trovare l\u2019ex blade runner Rick Deckard, che si nasconde da anni e a quanto pare mangia benissimo.",
+      'fatsi-driver':"Travis Bickling è un tassista solitario e privo di sonno che attraversa le strade unte della New York anni \u201970. Disgustato dalla sporcizia e dalla corruzione che vede oltre il parabrezza, si lancia in una missione solitaria per ripulire la città, alimentato esclusivamente da cibo da diner.",
+      'heavy-potter':"Un orfano che vive sotto le scale scopre di essere un mago e viene portato a Hogwarts, la scuola di magia e stregoneria. Tra battaglie contro il signore oscuro e incursioni al buffet della Sala Grande, il piatto di Heavy è sempre pieno.",
+      'interbelly':"In un futuro morente dove i raccolti hanno fallito e l\u2019umanità muore di fame, un ex pilota della NASA guida un equipaggio attraverso un wormhole in cerca di una nuova casa. La missione: trovare un pianeta con cibo a sufficienza per tutti. Il tempo è relativo, la fame è costante.",
+      'squid-gain':"Centinaia di concorrenti al verde accettano un invito misterioso per sfidarsi in una serie di giochi d\u2019infanzia mortali per un premio in denaro enorme. La posta in gioco è enorme. Anche i giocatori.",
+      'the-bigs':"Un gruppo eterogeneo di vigilanti si scontra con supereroi corrotti che abusano dei loro poteri per fama e profitto. A guidarli, Billy Butcher: un uomo con un rancore, un piano e zero interesse per le porzioni controllate.",
+      'the-fatrix':"Un hacker scopre che la realtà per come la conosce è in realtà un mondo simulato progettato per tenere l\u2019umanità docile e ben sfamata. Davanti alla scelta tra pillola rossa e pillola blu, Neo chiede se esiste una terza opzione con sugo.",
+      'weight-of-wallstreet':"Basato sulla storia vera di Jordan Belfry, un broker che ha costruito un\u2019enorme fortuna con frodi, eccessi e un appetito per le cose più raffinate della vita. I soldi erano osceni, le feste leggendarie e i conti del ristorante astronomici.",
+    },
+    news: {
+      title:'Le GIF di Fat Films sono arrivate!',
+      content:"Ora puoi trovare le GIF di Fat Films su Instagram e WhatsApp! Cerca 'fatfilms' nella sezione GIF quando scrivi messaggi e appariranno le nostre GIF. Condividi l\u2019amore grasso nelle tue chat!",
+    },
+  },
+  de: {
+    langs: { en:'Englisch', es:'Spanisch', fr:'Französisch', it:'Italienisch', de:'Deutsch', zh:'Chinesisch', ja:'Japanisch', ko:'Koreanisch', ar:'Arabisch' },
+    ui: {
+      home:'Start', suggestions:'Filmvorschläge', favorites:'Favoriten', genres:'Genres', language:'Sprache', news:'Neuigkeiten',
+      play:'Abspielen', moreInfo:'Mehr Infos', submit:'Senden', cast:'Besetzung', download:'Herunterladen',
+      search:'Suchen', searchPlaceholder:'Filme suchen...',
+      suggestTitle:'Filmvorschläge', suggestPrompt:'Welchen Film sollen wir als Nächstes machen?', suggestPlaceholder:'z. B. The Dark Knight, Breaking Bad...', topSuggestions:'Top-Vorschläge',
+      biggestHits:'Größte Hits', exclusives:'Fat Films Exklusiv', freshlyBaked:'Frisch gebacken', heavyHits:'Schwergewichte', yourFavorites:'Deine Favoriten', becauseYouAte:'Weil du {title} verputzt hast',
+      notAvailable:'Nicht verfügbar.', suggestIt:'Vorschlagen', alreadyOnSite:'Schon auf Fat Films!', alreadySuggested:'Schon vorgeschlagen',
+      noFavorites:'Noch keine Favoriten, tippe auf das Lesezeichen-Symbol eines Films, um ihn hier zu speichern.',
+      noSuggestions:'Noch keine Vorschläge, sei der Erste.',
+      loading:'Lädt...', copied:'Kopiert!', clickForSound:'Für Ton klicken',
+      networkError:'Netzwerkfehler. Bitte erneut versuchen.', submitError:'Etwas lief schief. Erneut versuchen.',
+      thanksAdded:'Danke! „{title}" wurde zur Liste hinzugefügt',
+      menu:'Menü', likeTip:'Gefällt mir', infoTip:'Info', favoriteTip:'Favorit', castTip:'Besetzung', downloadTip:'Version mit Wasserzeichen herunterladen',
+      castSuffix:'Besetzung', votes:'Stimmen', vote:'Stimme',
+    },
+    descriptions: {
+      'american-chud':"Patrick Ateman ist ein vermögender Wall-Street-Investmentbanker mit einer makellosen Morgenroutine für die Haut und unstillbarem Appetit. Tagsüber obsessiv wegen Visitenkarten und Restaurantreservierungen. Nachts wird es deutlich schmutziger.",
+      'baking-bad':"Ein Gymnasialchemielehrer bekommt eine verheerende Diagnose und beschließt, seine Fähigkeiten zu nutzen, um etwas weit Lukrativeres als Schulessen zu kochen. Mit seinem Ex-Schüler baut er ein Snack-Imperium, das gefährlich außer Kontrolle gerät.",
+      'bigger-things':"Als ein pummeliges Kind aus dem Städtchen Hawkins verschwindet, entdecken seine Freunde etwas Monströses in einer Parallelwelt namens Das Upside Down. Das wirklich Seltsame ist, wie viel diese Kinder in einer Krise verputzen können.",
+      'bulk-fiction':"Die Leben zweier schwergewichtiger Auftragskiller, der Frau eines Mafiabosses mit Faible für Milchshakes und eines Boxers, der sich weigert, umzufallen, verflechten sich quer durch Los Angeles. Nichtlineares Erzählen war nie so sättigend.",
+      'chewlander':"Derek Chewlander ist das berühmteste männliche Model der Welt, bekannt für seine Posenmarke „Blue Meal". Als ein finsterer Modemogul versucht, ihn als Waffe einzusetzen, muss Derek sich mit seinem Rivalen Hamsel verbünden, um den Tag zu retten, bis zum Platzen gestopft.",
+      'chiplash':"Ein junger Jazz-Schlagzeuger schreibt sich an einem der renommiertesten Konservatorien des Landes ein und gerät unter die Tyrannei von Terence Flesher, einem Dirigenten, der seine Schüler weit über ihre Grenzen treibt. Nicht ganz mein Tempo, nicht ganz meine Portion.",
+      'donnie-lardo':"Ein gestörter Teenager beginnt zu schlafwandeln und hat Visionen von einem riesigen, furchterregenden Kaninchen, das ihm erzählt, die Welt stehe kurz vor dem Ende. Zwischen existenzieller Angst und nächtlichen Kühlschrank-Raubzügen hat Donnie viel auf dem Teller. Wörtlich.",
+      'fat-club':"Ein schlafloser Büroangestellter und ein mysteriöser Seifenverkäufer gründen einen Untergrundclub mit einer Regel: Niemand spricht über Fat Club. Was als nackte Faustkampf beginnt, bläht sich schnell zu etwas viel, viel Größerem auf.",
+      'fat-runner':"Officer KD6-3.7 ist ein Blade Runner, der im dystopischen 2049 abtrünnige Replikanten jagt. Als er ein tief begrabenes Geheimnis aufdeckt, muss er den früheren Blade Runner Rick Deckard finden, der seit Jahren versteckt lebt und offenbar sehr gut isst.",
+      'fatsi-driver':"Travis Bickling ist ein einsamer, schlaftrunkener Taxifahrer, der durch die fettigen Straßen des New York der 70er Jahre kurvt. Angewidert vom Dreck und der Korruption jenseits seiner Windschutzscheibe, startet er eine Ein-Mann-Mission, die Stadt zu säubern, ausschließlich mit Diner-Food angetrieben.",
+      'heavy-potter':"Ein Waise, der unter der Treppe wohnt, entdeckt, dass er ein Zauberer ist, und wird nach Hogwarts entführt. Zwischen Kämpfen gegen den dunklen Lord und dem Verwüsten des Großen-Saal-Buffets ist Heavys Teller immer voll.",
+      'interbelly':"In einer sterbenden Zukunft, in der die Ernten ausgefallen sind und die Menschheit verhungert, führt ein ehemaliger NASA-Pilot eine Crew durch ein Wurmloch auf der Suche nach einer neuen Heimat. Die Mission: einen Planeten mit genug Essen für alle finden. Zeit ist relativ, Hunger ist konstant.",
+      'squid-gain':"Hunderte klammer Kandidaten nehmen eine rätselhafte Einladung an, in einer Reihe tödlicher Kinderspiele um ein gewaltiges Preisgeld zu kämpfen. Der Einsatz ist enorm. Die Spieler auch.",
+      'the-bigs':"Eine bunt zusammengewürfelte Gruppe von Selbstjustizlern legt sich mit korrupten Superhelden an, die ihre Kräfte für Ruhm und Profit missbrauchen. Angeführt wird sie von Billy Butcher: ein Mann mit Groll, Plan und null Interesse an Portionskontrolle.",
+      'the-fatrix':"Ein Computer-Hacker entdeckt, dass die Realität, wie er sie kennt, in Wahrheit eine simulierte Welt ist, die die Menschheit gefügig und wohlgenährt halten soll. Als ihm rote und blaue Pille angeboten werden, fragt Neo, ob es eine dritte Option mit Soße gibt.",
+      'weight-of-wallstreet':"Nach der wahren Geschichte von Jordan Belfry, einem Börsenmakler, der durch Betrug, Exzess und Appetit auf die feineren Dinge ein riesiges Vermögen aufbaute. Das Geld war obszön, die Partys legendär und die Mittagessen-Rechnungen astronomisch.",
+    },
+    news: {
+      title:'Fat Films GIFs sind da!',
+      content:"Du findest Fat Films GIFs jetzt auf Instagram und WhatsApp! Suche „fatfilms" im GIF-Bereich deiner Nachrichten und unsere Custom-GIFs tauchen auf. Teile die fette Liebe in deinen Chats!",
+    },
+  },
+  zh: {
+    langs: { en:'英语', es:'西班牙语', fr:'法语', it:'意大利语', de:'德语', zh:'中文', ja:'日语', ko:'韩语', ar:'阿拉伯语' },
+    ui: {
+      home:'首页', suggestions:'电影建议', favorites:'收藏', genres:'类型', language:'语言', news:'新闻',
+      play:'播放', moreInfo:'更多信息', submit:'提交', cast:'演员', download:'下载',
+      search:'搜索', searchPlaceholder:'搜索电影...',
+      suggestTitle:'电影建议', suggestPrompt:'下一部我们拍什么?', suggestPlaceholder:'例如 黑暗骑士、绝命毒师...', topSuggestions:'热门建议',
+      biggestHits:'最热门', exclusives:'Fat Films 独家', freshlyBaked:'新鲜出炉', heavyHits:'重量级', yourFavorites:'您的收藏', becauseYouAte:'因为您吃过 {title}',
+      notAvailable:'暂未上线。', suggestIt:'建议它', alreadyOnSite:'已在 Fat Films!', alreadySuggested:'已有人建议',
+      noFavorites:'暂无收藏,点击任意电影上的书签图标即可保存到这里。',
+      noSuggestions:'暂无建议,抢占沙发吧。',
+      loading:'加载中...', copied:'已复制!', clickForSound:'点击开启声音',
+      networkError:'网络错误,请重试。', submitError:'出错了,请重试。',
+      thanksAdded:'谢谢!已把"{title}"加入榜单',
+      menu:'菜单', likeTip:'点赞', infoTip:'详情', favoriteTip:'收藏', castTip:'演员', downloadTip:'下载带水印版本',
+      castSuffix:'演员', votes:'票', vote:'票',
+    },
+    descriptions: {
+      'american-chud':"Patrick Ateman 是华尔街一位富有的投资银行家,拥有一套一丝不苟的晨间护肤流程和永不满足的食欲。白天他沉迷于名片和餐厅预订。到了夜晚,一切变得油腻混乱得多。",
+      'baking-bad':"一位高中化学老师得到毁灭性诊断,决定用他的化学本事做点比学校午餐利润高得多的东西。他和昔日学生一起建立了一个零食帝国,规模失控,危险无比。",
+      'bigger-things':"当霍金斯小镇上一个胖乎乎的男孩失踪时,他的朋友们发现一个怪物潜伏在平行维度"颠倒世界"里。真正奇怪的是,这些孩子在危机之中居然能吃这么多。",
+      'bulk-fiction':"两名重量级杀手、一位迷恋奶昔的黑帮老大夫人、还有一个拒绝倒下的拳击手,他们的人生在洛杉矶交织。非线性叙事从未如此撑胃。",
+      'chewlander':"Derek Chewlander 是全世界最出名的男模,以他的招牌表情"蓝色大餐"闻名。当一位阴险的时装大亨把他变成武器时,Derek 必须与对手模特 Hamsel 联手拯救世界,撑得快爆。",
+      'chiplash':"一位年轻的爵士鼓手进入全国最顶尖的音乐学院,发现自己落入暴君般的导师 Terence Flesher 手中。这位指挥把学生逼到极限之外。节奏不对,份量也不对。",
+      'donnie-lardo':"一位问题少年开始梦游,并看到一只巨大恐怖的兔子告诉他世界末日即将到来。在存在主义焦虑和凌晨三点突袭冰箱之间,Donnie 盘子里的事儿多得很。真的是盘子。",
+      'fat-club':"一位失眠的上班族和一位神秘的肥皂销售员创立了一个地下俱乐部,只有一条规则:不许谈论 Fat Club。一场赤手空拳的斗殴迅速膨胀成更庞大得多的东西。",
+      'fat-runner':"KD6-3.7 警官是一名 Blade Runner,任务是在反乌托邦的 2049 年追捕失控的复制人。当他揭开一个深埋的秘密时,他必须找到前 Blade Runner Rick Deckard,这位老兄躲藏多年,显然吃得非常好。",
+      'fatsi-driver':"Travis Bickling 是一位孤独又缺觉的出租车司机,穿梭于 70 年代纽约油腻的街道。他厌恶挡风玻璃外的肮脏与腐败,决心独自清理这座城市,燃料全靠路边小餐馆的食物。",
+      'heavy-potter':"一位住在楼梯下的孤儿发现自己其实是个巫师,被带到霍格沃茨魔法学校。在与黑魔头战斗和横扫大礼堂自助餐之间,Heavy 的盘子永远装得满满的。",
+      'interbelly':"在一个庄稼歉收、人类面临饥荒的垂死未来,一位前 NASA 飞行员带领一个小队穿越虫洞寻找新家园。任务:找到一颗食物足够喂饱所有人的星球。时间是相对的,但饥饿是恒常的。",
+      'squid-gain':"数百名囊中羞涩的参赛者接受了一份神秘邀请,参加一系列致命童年游戏争夺巨额奖金。赌注非常大。玩家也非常大。",
+      'the-bigs':"一群杂牌义警向滥用超能力追求名利的腐败超级英雄宣战。领头的是 Billy Butcher:一个满腔仇恨、心有计划、对份量控制毫无兴趣的男人。",
+      'the-fatrix':"一位黑客发现他所认识的现实其实是一个模拟世界,目的是让人类乖顺且吃得好。当面对红蓝药丸的选择时,Neo 问是否有第三个带肉汁的选项。",
+      'weight-of-wallstreet':"根据 Jordan Belfry 的真实故事改编。他是一位股票经纪人,通过欺诈、挥霍和对人生中最好东西的胃口,积累了庞大的财富。钱多得令人咋舌,派对传奇,午餐账单天文数字。",
+    },
+    news: {
+      title:'Fat Films GIF 上线了!',
+      content:"现在您可以在 Instagram 和 WhatsApp 上使用 Fat Films GIF!发消息时在 GIF 搜索栏输入"fatfilms",我们的专属 GIF 就会出现。快和朋友们分享这份"胖"的爱!",
+    },
+  },
+  ja: {
+    langs: { en:'英語', es:'スペイン語', fr:'フランス語', it:'イタリア語', de:'ドイツ語', zh:'中国語', ja:'日本語', ko:'韓国語', ar:'アラビア語' },
+    ui: {
+      home:'ホーム', suggestions:'リクエスト', favorites:'お気に入り', genres:'ジャンル', language:'言語', news:'ニュース',
+      play:'再生', moreInfo:'詳細', submit:'送信', cast:'キャスト', download:'ダウンロード',
+      search:'検索', searchPlaceholder:'映画を検索...',
+      suggestTitle:'映画のリクエスト', suggestPrompt:'次はどの映画を作ろうか?', suggestPlaceholder:'例: The Dark Knight、Breaking Bad...', topSuggestions:'人気のリクエスト',
+      biggestHits:'大ヒット作', exclusives:'Fat Films 独占', freshlyBaked:'焼きたて新作', heavyHits:'ヘビー級', yourFavorites:'あなたのお気に入り', becauseYouAte:'{title} を召し上がったので',
+      notAvailable:'利用できません。', suggestIt:'リクエストする', alreadyOnSite:'Fat Films にあります!', alreadySuggested:'すでにリクエスト済み',
+      noFavorites:'お気に入りはまだありません。映画のブックマークアイコンをタップしてここに保存できます。',
+      noSuggestions:'リクエストはまだありません。最初の一人になりましょう。',
+      loading:'読み込み中...', copied:'コピーしました!', clickForSound:'クリックで音声',
+      networkError:'ネットワークエラー。もう一度お試しください。', submitError:'問題が発生しました。もう一度お試しください。',
+      thanksAdded:'ありがとう!「{title}」をランキングに追加しました',
+      menu:'メニュー', likeTip:'いいね', infoTip:'詳細', favoriteTip:'お気に入り', castTip:'キャスト', downloadTip:'ウォーターマーク版をダウンロード',
+      castSuffix:'キャスト', votes:'票', vote:'票',
+    },
+    descriptions: {
+      'american-chud':"Patrick Ateman は、完璧な朝のスキンケアルーティンと飽くなき食欲を持つ、ウォール街の裕福な投資銀行家。昼間は名刺とレストランの予約に取り憑かれている。夜になると、事態はもっと脂っこく荒れる。",
+      'baking-bad':"高校の化学教師が絶望的な診断を受け、その腕前を使って給食よりはるかに儲かる何かを調理することにする。元教え子と組んで、危険なほど制御不能なスナック帝国を築き上げていく。",
+      'bigger-things':"小さな町ホーキンスからぽっちゃりした男の子が消えると、友人たちは裏側世界と呼ばれる並行次元に潜む怪物を発見する。本当に奇妙なのは、この子たちが危機のさなかにどれだけ食べられるかだ。",
+      'bulk-fiction':"重量級の殺し屋二人、ミルクシェイク好きのマフィアの妻、倒れることを拒むボクサー。彼らの人生がロサンゼルスで交錯する。非線形の物語がこれほど満腹感をくれたことはない。",
+      'chewlander':"Derek Chewlander は世界で最も有名な男性モデル。彼の代名詞のポーズは「Blue Meal」。邪悪なファッション界の大物に兵器として利用されそうになった時、ライバルモデル Hamsel と組んで世界を救う。お腹ははち切れそう。",
+      'chiplash':"若きジャズドラマーが国内屈指の音楽院に入学するが、暴君のような指揮者 Terence Flesher の指導下に置かれてしまう。学生を限界のはるか先まで追い込む男だ。テンポも盛り付けも俺には合わない。",
+      'donnie-lardo':"問題児のティーンエイジャーが夢遊病になり、巨大で恐ろしいウサギが世界の終わりを告げるという幻視を見るようになる。実存的不安と午前3時の冷蔵庫襲撃の狭間で、Donnie の皿はまさに山盛りだ。",
+      'fat-club':"不眠症のサラリーマンと謎めいた石鹸売りが、たった一つのルールを持つ地下クラブを作る。Fat Club については誰も話してはいけない。素手の殴り合いから始まり、すぐにもっと大きな何かへと膨れ上がっていく。",
+      'fat-runner':"KD6-3.7 巡査は、ディストピアの 2049 年で暴走レプリカントを狩るブレードランナー。深く埋められた秘密を掘り当てた彼は、長年身を潜め、どうやらとてもよく食べている元ブレードランナー Rick Deckard を捜さなければならない。",
+      'fatsi-driver':"Travis Bickling は、70 年代ニューヨークの脂ぎった街を走る孤独で寝不足のタクシードライバー。フロントガラス越しに見える汚れと腐敗に嫌気がさし、ダイナー料理だけを燃料にして街を浄化する一人ミッションに乗り出す。",
+      'heavy-potter':"階段下に住む孤児が自分が魔法使いだと知り、ホグワーツ魔法魔術学校に連れて行かれる。闇の帝王との戦いと大広間のビュッフェ破壊の合間に、Heavy の皿はいつも山盛りだ。",
+      'interbelly':"作物が枯れ人類が飢餓に直面する末期の未来で、元 NASA パイロットがワームホールを越えて新しい住処を探す任務に出る。ミッション:全員を食わせるだけの食料がある惑星を見つけること。時間は相対的だが、空腹は常に絶対だ。",
+      'squid-gain':"金欠の参加者数百人が、莫大な賞金をかけた命がけの子供の遊びに参加する謎めいた招待を受ける。賭けられるものは大きい。プレイヤーも大きい。",
+      'the-bigs':"寄せ集めの自警団員たちが、名声と金のために力を乱用する腐敗したスーパーヒーローに立ち向かう。先頭に立つのは Billy Butcher。恨みと計画を持ち、そして食べる量を抑える気はまったくない男だ。",
+      'the-fatrix':"コンピュータハッカーが、自分の知る現実は、人類を従順によく食わせておくために設計されたシミュレーション世界だと気づく。赤い錠剤と青い錠剤を選べと言われた Neo は、グレービー付きの第三の選択肢はないか尋ねる。",
+      'weight-of-wallstreet':"詐欺と浪費、そして人生の美味しいものへの飽くなき食欲で巨万の富を築いた株式ブローカー、Jordan Belfry の実話に基づく。金は下品、パーティーは伝説、ランチの伝票は天文学的だった。",
+    },
+    news: {
+      title:'Fat Films の GIF が登場!',
+      content:"Fat Films の GIF が Instagram と WhatsApp で使えるようになりました!メッセージの GIF セクションで「fatfilms」と検索すると、オリジナル GIF が表示されます。脂っこい愛をチャットで共有しよう!",
+    },
+  },
+  ko: {
+    langs: { en:'영어', es:'스페인어', fr:'프랑스어', it:'이탈리아어', de:'독일어', zh:'중국어', ja:'일본어', ko:'한국어', ar:'아랍어' },
+    ui: {
+      home:'홈', suggestions:'영화 제안', favorites:'즐겨찾기', genres:'장르', language:'언어', news:'뉴스',
+      play:'재생', moreInfo:'자세히', submit:'제출', cast:'출연진', download:'다운로드',
+      search:'검색', searchPlaceholder:'영화 검색...',
+      suggestTitle:'영화 제안', suggestPrompt:'다음 영화는 뭐로 할까요?', suggestPlaceholder:'예: 다크 나이트, 브레이킹 배드...', topSuggestions:'인기 제안',
+      biggestHits:'최대 히트작', exclusives:'Fat Films 독점', freshlyBaked:'갓 구운 신작', heavyHits:'헤비급', yourFavorites:'내 즐겨찾기', becauseYouAte:'{title}을(를) 드셨으니',
+      notAvailable:'이용할 수 없습니다.', suggestIt:'제안하기', alreadyOnSite:'이미 Fat Films에 있어요!', alreadySuggested:'이미 제안됨',
+      noFavorites:'아직 즐겨찾기가 없습니다. 영화의 북마크 아이콘을 눌러 이곳에 저장하세요.',
+      noSuggestions:'아직 제안이 없어요. 당신이 처음이 되어 보세요.',
+      loading:'불러오는 중...', copied:'복사됨!', clickForSound:'소리를 위해 클릭',
+      networkError:'네트워크 오류. 다시 시도해 주세요.', submitError:'문제가 발생했습니다. 다시 시도해 주세요.',
+      thanksAdded:'감사합니다! "{title}"을(를) 리더보드에 추가했어요',
+      menu:'메뉴', likeTip:'좋아요', infoTip:'정보', favoriteTip:'즐겨찾기', castTip:'출연진', downloadTip:'워터마크 버전 다운로드',
+      castSuffix:'출연진', votes:'표', vote:'표',
+    },
+    descriptions: {
+      'american-chud':"Patrick Ateman은 완벽한 아침 스킨케어 루틴과 끝없는 식욕을 지닌 월스트리트의 부유한 투자 은행가입니다. 낮에는 명함과 레스토랑 예약에 집착하죠. 밤에는 훨씬 더 기름지고 엉망이 됩니다.",
+      'baking-bad':"한 고등학교 화학 교사가 치명적인 진단을 받은 뒤, 자신의 실력을 살려 급식보다 훨씬 돈이 되는 걸 만들기로 결심합니다. 옛 제자와 손을 잡고 간식 제국을 세우지만, 위험할 정도로 걷잡을 수 없어집니다.",
+      'bigger-things':"호킨스라는 작은 마을에서 통통한 소년이 사라지자, 친구들은 '뒤집힌 세계'라는 평행 차원에 도사린 괴물을 발견합니다. 정작 기이한 건, 이 아이들이 위기 속에서 얼마나 많이 먹을 수 있는가입니다.",
+      'bulk-fiction':"덩치 큰 두 청부업자, 밀크쉐이크를 사랑하는 조직 보스의 아내, 쓰러지길 거부하는 복서. 그들의 삶이 로스앤젤레스 전역에서 얽힙니다. 비선형 서사가 이렇게 배부른 적은 없었죠.",
+      'chewlander':"Derek Chewlander는 시그니처 포즈 Blue Meal로 유명한 세계 최고의 남성 모델. 사악한 패션 거물이 그를 무기로 쓰려 하자, Derek은 라이벌 모델 Hamsel과 손잡고 세상을 구합니다. 배는 터질 것 같은 상태로.",
+      'chiplash':"젊은 재즈 드러머가 국내 최고 명문 음악원에 입학했다가, 학생들을 한계 너머로 밀어붙이는 폭군 같은 지휘자 Terence Flesher의 수업을 받게 됩니다. 내 템포도 아니고, 내 양도 아닙니다.",
+      'donnie-lardo':"문제 많은 십 대가 몽유병에 걸리고, 세상이 곧 끝난다고 말하는 거대하고 무시무시한 토끼 환영을 보기 시작합니다. 실존적 공포와 새벽 3시 냉장고 습격 사이에서, Donnie는 접시에 담긴 게 정말 많죠. 말 그대로.",
+      'fat-club':"불면증 직장인과 수상한 비누 외판원이 딱 하나의 규칙이 있는 지하 클럽을 만듭니다. 아무도 Fat Club에 대해 말하지 말 것. 맨주먹 싸움으로 시작한 것이 순식간에 훨씬 더 커다란 무언가로 부풀어 오릅니다.",
+      'fat-runner':"KD6-3.7 경관은 디스토피아적 2049년에 이탈한 레플리칸트를 쫓는 블레이드 러너. 오랫동안 묻힌 비밀을 파헤친 그는 전직 블레이드 러너 Rick Deckard를 찾아야 합니다. 수년째 숨어 지내며, 보아하니 아주 잘 먹고 있는 그를.",
+      'fatsi-driver':"Travis Bickling은 1970년대 뉴욕의 기름진 거리를 누비는 외롭고 잠 부족한 택시 운전사. 앞 유리 너머의 더러움과 부패에 질린 그는 오로지 식당 음식만 연료로 삼아 도시를 청소하는 1인 미션에 나섭니다.",
+      'heavy-potter':"계단 밑에 사는 한 고아는 자신이 마법사라는 사실을 알고 호그와트 마법학교로 떠납니다. 어둠의 마왕과의 전투와 대연회장 뷔페 쑥대밭 사이에서, Heavy의 접시는 언제나 가득합니다.",
+      'interbelly':"농작물이 실패해 인류가 굶주리는 저물어가는 미래, 전직 NASA 파일럿이 새 터전을 찾기 위해 웜홀을 통해 승무원을 이끕니다. 임무: 모두를 먹일 수 있을 만큼의 식량이 있는 행성을 찾는 것. 시간은 상대적이지만, 배고픔은 언제나 변함없습니다.",
+      'squid-gain':"돈 한 푼 없는 수백 명의 참가자가 거대한 상금을 걸고 치명적인 어린 시절 게임에 참여하라는 미스터리한 초대에 응합니다. 판돈은 엄청나게 큽니다. 참가자들도요.",
+      'the-bigs':"권력을 명성과 이익을 위해 남용하는 부패한 슈퍼히어로들에게 맞서는 오합지졸 자경단. 선두에 선 Billy Butcher는 원한과 계획을 가지고 있고, 양 조절에는 조금도 관심이 없는 남자입니다.",
+      'the-fatrix':"한 컴퓨터 해커는 자신이 아는 현실이 인류를 온순하고 잘 먹은 상태로 유지하기 위해 설계된 시뮬레이션 세계임을 깨닫습니다. 빨간 알약과 파란 알약을 선택하라는 제안을 받자 Neo는 그레이비 소스가 뿌려진 세 번째 옵션이 있는지 묻습니다.",
+      'weight-of-wallstreet':"사기, 과잉, 그리고 인생의 좋은 것들에 대한 식욕으로 엄청난 부를 쌓은 주식 브로커 Jordan Belfry의 실화를 바탕으로 합니다. 돈은 외설적이었고, 파티는 전설적이었으며, 점심 계산서는 천문학적이었죠.",
+    },
+    news: {
+      title:'Fat Films GIF가 등장했습니다!',
+      content:"이제 Instagram과 WhatsApp에서 Fat Films GIF를 사용할 수 있어요! 메시지의 GIF 검색창에 'fatfilms'를 입력하면 저희의 맞춤 GIF가 나타납니다. 채팅에서 이 뚱뚱한 사랑을 공유하세요!",
+    },
+  },
+  ar: {
+    langs: { en:'الإنجليزية', es:'الإسبانية', fr:'الفرنسية', it:'الإيطالية', de:'الألمانية', zh:'الصينية', ja:'اليابانية', ko:'الكورية', ar:'العربية' },
+    ui: {
+      home:'الرئيسية', suggestions:'اقتراحات الأفلام', favorites:'المفضلة', genres:'الأنواع', language:'اللغة', news:'الأخبار',
+      play:'تشغيل', moreInfo:'مزيد من المعلومات', submit:'إرسال', cast:'طاقم العمل', download:'تحميل',
+      search:'بحث', searchPlaceholder:'ابحث عن الأفلام...',
+      suggestTitle:'اقتراحات الأفلام', suggestPrompt:'أي فيلم نصنعه بعد ذلك؟', suggestPlaceholder:'مثل The Dark Knight, Breaking Bad...', topSuggestions:'أكثر الاقتراحات طلبًا',
+      biggestHits:'أكبر النجاحات', exclusives:'حصريات Fat Films', freshlyBaked:'طازج من الفرن', heavyHits:'الأوزان الثقيلة', yourFavorites:'مفضلاتك', becauseYouAte:'لأنك أكلت {title}',
+      notAvailable:'غير متوفر.', suggestIt:'اقترحه', alreadyOnSite:'موجود بالفعل على Fat Films!', alreadySuggested:'تم اقتراحه بالفعل',
+      noFavorites:'لا توجد مفضلات بعد، انقر على أيقونة الإشارة المرجعية في أي فيلم لحفظه هنا.',
+      noSuggestions:'لا توجد اقتراحات بعد، كن أول من يقترح.',
+      loading:'جارٍ التحميل...', copied:'تم النسخ!', clickForSound:'انقر للصوت',
+      networkError:'خطأ في الشبكة. حاول مرة أخرى.', submitError:'حدث خطأ ما. حاول مرة أخرى.',
+      thanksAdded:'شكرًا! تمت إضافة "{title}" إلى القائمة',
+      menu:'القائمة', likeTip:'إعجاب', infoTip:'معلومات', favoriteTip:'مفضل', castTip:'طاقم', downloadTip:'تحميل النسخة بالعلامة المائية',
+      castSuffix:'طاقم العمل', votes:'أصوات', vote:'صوت',
+    },
+    descriptions: {
+      'american-chud':"باتريك أتيمان مصرفي استثماري ثري في وول ستريت، يتبع روتينًا صباحيًا مثاليًا للعناية بالبشرة، ولديه شهية لا تُشبَع. في النهار يتعلّق بهوَس ببطاقات العمل وحجوزات المطاعم. في الليل، تصبح الأمور أكثر دهنية وفوضى.",
+      'baking-bad':"مدرّس كيمياء في مدرسة ثانوية يتلقى تشخيصًا مدمرًا ويقرر استغلال مهاراته لطبخ شيء أكثر ربحية من وجبات المدرسة. مع تلميذه السابق يبني إمبراطورية وجبات خفيفة تخرج عن السيطرة بشكل خطير.",
+      'bigger-things':"حين يختفي طفل ممتلئ القوام من بلدة هوكينز الصغيرة، يكتشف أصدقاؤه كائنًا وحشيًا يتربص في بُعد موازٍ يُدعى العالم المقلوب. الغريب حقًا هو كمية الطعام التي يمكن لهؤلاء الأطفال التهامها في خضمّ الأزمة.",
+      'bulk-fiction':"حياة قاتلَين مأجورَين ثقيلَي الوزن، وزوجة زعيم عصابة مولعة بالميلك شيك، وملاكم يرفض السقوط، تتشابك عبر لوس أنجلوس. لم يكن السرد غير الخطي في يوم من الأيام بهذه الإشباع.",
+      'chewlander':"ديريك تشولاندر هو أشهر عارض أزياء في العالم، معروف بنظرته المميزة \"الوجبة الزرقاء\". عندما يحاول قطبٌ شرير في عالم الأزياء استخدامه كسلاح، يتحالف ديريك مع منافسه العارض هامسيل لإنقاذ اليوم وبطنُه شبه ممتلئة حد الانفجار.",
+      'chiplash':"شاب عازف جاز على الطبول يلتحق بأحد أرقى معاهد الموسيقى في البلاد، فيجد نفسه تحت إشراف طاغٍ للقائد تيرينس فلشر، الذي يدفع طلابه إلى ما وراء حدودهم. ليس إيقاعي، وليس حصتي.",
+      'donnie-lardo':"مراهق مضطرب يبدأ بالمشي أثناء النوم ويرى أرنبًا عملاقًا مرعبًا يخبره بأن العالم على وشك النهاية. بين القلق الوجودي وغارات الثلاجة في الثالثة صباحًا، لدى دوني الكثير على صحنه. حرفيًا.",
+      'fat-club':"موظف مكتبي يعاني من الأرق وبائع صابون غامض يؤسسان ناديًا سريًا بقاعدة وحيدة: لا أحد يتحدث عن Fat Club. ما يبدأ كشجار بالأيدي العارية يتضخم سريعًا إلى شيء أكبر بكثير.",
+      'fat-runner':"الضابط KD6-3.7 هو بليد رانر مكلَّف بمطاردة المتمردين من المستنسخين في عام 2049 الديستوبي. حين يكتشف سرًا مدفونًا منذ زمن بعيد، عليه أن يجد بليد رانر السابق ريك ديكارد، الذي كان مختبئًا ويأكل على ما يبدو جيدًا جدًا.",
+      'fatsi-driver':"ترافيس بيكلينغ سائق تاكسي وحيد لا ينام جيدًا، يتنقل عبر شوارع نيويورك الدهنية في السبعينات. يشمئز من القذارة والفساد الذي يراه عبر زجاج سيارته الأمامي، فينطلق في مهمة فردية لتنظيف المدينة، مُغذّىً بالكامل بطعام المقاهي الصغيرة.",
+      'heavy-potter':"يتيم يعيش تحت الدرج يكتشف أنه ساحر، ويُؤخَذ إلى مدرسة هوغوارتس للسحر والشعوذة. بين معاركه ضد أمير الظلام وتدميره لبوفيه القاعة الكبرى، طبق Heavy ممتلئ دائمًا.",
+      'interbelly':"في مستقبل يحتضر حيث فشلت المحاصيل وتواجه البشرية المجاعة، يقود طيار سابق في ناسا طاقمه عبر ثقب دودي بحثًا عن بيت جديد. المهمة: إيجاد كوكب فيه طعام كافٍ للجميع. الزمن نسبي، لكن الجوع ثابت.",
+      'squid-gain':"مئات المتسابقين المفلسين يقبلون دعوة غامضة للتنافس في سلسلة من ألعاب الطفولة القاتلة من أجل جائزة مالية ضخمة. المخاطر هائلة. واللاعبون كذلك.",
+      'the-bigs':"مجموعة غير متجانسة من المحاربين تواجه أبطالًا خارقين فاسدين يستغلّون قواهم من أجل الشهرة والمال. يقود الهجوم بيلي بوتشر: رجل يحمل ضغينة وخطة، ولا يهتم إطلاقًا بالتحكم في الكميات.",
+      'the-fatrix':"مخترق حاسوبي يكتشف أن الواقع كما يعرفه في الحقيقة عالم محاكي مُصمَّم لإبقاء البشرية وديعة ومُشبَعة بالطعام. عندما يُطلب منه الاختيار بين الحبة الحمراء والحبة الزرقاء، يسأل نيو إن كان ثمة خيار ثالث مع صلصة المرق.",
+      'weight-of-wallstreet':"مستوحى من القصة الحقيقية لجوردان بيلفري، سمسار الأسهم الذي بنى ثروة هائلة من خلال الاحتيال والإفراط وشهية لأفخم ملذات الحياة. المال كان فاحشًا، والحفلات أسطورية، وفواتير الغداء فلكية.",
+    },
+    news: {
+      title:'صور Fat Films المتحركة وصلت!',
+      content:"يمكنك الآن العثور على صور Fat Films المتحركة في Instagram و WhatsApp! ابحث عن 'fatfilms' في قسم الصور المتحركة أثناء الدردشة وستظهر صورنا المخصصة. شارك الحب الدهني في محادثاتك!",
+    },
+  },
+};
+
+// Read the saved language directly — the LS wrapper is defined below this
+// block, so we can't rely on it here at script init.
+let currentLang = (() => {
+  const saved = localStorage.getItem('ff.lang');
+  return saved && TRANSLATIONS[saved] ? saved : 'en';
+})();
+
+function t(path, vars) {
+  const parts = path.split('.');
+  const walk = (root) => {
+    let o = root;
+    for (const p of parts) { if (o == null) return undefined; o = o[p]; }
+    return o;
+  };
+  let val = walk(TRANSLATIONS[currentLang]);
+  if (val === undefined) val = walk(TRANSLATIONS.en);
+  if (typeof val !== 'string') return path;
+  if (vars) Object.keys(vars).forEach(k => { val = val.replace('{' + k + '}', vars[k]); });
+  return val;
+}
+
+function getDescription(slug) {
+  const fromI18n = TRANSLATIONS[currentLang]?.descriptions?.[slug];
+  if (fromI18n) return fromI18n;
+  const fromEn = TRANSLATIONS.en.descriptions[slug];
+  if (fromEn) return fromEn;
+  return BY_SLUG[slug]?.desc || '';
+}
+
+function applyTranslations() {
+  // 1. Direction + lang attribute on <html>.
+  document.documentElement.lang = currentLang;
+  document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+
+  // 2. Plain text swaps for [data-i18n="key.path"].
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
+
+  // 3. Attribute swaps: data-i18n-attr="placeholder:ui.searchPlaceholder" etc.
+  document.querySelectorAll('[data-i18n-attr]').forEach(el => {
+    el.dataset.i18nAttr.split(',').forEach(pair => {
+      const [attr, key] = pair.trim().split(':');
+      if (attr && key) el.setAttribute(attr, t(key));
+    });
+  });
+
+  // 4. Highlight the active language in the dropdown.
+  document.querySelectorAll('#lang-menu button[data-lang]').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === currentLang);
+  });
+}
+
+function changeLang(code) {
+  if (!TRANSLATIONS[code]) return;
+  currentLang = code;
+  LS.setLang(code);
+  applyTranslations();
+  // Refresh dynamic text without touching the hero video (reload would cut playback).
+  if (currentHeroFilm) {
+    const desc = document.getElementById('hero-desc');
+    if (desc) desc.textContent = getDescription(currentHeroFilm.slug);
+  }
+  // Row titles, card contents etc. all re-render.
+  if (typeof renderRows === 'function') renderRows();
+  const favModal = document.getElementById('favorites-modal');
+  if (favModal && favModal.classList.contains('show') && typeof renderFavoritesGrid === 'function') {
+    renderFavoritesGrid();
+  }
+}
 
 // ========================================================================
 // STORE (localStorage wrappers)
@@ -936,6 +1485,8 @@ const LS = {
     localStorage.setItem('ff.likes', JSON.stringify(likes));
   },
   isLiked: (slug) => !!LS.likes()[slug],
+  getLang: () => localStorage.getItem('ff.lang') || 'en',
+  setLang: (code) => localStorage.setItem('ff.lang', code),
 };
 
 // ========================================================================
@@ -976,6 +1527,10 @@ async function loadLikeCounts() {
 // the tint difference via the .liked class.
 const HEART_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9.5 2 5.5 5.5 4.5 8 3.8 10 5 12 7c2-2 4-3.2 6.5-2.5C22 5.5 23 9.5 21.5 12c-2.5 4.5-9.5 9-9.5 9z"/></svg>`;
 const HEART_FILLED_SVG = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9C1 9.5 2 5.5 5.5 4.5 8 3.8 10 5 12 7c2-2 4-3.2 6.5-2.5C22 5.5 23 9.5 21.5 12c-2.5 4.5-9.5 9-9.5 9z"/></svg>`;
+
+// Instagram-style bookmark/save icon — outline by default, filled when saved.
+const FAV_OUTLINE_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>`;
+const FAV_FILLED_SVG = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>`;
 
 async function toggleLike(slug, buttons) {
   const wasLiked = LS.isLiked(slug);
@@ -1064,7 +1619,7 @@ function setHero(film) {
   const bg = document.getElementById('hero-bg');
   bg.style.backgroundImage = `url("${film.card}")`;
   document.getElementById('hero-title').textContent = film.title;
-  document.getElementById('hero-desc').textContent = film.desc;
+  document.getElementById('hero-desc').textContent = getDescription(film.slug);
   document.getElementById('hero-play').onclick = () => openPlayer(film);
   document.getElementById('hero-info').onclick = () => openInfo(film);
 
@@ -1125,21 +1680,25 @@ function buildCard(slug) {
       <div class="card-title-fallback">${esc(f.title)}</div>
       ${pct > 2 ? `<div class="card-progress" style="width:${pct}%"></div>` : ''}
       <div class="card-hover">
-        <button class="play-sm" data-act="play" title="Play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
-        <button data-act="info" title="Info"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></button>
-        <button data-act="like" title="Like" class="heart-btn ${liked ? 'liked' : ''}" data-like-for="${slug}">${HEART_SVG}</button>
-        <button data-act="fav" title="Favorite" class="${faved ? 'active' : ''}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg></button>
-        <button data-act="cast" title="Cast"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></button>
+        <button class="play-sm" data-act="play" title="${esc(t('ui.play'))}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+        <button data-act="info" title="${esc(t('ui.infoTip'))}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></button>
+        <button data-act="like" title="${esc(t('ui.likeTip'))}" class="heart-btn ${liked ? 'liked' : ''}" data-like-for="${slug}">${HEART_SVG}</button>
+        <button data-act="fav" title="${esc(t('ui.favoriteTip'))}" class="fav-btn ${faved ? 'saved' : ''}" data-fav-for="${slug}">${faved ? FAV_FILLED_SVG : FAV_OUTLINE_SVG}</button>
+        <button data-act="cast" title="${esc(t('ui.castTip'))}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></button>
         <span class="like-count" data-count-for="${slug}">${getLikeCount(slug).toLocaleString()}</span>
       </div>
     </div>`;
 }
 
 function buildRow(cat) {
+  // cat.id is a stable key; cat.title is the pre-resolved label (needed for
+  // the dynamic "Because you ate X" and "Your Favorites" rows). Fall back to
+  // looking the id up in translations for standard categories.
+  const title = cat.title || t('ui.' + cat.id);
   const cards = cat.slugs.map(buildCard).join('');
   return `
-    <div class="row" data-cat="${esc(cat.title)}">
-      <h2 class="row-title">${esc(cat.title)}</h2>
+    <div class="row" data-cat="${esc(cat.id || title)}">
+      <h2 class="row-title">${esc(title)}</h2>
       <div class="row-scroll-wrap">
         <button class="row-arrow left" aria-label="Scroll left"><svg viewBox="0 0 24 24"><path d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4L10.8 12z"/></svg></button>
         <div class="row-scroll">${cards}</div>
@@ -1148,21 +1707,73 @@ function buildRow(cat) {
     </div>`;
 }
 
+// Favorites modal: grid of saved cards, or a localized empty state.
+function renderFavoritesGrid() {
+  const container = document.getElementById('fav-grid-container');
+  if (!container) return;
+  const favs = LS.favs().filter(s => BY_SLUG[s]);
+  if (!favs.length) {
+    container.innerHTML = `<div class="fav-empty">${esc(t('ui.noFavorites'))}</div>`;
+    return;
+  }
+  const cards = favs.map(buildCard).join('');
+  container.innerHTML = `<div class="fav-grid">${cards}</div>`;
+  // Reuse the exact same card wiring the row cards get — hover preview,
+  // action delegation, the lot. Scoped to the grid so we don't double-bind
+  // the hover preview on row cards.
+  container.querySelectorAll('.card').forEach(card => {
+    const slug = card.dataset.slug;
+    const film = BY_SLUG[slug];
+    if (!film) return;
+    attachHoverPreview(card, film);
+    card.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-act]');
+      if (btn) {
+        e.stopPropagation();
+        const act = btn.dataset.act;
+        if (act === 'play') openPlayer(film);
+        else if (act === 'info') openInfo(film);
+        else if (act === 'cast') openCast(film);
+        else if (act === 'fav') {
+          const on = LS.toggleFav(slug);
+          document.querySelectorAll(`[data-fav-for="${slug}"]`).forEach(b => {
+            b.classList.toggle('saved', on);
+            b.classList.add('saving');
+            setTimeout(() => b.classList.remove('saving'), 450);
+            b.innerHTML = on ? FAV_FILLED_SVG : FAV_OUTLINE_SVG;
+          });
+          renderRows();
+          renderFavoritesGrid();
+        }
+        else if (act === 'like') {
+          toggleLike(slug, document.querySelectorAll(`[data-like-for="${slug}"]`));
+        }
+        return;
+      }
+      openInfo(film);
+    });
+  });
+}
+
 function renderRows() {
-  const cats = shuffle(BASE_CATEGORIES);
+  const cats = shuffle(BASE_CATEGORIES.map(c => ({ ...c })));
 
   // Because you ate X — insert as 2nd row if applicable
   const last = LS.lastWatched();
   if (last && BY_SLUG[last]) {
     const others = FILMS.filter(f => f.slug !== last);
     const picks = shuffle(others).slice(0, 5).map(f => f.slug);
-    cats.splice(1, 0, { title: `Because you ate ${BY_SLUG[last].title}`, slugs: picks });
+    cats.splice(1, 0, {
+      id: 'becauseYouAte',
+      title: t('ui.becauseYouAte', { title: BY_SLUG[last].title }),
+      slugs: picks
+    });
   }
 
   // Favorites row
   const favs = LS.favs();
   if (favs.length) {
-    cats.push({ title: 'Your Favorites', slugs: favs.filter(s => BY_SLUG[s]) });
+    cats.push({ id: 'yourFavorites', title: t('ui.yourFavorites'), slugs: favs.filter(s => BY_SLUG[s]) });
   }
 
   document.getElementById('rows-wrap').innerHTML = cats.map(buildRow).join('');
@@ -1222,9 +1833,17 @@ function wireRows() {
         else if (act === 'cast') openCast(film);
         else if (act === 'fav') {
           const on = LS.toggleFav(slug);
-          btn.classList.toggle('active', on);
-          // Rerender favorites row if it exists, so additions/removals are visible
+          // Sync every bookmark button (card overlay + info modal) for this slug.
+          document.querySelectorAll(`[data-fav-for="${slug}"]`).forEach(b => {
+            b.classList.toggle('saved', on);
+            b.classList.add('saving');
+            setTimeout(() => b.classList.remove('saving'), 450);
+            b.innerHTML = on ? FAV_FILLED_SVG : FAV_OUTLINE_SVG;
+          });
+          // Favorites row / modal reflect additions and removals live.
           renderRows();
+          const favModal = document.getElementById('favorites-modal');
+          if (favModal && favModal.classList.contains('show')) renderFavoritesGrid();
         }
         else if (act === 'like') {
           // All heart instances for this slug (card hover + info modal) get
@@ -1273,7 +1892,7 @@ let infoFilm = null;
 function openInfo(film) {
   infoFilm = film;
   document.getElementById('info-title').textContent = film.title;
-  document.getElementById('info-desc').textContent = film.desc;
+  document.getElementById('info-desc').textContent = getDescription(film.slug);
   document.getElementById('info-play').onclick = () => { hideModal('info-modal'); openPlayer(film); };
   document.getElementById('info-cast').onclick = () => { hideModal('info-modal'); openCast(film); };
 
@@ -1290,11 +1909,31 @@ function openInfo(film) {
     toggleLike(film.slug, buttons);
   };
 
+  // Wire the bookmark (favorite) button inside the info modal.
+  const favBtn = document.getElementById('info-fav');
+  favBtn.dataset.favFor = film.slug;
+  favBtn.dataset.act = 'fav';
+  const faved = LS.isFav(film.slug);
+  favBtn.classList.toggle('saved', faved);
+  favBtn.innerHTML = (faved ? FAV_FILLED_SVG : FAV_OUTLINE_SVG);
+  favBtn.onclick = () => {
+    const on = LS.toggleFav(film.slug);
+    document.querySelectorAll(`[data-fav-for="${film.slug}"]`).forEach(b => {
+      b.classList.toggle('saved', on);
+      b.classList.add('saving');
+      setTimeout(() => b.classList.remove('saving'), 450);
+      b.innerHTML = on ? FAV_FILLED_SVG : FAV_OUTLINE_SVG;
+    });
+    renderRows();
+    const favModal = document.getElementById('favorites-modal');
+    if (favModal && favModal.classList.contains('show')) renderFavoritesGrid();
+  };
+
   showModal('info-modal');
 }
 
 function openCast(film) {
-  document.getElementById('cast-title').textContent = film.title + ' — Cast';
+  document.getElementById('cast-title').textContent = `${film.title} \u2014 ${t('ui.castSuffix')}`;
   document.getElementById('cast-list').innerHTML = film.cast.map(
     ([fake]) => `<li>${esc(fake)}</li>`
   ).join('');
@@ -1435,11 +2074,8 @@ document.querySelectorAll('[data-nav]').forEach(el => {
     const n = el.dataset.nav;
     document.getElementById('nav-menu').classList.remove('mobile-open');
     if (n === 'suggest') { showModal('suggest-modal'); loadLeaderboard(); }
-    else if (n === 'favorites') {
-      const row = [...document.querySelectorAll('.row')].find(r => r.dataset.cat === 'Your Favorites');
-      if (row) row.scrollIntoView({behavior:'smooth', block:'start'});
-      else alert('Favorite a film first — click the bookmark icon on any film card.');
-    }
+    else if (n === 'favorites') { renderFavoritesGrid(); showModal('favorites-modal'); }
+    else if (n === 'news') { showModal('news-modal'); }
     else if (n === 'home') { window.scrollTo({top:0, behavior:'smooth'}); }
   });
 });
@@ -1453,10 +2089,10 @@ document.querySelectorAll('[data-genre]').forEach(el => {
   });
 });
 
-document.querySelectorAll('[data-lang]').forEach(el => {
+document.querySelectorAll('#lang-menu [data-lang]').forEach(el => {
   el.addEventListener('click', () => {
     document.getElementById('nav-menu').classList.remove('mobile-open');
-    alert(`${el.dataset.lang} dubs coming soon. Probably with subtitles you'll want to eat.`);
+    changeLang(el.dataset.lang);
   });
 });
 
@@ -1479,14 +2115,18 @@ searchInput.addEventListener('input', () => {
   if (!q) { searchDropdown.classList.remove('show'); return; }
   const matches = FILMS.filter(f => f.title.toLowerCase().includes(q));
   if (matches.length === 0) {
-    searchDropdown.innerHTML = `<div class="search-empty">Not available. <button id="search-suggest-btn">Suggest it</button></div>`;
+    searchDropdown.innerHTML = `<div class="search-empty">${esc(t('ui.notAvailable'))} <button id="search-suggest-btn">${esc(t('ui.suggestIt'))}</button></div>`;
     document.getElementById('search-suggest-btn').addEventListener('click', () => {
+      const term = searchInput.value.trim();
       searchWrap.classList.remove('open');
       searchDropdown.classList.remove('show');
+      searchInput.value = '';
       showModal('suggest-modal');
       loadLeaderboard();
-      document.getElementById('suggest-input').value = searchInput.value;
-      searchInput.value = '';
+      const inp = document.getElementById('suggest-input');
+      inp.value = term;
+      // Auto-submit the search term to /api/suggest so it counts as a vote.
+      if (term) setTimeout(() => submitSuggest(), 50);
     });
   } else {
     searchDropdown.innerHTML = matches.map(f =>
@@ -1532,11 +2172,21 @@ function showMsg(el, text, kind) {
   showMsg._t = setTimeout(() => el.classList.remove('show'), 5000);
 }
 
+// Cached leaderboard rows so the autocomplete can show "Already suggested"
+// without another fetch per keystroke.
+let LEADERBOARD_CACHE = [];
+
+function lbEmptyHtml(key) {
+  return `<div style="text-align:center; padding:20px; color:#666; font-size:0.85rem;">${esc(t('ui.' + key))}</div>`;
+}
+
 function renderLB(items) {
+  LEADERBOARD_CACHE = Array.isArray(items) ? items : [];
   if (!items || items.length === 0) {
-    leaderboardList.innerHTML = `<div style="text-align:center; padding:20px; color:#666; font-size:0.85rem;">No suggestions yet — be the first.</div>`;
+    leaderboardList.innerHTML = lbEmptyHtml('noSuggestions');
     return;
   }
+  const voteLabel = (n) => n === 1 ? t('ui.vote') : t('ui.votes');
   leaderboardList.innerHTML = items.slice(0, 15).map((it, i) => {
     const poster = it.poster_url
       ? `<div class="lb-poster"><img src="${esc(it.poster_url)}" alt="" loading="lazy"></div>`
@@ -1544,46 +2194,63 @@ function renderLB(items) {
     return `<div class="lb-item">
       <div class="lb-rank">${i+1}</div>
       ${poster}
-      <div class="lb-title">${esc(it.title || 'Untitled')}</div>
-      <div class="lb-votes">${it.vote_count} vote${it.vote_count === 1 ? '' : 's'}</div>
+      <div class="lb-title">${esc(it.title || '—')}</div>
+      <div class="lb-votes">${it.vote_count} ${esc(voteLabel(it.vote_count))}</div>
     </div>`;
   }).join('');
 }
 
 async function loadLeaderboard() {
-  leaderboardList.innerHTML = `<div style="text-align:center; padding:20px; color:#666; font-size:0.85rem;">Loading...</div>`;
+  leaderboardList.innerHTML = lbEmptyHtml('loading');
   try {
     const r = await fetch('/api/leaderboard');
     if (!r.ok) throw new Error('fail');
     const d = await r.json();
     renderLB(d.suggestions);
-  } catch { leaderboardList.innerHTML = `<div style="text-align:center; padding:20px; color:#666; font-size:0.85rem;">Couldn\u2019t load leaderboard.</div>`; }
+  } catch { leaderboardList.innerHTML = lbEmptyHtml('networkError'); }
 }
 
+// Autocomplete shows matches from BOTH the site's own films AND the leaderboard.
 suggestInput.addEventListener('input', () => {
   const q = suggestInput.value.trim().toLowerCase();
   if (!q) { suggestAuto.classList.remove('show'); return; }
-  const matches = FILMS.filter(f => f.title.toLowerCase().includes(q)).slice(0, 5);
-  if (matches.length === 0) { suggestAuto.classList.remove('show'); return; }
-  suggestAuto.innerHTML = matches.map(f =>
-    `<div class="match">${esc(f.title)}<span class="tag">already on Fat Films</span></div>`
+
+  const siteMatches = FILMS
+    .filter(f => f.title.toLowerCase().includes(q))
+    .slice(0, 5)
+    .map(f => ({ title: f.title, tag: t('ui.alreadyOnSite'), kind: 'site' }));
+
+  const lbMatches = LEADERBOARD_CACHE
+    .filter(it => typeof it.title === 'string' && it.title.toLowerCase().includes(q))
+    // Skip anything that also lives on the site to avoid duplicates.
+    .filter(it => !siteMatches.some(s => s.title.toLowerCase() === it.title.toLowerCase()))
+    .slice(0, 5)
+    .map(it => ({ title: it.title, tag: `${t('ui.alreadySuggested')} · ${it.vote_count}`, kind: 'leaderboard' }));
+
+  const all = [...siteMatches, ...lbMatches];
+  if (all.length === 0) { suggestAuto.classList.remove('show'); return; }
+  suggestAuto.innerHTML = all.map(m =>
+    `<div class="match">${esc(m.title)}<span class="tag">${esc(m.tag)}</span></div>`
   ).join('');
   suggestAuto.classList.add('show');
 });
 
 function isAlreadyOnSite(title) {
-  const t = title.trim().toLowerCase();
-  return FILMS.some(f => f.title.toLowerCase() === t);
+  const tLower = title.trim().toLowerCase();
+  return FILMS.some(f => f.title.toLowerCase() === tLower);
 }
 
 async function submitSuggest() {
   const title = suggestInput.value.trim();
   if (!title) return;
+  // Exact match against existing films blocks submission; leaderboard matches
+  // are allowed through — submitting bumps the vote count.
   if (isAlreadyOnSite(title)) {
-    showMsg(suggestMsg, 'Already on Fat Films!', 'warn');
+    showMsg(suggestMsg, t('ui.alreadyOnSite'), 'warn');
     return;
   }
-  suggestBtn.disabled = true; suggestBtn.textContent = 'Sending...';
+  suggestBtn.disabled = true;
+  suggestBtn.textContent = t('ui.loading').replace(/\.\.\.$/, '...');
   try {
     const r = await fetch('/api/suggest', {
       method: 'POST', headers: {'Content-Type':'application/json'},
@@ -1591,15 +2258,15 @@ async function submitSuggest() {
     });
     const d = await r.json().catch(()=>({}));
     if (r.ok && d.success) {
-      showMsg(suggestMsg, `\u2705 Added \u201C${d.title}\u201D to the leaderboard`, 'success');
+      showMsg(suggestMsg, `\u2705 ${t('ui.thanksAdded', { title: d.title })}`, 'success');
       suggestInput.value = '';
       suggestAuto.classList.remove('show');
       if (Array.isArray(d.leaderboard)) renderLB(d.leaderboard); else loadLeaderboard();
     } else {
-      showMsg(suggestMsg, d.error || 'Something went wrong. Try again.', 'error');
+      showMsg(suggestMsg, d.error || t('ui.submitError'), 'error');
     }
-  } catch { showMsg(suggestMsg, 'Network error. Try again.', 'error'); }
-  finally { suggestBtn.disabled = false; suggestBtn.textContent = 'Submit'; }
+  } catch { showMsg(suggestMsg, t('ui.networkError'), 'error'); }
+  finally { suggestBtn.disabled = false; suggestBtn.textContent = t('ui.submit'); }
 }
 suggestBtn.addEventListener('click', submitSuggest);
 suggestInput.addEventListener('keydown', e => { if (e.key === 'Enter') submitSuggest(); });
@@ -1665,6 +2332,7 @@ resetIdle();
 // ========================================================================
 // INITIAL RENDER
 // ========================================================================
+applyTranslations();
 renderRows();
 loadLikeCounts();
 </script>
