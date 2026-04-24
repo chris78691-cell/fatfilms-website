@@ -23,6 +23,9 @@ export default async function handler(req, res) {
   const map = {};
   (data || []).forEach(row => { map[row.film_slug] = row.count; });
 
-  res.setHeader('Cache-Control', 's-maxage=15, stale-while-revalidate=60');
+  // Short TTL so a like placed by one user becomes visible to everyone else
+  // within ~5s. stale-while-revalidate keeps the UI snappy while the edge
+  // quietly refreshes in the background.
+  res.setHeader('Cache-Control', 's-maxage=5, stale-while-revalidate=30');
   return res.status(200).json(map);
 }

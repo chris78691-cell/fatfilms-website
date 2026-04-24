@@ -1578,15 +1578,37 @@ function updateLikeCount(slug) {
   document.querySelectorAll(`[data-count-for="${slug}"]`).forEach(el => el.textContent = n);
 }
 
+// Slugs the user has just toggled; the poll skips updating them for a short
+// window so a stale cached /api/likes response can't flicker our optimistic
+// +/-1 back to the pre-toggle value.
+const recentToggleAt = new Map();
+const RECENT_TOGGLE_MS = 15000;
+
 async function loadLikeCounts() {
   try {
-    const r = await fetch('/api/likes');
+    const r = await fetch('/api/likes', { cache: 'no-store' });
     if (!r.ok) return;
     const map = await r.json();
-    Object.keys(map).forEach(k => { LIKE_COUNTS[k] = map[k]; });
+    const now = Date.now();
+    Object.keys(map).forEach(k => {
+      const last = recentToggleAt.get(k);
+      if (last && now - last < RECENT_TOGGLE_MS) return; // skip very recent toggles
+      LIKE_COUNTS[k] = map[k];
+    });
     FILMS.forEach(f => updateLikeCount(f.slug));
   } catch {}
 }
+
+// Keep counts fresh when other users like. We skip polling while the tab is
+// hidden to avoid wasted requests, and refresh immediately when the tab
+// comes back into focus for a snappy feel.
+setInterval(() => {
+  if (document.visibilityState === 'visible') loadLikeCounts();
+}, 12000);
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') loadLikeCounts();
+});
+window.addEventListener('focus', loadLikeCounts);
 
 // Heart SVGs — outline when unliked, filled when liked. currentColor handles
 // the tint difference via the .liked class.
@@ -1605,6 +1627,7 @@ async function toggleLike(slug, buttons) {
   LS.setLiked(slug, !wasLiked);
   LIKE_COUNTS[slug] = Math.max(0, getLikeCount(slug) + (wasLiked ? -1 : 1));
   updateLikeCount(slug);
+  recentToggleAt.set(slug, Date.now()); // poll should leave this slug alone for a bit
   buttons.forEach(btn => {
     btn.classList.toggle('liked', !wasLiked);
     btn.classList.add('liking');
@@ -1623,6 +1646,7 @@ async function toggleLike(slug, buttons) {
       LIKE_COUNTS[slug] = d.count;
       updateLikeCount(slug);
       LS.setLiked(slug, !!d.liked);
+      recentToggleAt.set(slug, Date.now()); // re-anchor debounce on the authoritative value
       document.querySelectorAll(`[data-like-for="${slug}"]`).forEach(btn => {
         btn.classList.toggle('liked', !!d.liked);
       });
@@ -2315,12 +2339,15 @@ let suggestAutoTimer = null;
 let suggestAutoAbort = null;
 
 function renderSuggestRow(m) {
+  // `display` may differ from `title` for TMDB rows (shows "Title (Year)" but
+  // the click/fill value stays clean so the submit endpoint can match it).
+  const label = m.display || m.title;
   const attrs = [
     `data-kind="${esc(m.kind)}"`,
     `data-title="${esc(m.title)}"`,
     m.slug ? `data-slug="${esc(m.slug)}"` : '',
   ].filter(Boolean).join(' ');
-  return `<div class="match" ${attrs}>${esc(m.title)}<span class="tag ${m.kind === 'new' ? 'tag-new' : ''}">${esc(m.tag)}</span></div>`;
+  return `<div class="match" ${attrs}>${esc(label)}<span class="tag ${m.kind === 'new' ? 'tag-new' : ''}">${esc(m.tag)}</span></div>`;
 }
 
 function renderSuggestMatches(matches) {
@@ -2382,7 +2409,10 @@ async function runSuggestAutocomplete(q) {
       .slice(0, 6)
       .map(it => ({
         kind: 'new',
-        title: it.year ? `${it.title} (${it.year})` : it.title,
+        // Clean title for the input (year suffix breaks /api/suggest matching);
+        // display is kept separate so the row still shows "Title (Year)".
+        title: it.title,
+        display: it.year ? `${it.title} (${it.year})` : it.title,
         tag: t('ui.beTheFirst'),
       }));
     // Guard: make sure the input still matches this query (user may have kept typing).
