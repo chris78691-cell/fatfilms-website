@@ -1756,18 +1756,25 @@ function renderFavoritesGrid() {
 }
 
 function renderRows() {
-  const cats = shuffle(BASE_CATEGORIES.map(c => ({ ...c })));
+  // Deep-copy slugs so we can mutate a row's list (removing the film we pull
+  // into "Because you ate...") without touching BASE_CATEGORIES.
+  const cats = shuffle(BASE_CATEGORIES.map(c => ({ ...c, slugs: [...c.slugs] })));
 
-  // Because you ate X — insert as 2nd row if applicable
+  // Because you ate X — insert as the 2nd row. Pull a single film from Fat
+  // Films Exclusives so the same film never appears in two rows.
   const last = LS.lastWatched();
   if (last && BY_SLUG[last]) {
-    const others = FILMS.filter(f => f.slug !== last);
-    const picks = shuffle(others).slice(0, 5).map(f => f.slug);
-    cats.splice(1, 0, {
-      id: 'becauseYouAte',
-      title: t('ui.becauseYouAte', { title: BY_SLUG[last].title }),
-      slugs: picks
-    });
+    const exclusives = cats.find(c => c.id === 'exclusives');
+    const pool = exclusives ? exclusives.slugs.filter(s => s !== last) : [];
+    if (pool.length > 0) {
+      const pick = pool[Math.floor(Math.random() * pool.length)];
+      exclusives.slugs = exclusives.slugs.filter(s => s !== pick);
+      cats.splice(1, 0, {
+        id: 'becauseYouAte',
+        title: t('ui.becauseYouAte', { title: BY_SLUG[last].title }),
+        slugs: [pick]
+      });
+    }
   }
 
   // Favorites row
