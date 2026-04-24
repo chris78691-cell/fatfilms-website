@@ -18,132 +18,71 @@
   <link rel="icon" href="/favicon.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;700;900&family=Space+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;900&family=Space+Mono&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
+    :root {
+      --bg: #0a0a0a;
+      --accent: #e50914;
+      --text: #e5e5e5;
+      --muted: #888;
+      --card: #181818;
+      --border: rgba(255,255,255,0.08);
+    }
     html, body {
-      height: 100%;
-      overflow: hidden;
-      background: #0a0a0a;
-      color: #e0e0e0;
-      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body.locked { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+    /* ========== LOADING SCREEN ========== */
+    .loader {
+      position: fixed; inset: 0;
+      background: #000;
+      z-index: 10000;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.6s ease;
+    }
+    .loader.gone { opacity: 0; pointer-events: none; }
+    .loader-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 14vw, 12rem);
+      color: #fff;
+      letter-spacing: 12px;
+      transform: scale(0.85);
+      opacity: 0;
+      text-shadow: 0 0 30px rgba(255,255,255,0.3), 0 0 60px rgba(229,9,20,0.4);
+      animation: loaderIn 2.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes loaderIn {
+      0% { transform: scale(0.85); opacity: 0; }
+      30% { opacity: 1; }
+      70% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1.15); opacity: 0.9; }
     }
 
-    /* FULLSCREEN GRID */
-    .fullscreen {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh; /* fallback for older browsers */
-      height: 100dvh; /* stable on mobile with dynamic toolbars */
-      padding: 24px;
-    }
-
-    .grid {
-      position: relative;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
-      gap: 5px;
-      width: 100%;
-      height: 100%;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .quadrant {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .quadrant img {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: opacity 1.2s ease-in-out;
-    }
-
-    .quadrant img.fade-out { opacity: 0; }
-
-    .quadrant {
-      border-radius: 2px;
-      cursor: pointer;
-      transition: transform 0.35s ease-out, filter 0.35s ease-out, box-shadow 0.35s ease-out;
-      z-index: 1;
-    }
-
-    .quadrant:hover {
-      filter: brightness(1.1);
-    }
-
-    /* Per-quadrant zoom: scale + translate inward */
-    .quadrant:nth-child(1).popped { transform: scale(1.15) translate(3%, 3%); }
-    .quadrant:nth-child(2).popped { transform: scale(1.15) translate(-3%, 3%); }
-    .quadrant:nth-child(3).popped { transform: scale(1.15) translate(3%, -3%); }
-    .quadrant:nth-child(4).popped { transform: scale(1.15) translate(-3%, -3%); }
-
-    .quadrant.popped {
-      z-index: 5;
-      box-shadow: 0 0 30px rgba(0,0,0,0.6), 0 0 60px rgba(0,0,0,0.3);
-      filter: brightness(1.05);
-    }
-
-    /* Dim siblings when one is popped */
-    .grid.has-pop .quadrant:not(.popped) {
-      filter: brightness(0.45);
-    }
-
-    /* OVERLAYS — all fixed on top of grid */
-    .overlay-top {
-      position: fixed;
-      top: 0; left: 0; right: 0;
+    /* ========== MARQUEE (token CA) ========== */
+    .marquee {
+      position: fixed; top: 0; left: 0; right: 0;
       height: 24px;
-      z-index: 20;
+      z-index: 120;
       overflow: hidden;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.75);
       border-bottom: 1px solid rgba(255,255,255,0.08);
       cursor: pointer;
       transition: background 0.2s;
     }
-
-    .overlay-top:hover {
-      background: rgba(0,0,0,0.8);
-    }
-
-    .copy-toast {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: 24px;
-      z-index: 25;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(30,130,70,0.9);
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: 1px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
-    }
-
-    .copy-toast.show {
-      opacity: 1;
-    }
-
+    .marquee:hover { background: rgba(0,0,0,0.9); }
     .marquee-track {
-      display: flex;
-      align-items: center;
-      height: 100%;
+      display: flex; align-items: center; height: 100%;
       width: max-content;
       animation: marquee 24s linear infinite;
     }
-
     .marquee-track span {
       font-family: 'Space Mono', monospace;
       font-size: 13px;
@@ -151,1012 +90,658 @@
       letter-spacing: 1.5px;
       white-space: nowrap;
     }
-
     @keyframes marquee {
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
-
-    .hero-title {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 20;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(4rem, 12vw, 11rem);
-      font-weight: 400;
-      color: #fff;
-      text-align: center;
-      letter-spacing: 10px;
-      text-shadow:
-        3px 3px 6px rgba(0,0,0,0.8),
-        -2px -2px 6px rgba(0,0,0,0.8),
-        0 0 40px rgba(0,0,0,0.9),
-        0 0 80px rgba(0,0,0,0.6);
-      pointer-events: none;
-      user-select: none;
+    .copy-toast {
+      position: fixed; top: 0; left: 0; right: 0; height: 24px; z-index: 125;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(30,130,70,0.9);
+      font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 1px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
     }
+    .copy-toast.show { opacity: 1; }
 
-    /* SOCIAL LINKS — prominent bottom bar */
-    .socials-overlay {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      z-index: 20;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 36px;
-      padding: 10px 16px;
-      background: rgba(0,0,0,0.6);
-      border-top: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .socials-overlay a {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      color: rgba(255,255,255,0.85);
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 600;
-      transition: color 0.2s;
-    }
-
-    .socials-overlay a:hover { color: #fff; text-decoration: underline; }
-
-    .socials-overlay svg {
-      width: 22px;
-      height: 22px;
-      fill: currentColor;
-    }
-
-    /* HAMBURGER BUTTON */
-    .hamburger {
-      position: fixed;
-      top: 32px;
-      left: 28px;
-      z-index: 30;
-      background: rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 8px;
-      color: rgba(255,255,255,0.85);
-      font-size: 24px;
-      cursor: pointer;
-      line-height: 1;
-      padding: 8px 10px;
-      transition: color 0.2s, background 0.2s;
-    }
-
-    .hamburger:hover {
-      color: #fff;
-      background: rgba(0,0,0,0.7);
-    }
-
-    /* SIDEBAR MENU */
-    .sidebar {
-      position: fixed;
-      top: 0; left: 0;
-      width: 280px;
-      height: 100vh;
-      background: rgba(10,10,10,0.95);
-      backdrop-filter: blur(12px);
+    /* ========== NAV ========== */
+    .nav {
+      position: fixed; top: 24px; left: 0; right: 0;
       z-index: 100;
-      transform: translateX(-100%);
-      transition: transform 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      padding: 24px;
+      padding: 14px 40px;
+      display: flex; align-items: center;
+      gap: 24px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
+      transition: background 0.3s;
     }
-
-    .sidebar.open { transform: translateX(0); }
-
-    .sidebar-close {
-      align-self: flex-end;
-      background: none;
-      border: none;
-      color: #888;
-      font-size: 24px;
-      cursor: pointer;
-      padding: 4px 8px;
-      transition: color 0.2s;
+    .nav.scrolled {
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(10px);
     }
-
-    .sidebar-close:hover { color: #fff; }
-
-    .sidebar-nav {
-      margin-top: 40px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .sidebar-nav button {
-      background: none;
-      border: none;
-      color: #ccc;
-      font-size: 1.1rem;
-      font-weight: 700;
-      font-family: 'Inter', sans-serif;
-      text-align: left;
-      padding: 14px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .sidebar-nav button:hover {
-      background: rgba(255,255,255,0.08);
-      color: #fff;
-    }
-
-    /* BACKDROP — click to close sidebar */
-    .backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 90;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
-    }
-
-    .backdrop.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    /* MODAL */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(6px);
-      z-index: 200;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
-    }
-
-    .modal-overlay.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .modal {
-      background: #141414;
-      border: 1px solid #2a2a2a;
-      border-radius: 12px;
-      padding: 32px;
-      max-width: 520px;
-      width: 90%;
-      position: relative;
-      transform: scale(0.95) translateY(10px);
-      transition: transform 0.3s ease;
-    }
-
-    .modal-overlay.visible .modal {
-      transform: scale(1) translateY(0);
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 12px;
-      right: 16px;
-      background: none;
-      border: none;
-      color: #666;
-      font-size: 22px;
-      cursor: pointer;
-      padding: 4px 8px;
-      transition: color 0.2s;
-    }
-
-    .modal-close:hover { color: #fff; }
-
-    .modal h2 {
-      font-size: 1.4rem;
-      font-weight: 900;
-      color: #fff;
-      margin-bottom: 16px;
-    }
-
-    .modal p {
-      font-size: 0.92rem;
-      line-height: 1.7;
-      color: #999;
-    }
-
-    /* SUGGESTION FORM inside modal */
-    .suggestion-form {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .suggestion-form input {
-      flex: 1;
-      padding: 12px 16px;
-      border: 1px solid #2a2a2a;
-      border-radius: 8px;
-      background: #1a1a1a;
-      color: #e0e0e0;
-      font-size: 0.9rem;
-      font-family: 'Inter', sans-serif;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .suggestion-form input:focus { border-color: #444; }
-    .suggestion-form input::placeholder { color: #444; }
-
-    .suggestion-form button {
-      padding: 12px 24px;
-      background: #fff;
-      color: #0a0a0a;
-      border: none;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      white-space: nowrap;
-    }
-
-    .suggestion-form button:hover { background: #ddd; }
-    .suggestion-form button:active { transform: scale(0.97); }
-
-    .confirmation {
-      margin-top: 12px;
-      font-size: 0.85rem;
-      min-height: 1.2em;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .confirmation.show { opacity: 1; }
-    .confirmation.success { color: #7c7; }
-    .confirmation.error { color: #e06868; }
-
-    /* SUGGEST MODAL — wider to fit leaderboard */
-    #suggest-modal .modal {
-      max-width: 620px;
-      width: 92%;
-      max-height: 85vh;
-      overflow-y: auto;
-    }
-
-    /* LEADERBOARD */
-    .leaderboard {
-      margin-top: 28px;
-      padding-top: 22px;
-      border-top: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .leaderboard h3 {
+    .brand {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.3rem;
-      letter-spacing: 2px;
+      font-size: 1.6rem; letter-spacing: 3px;
       color: #fff;
-      margin-bottom: 14px;
-      text-transform: uppercase;
+      text-shadow: 0 0 12px rgba(229,9,20,0.3);
+      flex-shrink: 0;
     }
-
-    .leaderboard-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      max-height: 360px;
-      overflow-y: auto;
-      padding-right: 4px;
-      /* Firefox */
-      scrollbar-width: thin;
-      scrollbar-color: rgba(255,255,255,0.2) rgba(255,255,255,0.05);
+    .nav-menu {
+      display: flex; align-items: center; gap: 22px;
+      flex: 1;
     }
-
-    /* WebKit/Blink (Chrome, Safari, Edge) — scoped to leaderboard only */
-    .leaderboard-list::-webkit-scrollbar {
-      width: 7px;
+    .nav-menu button, .nav-menu a {
+      font-size: 0.88rem; font-weight: 500;
+      color: var(--text);
+      padding: 6px 2px;
+      transition: color 0.15s;
+      display: inline-flex; align-items: center; gap: 4px;
     }
+    .nav-menu button:hover, .nav-menu a:hover { color: #fff; }
+    .nav-right { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+    .icon-btn { width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; transition: background 0.2s; }
+    .icon-btn:hover { background: rgba(255,255,255,0.08); }
+    .icon-btn svg { width: 20px; height: 20px; fill: currentColor; }
 
-    .leaderboard-list::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.05);
-      border-radius: 4px;
+    .search-wrap { display: flex; align-items: center; position: relative; }
+    .search-input {
+      width: 0; opacity: 0; transition: width 0.3s, opacity 0.3s;
+      background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.3);
+      color: #fff; padding: 7px 10px; font-size: 0.85rem;
+      border-radius: 4px; outline: none;
     }
-
-    .leaderboard-list::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.2);
-      border-radius: 4px;
-      transition: background 0.2s;
+    .search-wrap.open .search-input { width: 260px; opacity: 1; margin-right: 6px; }
+    .search-dropdown {
+      position: absolute; top: 110%; right: 0; width: 320px;
+      background: #141414; border: 1px solid var(--border); border-radius: 6px;
+      max-height: 380px; overflow-y: auto; display: none;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+      z-index: 110;
     }
-
-    .leaderboard-list::-webkit-scrollbar-thumb:hover {
-      background: rgba(255,255,255,0.35);
+    .search-dropdown.show { display: block; }
+    .search-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 10px; cursor: pointer;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
     }
+    .search-item:hover { background: rgba(255,255,255,0.06); }
+    .search-item img { width: 52px; height: 30px; object-fit: cover; border-radius: 3px; flex-shrink: 0; background: #222; }
+    .search-item .title { font-size: 0.88rem; font-weight: 600; color: #fff; }
+    .search-empty { padding: 14px; font-size: 0.85rem; color: var(--muted); text-align: center; }
+    .search-empty button { color: var(--accent); font-weight: 700; margin-left: 4px; }
 
-    .leaderboard-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 8px 10px;
-      background: #1a1a1a;
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 6px;
+    /* Dropdown menus (genres / language) */
+    .drop-wrap { position: relative; }
+    .drop-menu {
+      position: absolute; top: 100%; left: 0;
+      background: rgba(15,15,15,0.98); border: 1px solid var(--border);
+      border-radius: 6px; padding: 8px; min-width: 180px;
+      display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      z-index: 110;
+    }
+    .drop-wrap:hover .drop-menu, .drop-menu:hover { display: block; }
+    .drop-menu button, .drop-menu a {
+      display: block; width: 100%; text-align: left;
+      padding: 8px 12px; font-size: 0.85rem; border-radius: 4px;
       transition: background 0.15s;
     }
+    .drop-menu button:hover, .drop-menu a:hover { background: rgba(255,255,255,0.08); }
 
-    .leaderboard-item:hover { background: #222; }
+    /* Hamburger (mobile) */
+    .hamburger { display: none; }
 
-    .lb-rank {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.1rem;
-      color: #888;
-      width: 22px;
-      flex-shrink: 0;
-      text-align: center;
-    }
-
-    .lb-poster {
-      width: 40px;
-      height: 60px;
-      flex-shrink: 0;
-      background: #222;
-      border-radius: 4px;
+    /* ========== HERO ========== */
+    .hero {
+      position: relative;
+      height: 80vh;
+      min-height: 520px;
+      display: flex; align-items: flex-end;
       overflow: hidden;
+      margin-top: 0;
     }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      transition: opacity 0.6s;
+    }
+    .hero-bg::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(10,10,10,0) 0%, rgba(10,10,10,0.3) 40%, rgba(10,10,10,0.95) 100%),
+                  linear-gradient(90deg, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.3) 60%, rgba(10,10,10,0) 100%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 80px 40px 100px;
+      max-width: 640px;
+    }
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 6.5vw, 5rem);
+      letter-spacing: 3px;
+      line-height: 0.95;
+      color: #fff;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+      margin-bottom: 16px;
+    }
+    .hero-desc {
+      font-size: 1.02rem; line-height: 1.5;
+      color: #ddd; max-width: 560px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+      margin-bottom: 22px;
+    }
+    .hero-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .btn-play {
+      background: #fff; color: #111;
+      padding: 10px 26px; border-radius: 4px;
+      font-size: 1rem; font-weight: 700;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: background 0.15s;
+    }
+    .btn-play:hover { background: #ddd; }
+    .btn-info {
+      background: rgba(120,120,120,0.55);
+      color: #fff;
+      padding: 10px 24px; border-radius: 4px;
+      font-size: 0.95rem; font-weight: 600;
+      display: inline-flex; align-items: center; gap: 8px;
+      backdrop-filter: blur(4px);
+      transition: background 0.15s;
+    }
+    .btn-info:hover { background: rgba(120,120,120,0.75); }
 
-    .lb-poster img {
-      width: 100%;
-      height: 100%;
+    /* ========== ROWS ========== */
+    .rows-wrap { padding: 20px 0 60px; margin-top: -60px; position: relative; z-index: 3; }
+    .row { margin-bottom: 36px; padding: 0 40px; position: relative; }
+    .row-title {
+      font-size: 1.25rem; font-weight: 700;
+      color: #fff; margin-bottom: 10px;
+      letter-spacing: 0.3px;
+    }
+    .row-scroll-wrap { position: relative; }
+    .row-scroll {
+      display: flex; gap: 8px;
+      overflow-x: auto; overflow-y: hidden;
+      scroll-behavior: smooth;
+      scroll-snap-type: x mandatory;
+      padding: 6px 0 14px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.15) transparent;
+    }
+    .row-scroll::-webkit-scrollbar { height: 6px; }
+    .row-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+    .row-scroll::-webkit-scrollbar-track { background: transparent; }
+
+    .row-arrow {
+      position: absolute; top: 0; bottom: 14px;
+      width: 48px; z-index: 5;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.6);
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .row-scroll-wrap:hover .row-arrow { opacity: 1; }
+    .row-arrow:hover { background: rgba(0,0,0,0.8); }
+    .row-arrow.left { left: 0; }
+    .row-arrow.right { right: 0; }
+    .row-arrow svg { width: 28px; height: 28px; fill: #fff; }
+
+    /* ========== CARD ========== */
+    .card {
+      flex-shrink: 0;
+      width: clamp(200px, 22vw, 300px);
+      aspect-ratio: 16/9;
+      border-radius: 5px;
+      overflow: visible;
+      position: relative;
+      cursor: pointer;
+      scroll-snap-align: start;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card:hover { transform: scale(1.06); z-index: 6; }
+    .card-thumb {
+      width: 100%; height: 100%;
+      border-radius: 5px;
+      background: #222;
       object-fit: cover;
       display: block;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    }
+    .card-title-fallback {
+      position: absolute; bottom: 8px; left: 8px; right: 8px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem; letter-spacing: 1.5px;
+      color: #fff;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
+      pointer-events: none;
+    }
+    .card-progress {
+      position: absolute; bottom: 0; left: 0; height: 3px;
+      background: var(--accent);
+      border-radius: 0 0 5px 5px;
+      pointer-events: none;
     }
 
-    .lb-poster.empty {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #444;
-      font-size: 18px;
+    .card-hover {
+      position: absolute; left: 0; right: 0; bottom: -60px;
+      background: rgba(0,0,0,0.85);
+      padding: 10px;
+      display: flex; gap: 6px; align-items: center;
+      border-radius: 0 0 5px 5px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .card:hover .card-hover { opacity: 1; pointer-events: auto; }
+    .card-hover button {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.4);
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .card-hover button:hover { background: rgba(255,255,255,0.22); border-color: #fff; }
+    .card-hover button.play-sm { background: #fff; color: #111; border-color: #fff; }
+    .card-hover button.play-sm:hover { background: #ddd; }
+    .card-hover button.active { background: var(--accent); border-color: var(--accent); }
+    .card-hover svg { width: 14px; height: 14px; fill: currentColor; }
+    .card-hover .like-count {
+      font-size: 0.72rem; color: #ccc; margin-left: 4px;
     }
 
-    .lb-title {
-      flex: 1;
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: #e0e0e0;
-      word-break: break-word;
-      line-height: 1.35;
-    }
-
-    .lb-votes {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.8rem;
-      color: #888;
-      background: rgba(255,255,255,0.06);
-      padding: 4px 10px;
-      border-radius: 12px;
-      flex-shrink: 0;
-    }
-
-    .leaderboard-empty {
-      text-align: center;
+    /* ========== MODAL (shared) ========== */
+    .modal-bg {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(6px);
+      z-index: 500;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s;
       padding: 20px;
-      color: #666;
-      font-size: 0.85rem;
     }
-
-    .leaderboard-loading {
-      text-align: center;
-      padding: 20px;
-      color: #555;
-      font-size: 0.85rem;
-    }
-
-    /* FILMS MODAL — wider */
-    #films-modal .modal {
-      max-width: 820px;
-      width: 92%;
-      max-height: 85vh;
-      overflow-y: auto;
+    .modal-bg.show { opacity: 1; pointer-events: auto; }
+    .modal-box {
+      background: #141414;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
       padding: 28px;
+      max-width: 560px; width: 100%;
+      max-height: 85vh; overflow-y: auto;
+      position: relative;
+      transform: scale(0.96);
+      transition: transform 0.25s;
+    }
+    .modal-bg.show .modal-box { transform: scale(1); }
+    .modal-close {
+      position: absolute; top: 10px; right: 14px;
+      font-size: 22px; color: #888;
+      transition: color 0.15s;
+    }
+    .modal-close:hover { color: #fff; }
+    .modal-box h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem; letter-spacing: 2px;
+      color: #fff; margin-bottom: 14px;
+      padding-right: 40px;
+    }
+    .modal-box h3 {
+      font-size: 1rem; font-weight: 700;
+      color: #fff; margin: 18px 0 8px;
+    }
+    .modal-box p { font-size: 0.95rem; line-height: 1.6; color: #ccc; }
+    .cast-list { list-style: none; }
+    .cast-list li {
+      padding: 7px 0; font-size: 0.92rem; color: #ccc;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .cast-list li:last-child { border-bottom: none; }
+    .cast-list .real { color: var(--muted); font-size: 0.8rem; margin-left: 6px; }
+
+    /* Suggest modal extras */
+    #suggest-modal .modal-box { max-width: 640px; }
+    .suggest-form { display: flex; gap: 10px; margin: 14px 0 10px; position: relative; }
+    .suggest-form input {
+      flex: 1; padding: 10px 14px;
+      border: 1px solid #2a2a2a; border-radius: 6px;
+      background: #1a1a1a; color: #e0e0e0;
+      font-size: 0.9rem; outline: none;
+    }
+    .suggest-form input:focus { border-color: #555; }
+    .suggest-form button {
+      padding: 10px 22px;
+      background: #fff; color: #111;
+      border-radius: 6px; font-weight: 700; font-size: 0.9rem;
+    }
+    .suggest-form button:disabled { opacity: 0.6; cursor: wait; }
+    .suggest-form button:hover:not(:disabled) { background: #ddd; }
+    .suggest-auto {
+      position: absolute; top: 100%; left: 0; right: 90px;
+      background: #141414; border: 1px solid var(--border);
+      border-radius: 6px; max-height: 200px; overflow-y: auto;
+      display: none; z-index: 10; margin-top: 4px;
+    }
+    .suggest-auto.show { display: block; }
+    .suggest-auto .match {
+      padding: 7px 12px; font-size: 0.85rem; cursor: default;
+      color: #fff8a0; border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .suggest-auto .match .tag { font-size: 0.7rem; color: var(--muted); margin-left: 6px; }
+
+    .msg { min-height: 1.2em; font-size: 0.9rem; margin-top: 6px; opacity: 0; transition: opacity 0.2s; }
+    .msg.show { opacity: 1; }
+    .msg.success { color: #7c7; }
+    .msg.error { color: #e06868; }
+    .msg.warn { color: #ffb347; }
+
+    .leaderboard-list {
+      display: flex; flex-direction: column; gap: 8px;
+      max-height: 360px; overflow-y: auto; padding-right: 4px;
       scrollbar-width: thin;
       scrollbar-color: rgba(255,255,255,0.2) rgba(255,255,255,0.05);
     }
-
-    #films-modal .modal::-webkit-scrollbar {
-      width: 7px;
+    .leaderboard-list::-webkit-scrollbar { width: 7px; }
+    .leaderboard-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 4px; }
+    .leaderboard-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+    .leaderboard-list::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.35); }
+    .lb-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 8px 10px;
+      background: #1a1a1a; border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 6px;
     }
+    .lb-rank { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: #888; width: 22px; text-align: center; flex-shrink: 0; }
+    .lb-poster { width: 40px; height: 60px; background: #222; border-radius: 4px; overflow: hidden; flex-shrink: 0; }
+    .lb-poster img { width: 100%; height: 100%; object-fit: cover; }
+    .lb-poster.empty { display: flex; align-items: center; justify-content: center; color: #444; font-size: 18px; }
+    .lb-title { flex: 1; font-size: 0.9rem; font-weight: 600; color: #e0e0e0; word-break: break-word; line-height: 1.35; }
+    .lb-votes { font-family: 'Space Mono', monospace; font-size: 0.78rem; color: #888; background: rgba(255,255,255,0.06); padding: 4px 10px; border-radius: 12px; flex-shrink: 0; }
 
-    #films-modal .modal::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.05);
-      border-radius: 4px;
+    /* ========== VIDEO PLAYER ========== */
+    .player {
+      position: fixed; inset: 0; z-index: 700;
+      background: rgba(0,0,0,0.95);
+      display: none;
+      align-items: center; justify-content: center;
     }
-
-    #films-modal .modal::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.2);
-      border-radius: 4px;
-      transition: background 0.2s;
-    }
-
-    #films-modal .modal::-webkit-scrollbar-thumb:hover {
-      background: rgba(255,255,255,0.35);
-    }
-
-    /* "Access Google Drive" pill button in the Films modal header */
-    .drive-btn {
-      position: absolute;
-      top: 14px;
-      right: 52px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 12px;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 999px;
-      background: rgba(255,255,255,0.04);
-      color: #fff;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.78rem;
-      font-weight: 600;
-      text-decoration: none;
-      white-space: nowrap;
-      transition: background 0.2s, border-color 0.2s, color 0.2s;
-    }
-
-    .drive-btn:hover {
-      background: rgba(255,255,255,0.12);
-      border-color: rgba(255,255,255,0.4);
-      color: #fff;
-    }
-
-    .films-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-      margin-top: 12px;
-    }
-
-    .film-card {
-      background: #1a1a1a;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 8px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.25s ease, filter 0.25s ease;
-    }
-
-    .film-card:hover {
-      transform: scale(1.03);
-      filter: brightness(1.15);
-    }
-
-    .film-thumb {
+    .player.show { display: flex; }
+    .player-inner {
       position: relative;
-      aspect-ratio: 16 / 9;
-      overflow: hidden;
+      width: 92vw; max-width: 1100px;
     }
-
-    .film-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
+    .player-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
     }
-
-    .film-thumb .play-icon {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.3);
-      opacity: 0;
-      transition: opacity 0.25s;
-      font-size: 2.2rem;
-      color: #fff;
-      pointer-events: none;
-    }
-
-    .film-card:hover .play-icon {
-      opacity: 1;
-    }
-
-    .film-card-title {
-      padding: 10px 12px;
-      text-align: center;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    /* VIDEO PLAYER OVERLAY */
-    .video-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.88);
-      backdrop-filter: blur(8px);
-      z-index: 300;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
-    }
-
-    .video-overlay.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .video-wrapper {
-      position: relative;
-      width: 80vw;
-      max-width: 900px;
-    }
-
-    .video-title-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.12);
-    }
-
-    .video-film-title {
+    .player-title {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(24px, 4vw, 38px);
-      font-weight: 400;
-      color: #fff;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      letter-spacing: 3px; color: #fff;
     }
-
-    .video-close {
-      background: none;
-      border: none;
-      color: #888;
-      font-size: 22px;
-      cursor: pointer;
-      padding: 2px 6px;
-      transition: color 0.2s, transform 0.2s;
+    .player-close { font-size: 26px; color: #aaa; transition: color 0.15s, transform 0.15s; }
+    .player-close:hover { color: #fff; transform: scale(1.1); }
+    .player-wrap {
+      position: relative; border-radius: 8px; overflow: hidden;
+      background: #000; border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
     }
-
-    .video-close:hover { color: #fff; transform: scale(1.1); }
-
-    .video-player-container {
-      position: relative;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-      overflow: hidden;
-      background: #000;
-    }
-
-    .video-player-container video {
-      width: 100%;
-      display: block;
-    }
-
-    /* Custom controls */
-    .custom-controls {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 48px;
+    .player-wrap video { width: 100%; display: block; }
+    .player-controls {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 48px;
       background: rgba(0,0,0,0.75);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 0 14px;
-      opacity: 1;
-      transition: opacity 0.3s;
+      display: flex; align-items: center; gap: 12px; padding: 0 14px;
+      opacity: 1; transition: opacity 0.3s;
     }
-
-    .custom-controls.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .ctrl-btn {
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 18px;
-      cursor: pointer;
-      padding: 4px;
-      line-height: 1;
-      transition: color 0.15s;
-      flex-shrink: 0;
-    }
-
+    .player-controls.hidden { opacity: 0; pointer-events: none; }
+    .ctrl-btn { color: #fff; padding: 4px; line-height: 1; font-size: 18px; }
     .ctrl-btn:hover { color: #ccc; }
-
-    /* Progress bar */
     .progress-wrap {
-      flex: 1;
-      height: 6px;
-      background: #444;
-      border-radius: 3px;
-      cursor: pointer;
-      position: relative;
+      flex: 1; height: 6px; background: #444; border-radius: 3px;
+      cursor: pointer; position: relative;
     }
-
-    .progress-fill {
-      height: 100%;
-      background: #e04040;
-      border-radius: 3px;
-      width: 0%;
-      position: relative;
-    }
-
+    .progress-fill { height: 100%; background: var(--accent); border-radius: 3px; width: 0%; position: relative; }
     .progress-handle {
-      position: absolute;
-      right: -6px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #fff;
+      position: absolute; right: -6px; top: 50%; transform: translateY(-50%);
+      width: 12px; height: 12px; border-radius: 50%; background: #fff;
       box-shadow: 0 0 4px rgba(0,0,0,0.5);
     }
-
-    .time-display {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      color: #ccc;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    /* Volume */
-    .volume-wrap {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-shrink: 0;
-    }
-
-    .volume-slider {
-      width: 60px;
-      height: 4px;
-      background: #444;
-      border-radius: 2px;
-      cursor: pointer;
-      position: relative;
-    }
-
-    .volume-fill {
-      height: 100%;
-      background: #fff;
-      border-radius: 2px;
-      width: 100%;
-    }
-
-    /* Unmute prompt */
+    .time-display { font-family: 'Space Mono', monospace; font-size: 11px; color: #ccc; white-space: nowrap; }
+    .volume-wrap { display: flex; align-items: center; gap: 6px; }
+    .volume-slider { width: 60px; height: 4px; background: #444; border-radius: 2px; cursor: pointer; position: relative; }
+    .volume-fill { height: 100%; background: #fff; border-radius: 2px; width: 100%; }
     .unmute-prompt {
-      position: absolute;
-      top: 50%;
-      left: 50%;
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px; padding: 10px 18px; color: #fff;
+      font-size: 0.9rem; font-weight: 600; display: none; z-index: 5;
+    }
+
+    /* ========== IDLE SCREEN ========== */
+    .idle {
+      position: fixed; inset: 0;
+      background: #0a0a0a;
+      z-index: 800;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 4px; padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.8s ease;
+      filter: brightness(0.7);
+    }
+    .idle.show { opacity: 1; pointer-events: auto; }
+    .quad { position: relative; overflow: hidden; border-radius: 3px; }
+    .quad img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover;
+      transition: opacity 1.2s ease-in-out;
+    }
+    .quad img.fade { opacity: 0; }
+    .idle-title {
+      position: absolute; top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(0,0,0,0.7);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 8px;
-      padding: 12px 20px;
-      color: #fff;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      z-index: 5;
-      transition: background 0.2s;
-      display: none;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 12vw, 10rem);
+      letter-spacing: 10px; color: #fff;
+      text-shadow: 3px 3px 8px #000, -2px -2px 8px #000, 0 0 60px rgba(0,0,0,0.9);
+      pointer-events: none;
+      z-index: 10;
     }
 
-    .unmute-prompt:hover { background: rgba(0,0,0,0.9); }
-
-    /* INTRO ANIMATION */
-    .hero-title {
-      opacity: 0;
+    /* ========== FOOTER ========== */
+    .footer {
+      padding: 50px 40px 30px;
+      border-top: 1px solid var(--border);
+      text-align: center;
     }
+    .socials { display: flex; justify-content: center; gap: 36px; flex-wrap: wrap; }
+    .socials a { display: inline-flex; align-items: center; gap: 7px; color: #aaa; font-size: 0.9rem; font-weight: 600; transition: color 0.15s; }
+    .socials a:hover { color: #fff; }
+    .socials svg { width: 20px; height: 20px; fill: currentColor; }
+    .footer-copy { margin-top: 20px; font-size: 0.75rem; color: #666; }
 
-    .hero-title.intro-visible {
-      opacity: 1;
-      transition: opacity 0.8s ease-out;
-    }
-
-    .quadrant {
-      opacity: 0;
-    }
-
-    .quadrant.intro-visible {
-      opacity: 1;
-      transition: opacity 0.8s ease-out, transform 0.35s ease-out, filter 0.35s ease-out, box-shadow 0.35s ease-out;
-    }
-
-    .overlay-top,
-    .hamburger,
-    .socials-overlay {
-      opacity: 0;
-    }
-
-    .overlay-top.intro-visible,
-    .hamburger.intro-visible,
-    .socials-overlay.intro-visible {
-      opacity: 1;
-      transition: opacity 0.5s ease-out;
-    }
-
-    /* Preserve overlay-top specific opacity after intro */
-    .overlay-top.intro-visible {
-      /* color handles the text opacity already */
-    }
-
-    /* MOBILE */
-    @media (max-width: 640px) {
-      .fullscreen {
-        padding: 12px;
+    /* ========== MOBILE ========== */
+    @media (max-width: 900px) {
+      .nav { padding: 10px 16px; gap: 10px; }
+      .brand { font-size: 1.3rem; letter-spacing: 2px; }
+      .nav-menu { display: none; }
+      .nav-menu.mobile-open {
+        display: flex; position: absolute; top: 100%; left: 0; right: 0;
+        flex-direction: column; align-items: stretch;
+        background: rgba(10,10,10,0.98); padding: 10px 16px; gap: 2px;
+        border-top: 1px solid var(--border);
       }
-
-      .hero-title {
-        font-size: clamp(2.5rem, 14vw, 5rem);
-        letter-spacing: 4px;
-      }
-
-      .socials-overlay { gap: 20px; padding: 8px 12px; }
-      .socials-overlay a { font-size: 0.75rem; }
-      .socials-overlay svg { width: 18px; height: 18px; }
-
-      .sidebar { width: 260px; }
-
-      /* On mobile the pill would crash into the X — drop it under the title */
-      .drive-btn {
-        position: static;
-        margin: 4px 0 16px;
-      }
-
-      .suggestion-form { flex-direction: column; }
-
-      .films-grid { grid-template-columns: 1fr; }
-
-      .video-wrapper { width: 95vw; }
-      .volume-slider { display: none; }
-    }
-
-    @media (min-width: 641px) and (max-width: 900px) {
-      .films-grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-menu.mobile-open button, .nav-menu.mobile-open a { padding: 10px 6px; }
+      .nav-menu.mobile-open .drop-wrap { width: 100%; }
+      .nav-menu.mobile-open .drop-menu { position: static; display: block; margin-top: 4px; background: rgba(255,255,255,0.03); border: none; padding: 4px 6px; }
+      .hamburger { display: inline-flex; }
+      .hero-content { padding: 60px 20px 80px; }
+      .row { padding: 0 16px; }
+      .card { width: clamp(150px, 42vw, 240px); }
+      .search-wrap.open .search-input { width: 180px; }
+      .search-dropdown { width: 260px; right: -10px; }
+      .footer { padding: 30px 16px 20px; }
     }
   </style>
 </head>
 <body>
 
-<!-- FULLSCREEN 2x2 GRID -->
-<div class="fullscreen">
-  <div class="grid">
-    <div class="quadrant" id="q0"></div>
-    <div class="quadrant" id="q1"></div>
-    <div class="quadrant" id="q2"></div>
-    <div class="quadrant" id="q3"></div>
-  </div>
-  <div class="hero-title">FAT FILMS</div>
+<!-- ========== LOADING SCREEN ========== -->
+<div class="loader" id="loader">
+  <div class="loader-text">FAT FILMS</div>
 </div>
 
-<!-- OVERLAYS -->
+<!-- ========== MARQUEE + COPY TOAST ========== -->
 <div class="copy-toast" id="copy-toast">Copied!</div>
-<div class="overlay-top" id="overlay-top">
+<div class="marquee" id="marquee">
   <div class="marquee-track">
     <span>GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; </span><span>GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump &nbsp;&bull;&nbsp; </span>
   </div>
 </div>
 
-<button class="hamburger" id="hamburger-btn" aria-label="Open menu">&#9776;</button>
-
-<div class="socials-overlay">
-  <a href="https://www.instagram.com/fatfilmz" target="_blank" rel="noopener">
-    <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-    <span>Instagram</span>
-  </a>
-  <a href="https://www.tiktok.com/@dannylarsonator" target="_blank" rel="noopener">
-    <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.48v-7.15a8.16 8.16 0 005.58 2.18v-3.44a4.85 4.85 0 01-1.99-.58z"/></svg>
-    <span>TikTok</span>
-  </a>
-  <a href="https://x.com/fatfilmsparody" target="_blank" rel="noopener">
-    <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-    <span>X / Twitter</span>
-  </a>
-</div>
-
-<!-- SIDEBAR MENU -->
-<div class="backdrop" id="backdrop"></div>
-<div class="sidebar" id="sidebar">
-  <button class="sidebar-close" id="sidebar-close">&times;</button>
-  <nav class="sidebar-nav">
-    <button id="nav-films">Films</button>
-    <button id="nav-about">About</button>
-    <button id="nav-suggest">Suggest a Film</button>
-  </nav>
-</div>
-
-<!-- ABOUT MODAL -->
-<div class="modal-overlay" id="about-modal">
-  <div class="modal">
-    <button class="modal-close" data-close>&times;</button>
-    <h2>About Fat Films</h2>
-    <p>Fat Films is taking the internet by storm, recreating iconic scenes from your favourite films and series, but making every character fat. Powered by cutting-edge AI technology, we transform legendary movie moments into hilarious, larger-than-life masterpieces. With millions of views across TikTok and Instagram, Fat Films has become one of the most viral AI entertainment projects on the internet. Now, we're bringing it on-chain.</p>
-  </div>
-</div>
-
-<!-- SUGGEST MODAL -->
-<div class="modal-overlay" id="suggest-modal">
-  <div class="modal">
-    <button class="modal-close" data-close>&times;</button>
-    <h2>What film should we do next?</h2>
-    <div class="suggestion-form">
-      <input type="text" id="suggestion-input" placeholder="e.g. The Dark Knight, Breaking Bad...">
-      <button id="suggestion-btn">Submit</button>
-    </div>
-    <div class="confirmation" id="confirmation"></div>
-
-    <div class="leaderboard">
-      <h3>Top Suggestions</h3>
-      <div class="leaderboard-list" id="leaderboard-list">
-        <div class="leaderboard-loading">Loading...</div>
+<!-- ========== NAV ========== -->
+<nav class="nav" id="nav">
+  <a href="#" class="brand">FAT FILMS</a>
+  <button class="icon-btn hamburger" id="hamburger" aria-label="Menu">
+    <svg viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+  </button>
+  <div class="nav-menu" id="nav-menu">
+    <a href="#home" data-nav="home">Home</a>
+    <button data-nav="suggest">Film Suggestions</button>
+    <button data-nav="favorites">Favorites</button>
+    <div class="drop-wrap">
+      <button>Genres <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></button>
+      <div class="drop-menu">
+        <button data-genre="Biggest Hits">Biggest Hits</button>
+        <button data-genre="Fat Films Exclusives">Fat Films Exclusives</button>
+        <button data-genre="Freshly Baked">Freshly Baked</button>
+        <button data-genre="Heavy Hits">Heavy Hits</button>
       </div>
     </div>
+    <div class="drop-wrap">
+      <button>Language <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></button>
+      <div class="drop-menu">
+        <button data-lang="Spanish">Spanish</button>
+        <button data-lang="French">French</button>
+        <button data-lang="Italian">Italian</button>
+        <button data-lang="German">German</button>
+        <button data-lang="Chinese">Chinese</button>
+        <button data-lang="Japanese">Japanese</button>
+        <button data-lang="Korean">Korean</button>
+        <button data-lang="Arabic">Arabic</button>
+      </div>
+    </div>
+    <a href="#news">News</a>
   </div>
-</div>
+  <div class="nav-right">
+    <div class="search-wrap" id="search-wrap">
+      <input type="text" class="search-input" id="search-input" placeholder="Search films...">
+      <button class="icon-btn" id="search-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.8l-.3-.3c1-1.1 1.6-2.6 1.6-4.2C16 5.9 13.1 3 9.5 3S3 5.9 3 9.5 5.9 16 9.5 16c1.6 0 3.1-.6 4.2-1.6l.3.3v.8l5 5 1.5-1.5-5-5zm-6 0C7 14 5 12 5 9.5S7 5 9.5 5 14 7 14 9.5 12 14 9.5 14z"/></svg>
+      </button>
+      <div class="search-dropdown" id="search-dropdown"></div>
+    </div>
+  </div>
+</nav>
 
-<!-- FILMS MODAL -->
-<div class="modal-overlay" id="films-modal">
-  <div class="modal">
+<!-- ========== HERO ========== -->
+<section class="hero" id="hero">
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-content">
+    <h1 class="hero-title" id="hero-title"></h1>
+    <p class="hero-desc" id="hero-desc"></p>
+    <div class="hero-actions">
+      <button class="btn-play" id="hero-play">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        Play
+      </button>
+      <button class="btn-info" id="hero-info">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        More Info
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ROWS ========== -->
+<div class="rows-wrap" id="rows-wrap"></div>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer" id="news">
+  <div class="socials">
+    <a href="https://www.instagram.com/fatfilmz" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      Instagram
+    </a>
+    <a href="https://www.tiktok.com/@dannylarsonator" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.48v-7.15a8.16 8.16 0 005.58 2.18v-3.44a4.85 4.85 0 01-1.99-.58z"/></svg>
+      TikTok
+    </a>
+    <a href="https://x.com/fatfilmsparody" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      X / Twitter
+    </a>
+  </div>
+  <div class="footer-copy">&copy; Fat Films. A parody project. All film references are jokes.</div>
+</footer>
+
+<!-- ========== INFO / CAST MODALS ========== -->
+<div class="modal-bg" id="info-modal">
+  <div class="modal-box">
     <button class="modal-close" data-close>&times;</button>
-    <h2>Films</h2>
-    <a class="drive-btn" href="https://drive.google.com/drive/folders/16WIRZ0H1-IRm523nEcHoK_8fCj4WIUVq?usp=sharing" target="_blank" rel="noopener">Access Google Drive</a>
-    <div class="films-grid">
-      <div class="film-card" data-video="videos/american chud.mp4">
-        <div class="film-thumb">
-          <img src="frames/american_chud_00.jpg" alt="American Chud">
-          <div class="play-icon">&#9654;</div>
-        </div>
-        <div class="film-card-title">American Chud</div>
-      </div>
-      <div class="film-card" data-video="videos/baking bad.mp4">
-        <div class="film-thumb">
-          <img src="frames/baking_bad_00.jpg" alt="Baking Bad">
-          <div class="play-icon">&#9654;</div>
-        </div>
-        <div class="film-card-title">Baking Bad</div>
-      </div>
-      <div class="film-card" data-video="videos/Bigger Things.mp4">
-        <div class="film-thumb">
-          <img src="frames/Bigger_Things_00.jpg" alt="Bigger Things">
-          <div class="play-icon">&#9654;</div>
-        </div>
-        <div class="film-card-title">Bigger Things</div>
-      </div>
-      <div class="film-card" data-video="videos/Bulk Fiction.mp4">
-        <div class="film-thumb">
-          <img src="frames/Bulk_Fiction_00.jpg" alt="Bulk Fiction">
-          <div class="play-icon">&#9654;</div>
-        </div>
-        <div class="film-card-title">Bulk Fiction</div>
-      </div>
-      <div class="film-card" data-video="videos/Chewlander.mp4">
-        <div class="film-thumb">
-          <img src="frames/Chewlander_00.jpg" alt="Chewlander">
-          <div class="play-icon">&#9654;</div>
-        </div>
-        <div class="film-card-title">Chewlander</div>
-      </div>
-      <div class="film-card" data-video="videos/Chiplash.mp4">
-        <div class="film-thumb">
-          <img src="frames/Chiplash_00.jpg" alt="Chiplash">
-          <div class="play-icon">&#9654;</div>
-        </div>
-        <div class="film-card-title">Chiplash</div>
-      </div>
-      <div class="film-card" data-video="videos/donnie lardo.mp4">
-        <div class="film-thumb">
-          <img src="frames/donnie_lardo_00.jpg" alt="Donnie Lardo">
-          <div class="play-icon">&#9654;</div>
-        </div>
-        <div class="film-card-title">Donnie Lardo</div>
-      </div>
-      <div class="film-card" data-video="videos/fat club.mp4">
-        <div class="film-thumb">
-          <img src="frames/fat_club_00.jpg" alt="Fat Club">
-          <div class="play-icon">&#9654;</div>
-        </div>
-        <div class="film-card-title">Fat Club</div>
-      </div>
-      <div class="film-card" data-video="videos/fat runner.mp4">
-        <div class="film-thumb">
-          <img src="frames/fat_runner_00.jpg" alt="Fat Runner">
-          <div class="play-icon">&#9654;</div>
-        </div>
-        <div class="film-card-title">Fat Runner</div>
-      </div>
-      <div class="film-card" data-video="videos/fatsy driver.mp4">
-        <div class="film-thumb">
-          <img src="frames/fatsy_driver_00.jpg" alt="Fatsi Driver">
-          <div class="play-icon">&#9654;</div>
-        </div>
-        <div class="film-card-title">Fatsi Driver</div>
-      </div>
-      <div class="film-card" data-video="videos/Heavy Potter.mp4">
-        <div class="film-thumb">
-          <img src="frames/Heavy_Potter_00.jpg" alt="Heavy Potter">
-          <div class="play-icon">&#9654;</div>
-        </div>
-        <div class="film-card-title">Heavy Potter</div>
-      </div>
-      <div class="film-card" data-video="videos/interbelly.mp4">
-        <div class="film-thumb">
-          <img src="frames/interbelly_00.jpg" alt="Interbelly">
-          <div class="play-icon">&#9654;</div>
-        </div>
-        <div class="film-card-title">Interbelly</div>
-      </div>
-      <div class="film-card" data-video="videos/squid gain.mp4">
-        <div class="film-thumb">
-          <img src="frames/squid_gain_00.jpg" alt="Squid Gain">
-          <div class="play-icon">&#9654;</div>
-        </div>
-        <div class="film-card-title">Squid Gain</div>
-      </div>
-      <div class="film-card" data-video="videos/the bigs.mp4">
-        <div class="film-thumb">
-          <img src="frames/the_bigs_00.jpg" alt="The Bigs">
-          <div class="play-icon">&#9654;</div>
-        </div>
-        <div class="film-card-title">The Bigs</div>
-      </div>
-      <div class="film-card" data-video="videos/The Fatrix.mp4">
-        <div class="film-thumb">
-          <img src="frames/The_Fatrix_00.jpg" alt="The Fatrix">
-          <div class="play-icon">&#9654;</div>
-        </div>
-        <div class="film-card-title">The Fatrix</div>
-      </div>
-      <div class="film-card" data-video="videos/The Weight of Wallstreet.mp4">
-        <div class="film-thumb">
-          <img src="frames/The_Weight_of_Wallstreet_00.jpg" alt="The Weight of Wallstreet">
-          <div class="play-icon">&#9654;</div>
-        </div>
-        <div class="film-card-title">The Weight of Wallstreet</div>
-      </div>
+    <h2 id="info-title"></h2>
+    <p id="info-desc"></p>
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <button class="btn-play" id="info-play"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Play</button>
+      <button class="btn-info" id="info-cast">Cast</button>
     </div>
   </div>
 </div>
 
-<!-- VIDEO PLAYER OVERLAY -->
-<div class="video-overlay" id="video-overlay">
-  <div class="video-wrapper">
-    <div class="video-title-bar">
-      <span class="video-film-title" id="video-film-title"></span>
-      <button class="video-close" id="video-close">&times;</button>
+<div class="modal-bg" id="cast-modal">
+  <div class="modal-box">
+    <button class="modal-close" data-close>&times;</button>
+    <h2 id="cast-title"></h2>
+    <ul class="cast-list" id="cast-list"></ul>
+  </div>
+</div>
+
+<!-- ========== SUGGEST MODAL ========== -->
+<div class="modal-bg" id="suggest-modal">
+  <div class="modal-box">
+    <button class="modal-close" data-close>&times;</button>
+    <h2>Film Suggestions</h2>
+    <p style="font-size:0.9rem; color:#aaa;">What film should we do next?</p>
+    <div class="suggest-form">
+      <input type="text" id="suggest-input" placeholder="e.g. The Dark Knight, Breaking Bad...">
+      <button id="suggest-btn">Submit</button>
+      <div class="suggest-auto" id="suggest-auto"></div>
     </div>
-    <div class="video-player-container" id="video-player-container">
-      <video id="video-player"></video>
+    <div class="msg" id="suggest-msg"></div>
+    <h3>Top Suggestions</h3>
+    <div class="leaderboard-list" id="leaderboard-list">
+      <div style="text-align:center; padding:20px; color:#666; font-size:0.85rem;">Loading...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== VIDEO PLAYER ========== -->
+<div class="player" id="player">
+  <div class="player-inner">
+    <div class="player-head">
+      <span class="player-title" id="player-title"></span>
+      <button class="player-close" id="player-close">&times;</button>
+    </div>
+    <div class="player-wrap" id="player-wrap">
+      <video id="video"></video>
       <button class="unmute-prompt" id="unmute-prompt">Click for sound &#128266;</button>
-      <div class="custom-controls" id="custom-controls">
+      <div class="player-controls" id="player-controls">
         <button class="ctrl-btn" id="ctrl-play">&#9654;</button>
         <div class="progress-wrap" id="progress-wrap">
-          <div class="progress-fill" id="progress-fill">
-            <div class="progress-handle"></div>
-          </div>
+          <div class="progress-fill" id="progress-fill"><div class="progress-handle"></div></div>
         </div>
         <span class="time-display" id="time-display">0:00 / 0:00</span>
         <div class="volume-wrap">
           <button class="ctrl-btn" id="ctrl-vol">&#128266;</button>
-          <div class="volume-slider" id="volume-slider">
-            <div class="volume-fill" id="volume-fill"></div>
-          </div>
+          <div class="volume-slider" id="volume-slider"><div class="volume-fill" id="volume-fill"></div></div>
         </div>
         <button class="ctrl-btn" id="ctrl-fs">&#x26F6;</button>
       </div>
@@ -1164,478 +749,654 @@
   </div>
 </div>
 
+<!-- ========== IDLE SCREEN ========== -->
+<div class="idle" id="idle">
+  <div class="quad" id="q0"></div>
+  <div class="quad" id="q1"></div>
+  <div class="quad" id="q2"></div>
+  <div class="quad" id="q3"></div>
+  <div class="idle-title">FAT FILMS</div>
+</div>
+
 <script>
-  // Embedded frame list
-  const frames = ["Bigger_Things_00.jpg","Bigger_Things_01.jpg","Bigger_Things_02.jpg","Bigger_Things_03.jpg","Bigger_Things_04.jpg","Bigger_Things_05.jpg","Bigger_Things_06.jpg","Bigger_Things_07.jpg","Bigger_Things_08.jpg","Bigger_Things_09.jpg","Chewlander_00.jpg","Chewlander_01.jpg","Chewlander_02.jpg","Chewlander_03.jpg","Chewlander_04.jpg","Chewlander_05.jpg","Chewlander_06.jpg","Chewlander_07.jpg","Chewlander_08.jpg","Chewlander_09.jpg","The_Weight_of_Wallstreet_00.jpg","The_Weight_of_Wallstreet_01.jpg","The_Weight_of_Wallstreet_02.jpg","The_Weight_of_Wallstreet_03.jpg","The_Weight_of_Wallstreet_04.jpg","The_Weight_of_Wallstreet_05.jpg","The_Weight_of_Wallstreet_06.jpg","The_Weight_of_Wallstreet_07.jpg","The_Weight_of_Wallstreet_08.jpg","The_Weight_of_Wallstreet_09.jpg","american_chud_00.jpg","american_chud_01.jpg","american_chud_02.jpg","american_chud_03.jpg","american_chud_04.jpg","american_chud_05.jpg","american_chud_06.jpg","american_chud_07.jpg","american_chud_08.jpg","american_chud_09.jpg","baking_bad_00.jpg","baking_bad_01.jpg","baking_bad_02.jpg","baking_bad_03.jpg","baking_bad_04.jpg","baking_bad_05.jpg","baking_bad_06.jpg","baking_bad_07.jpg","baking_bad_08.jpg","baking_bad_09.jpg","donnie_lardo_00.jpg","donnie_lardo_01.jpg","donnie_lardo_02.jpg","donnie_lardo_03.jpg","donnie_lardo_04.jpg","donnie_lardo_05.jpg","donnie_lardo_06.jpg","donnie_lardo_07.jpg","donnie_lardo_08.jpg","donnie_lardo_09.jpg","fat_club_00.jpg","fat_club_01.jpg","fat_club_02.jpg","fat_club_03.jpg","fat_club_04.jpg","fat_club_05.jpg","fat_club_06.jpg","fat_club_07.jpg","fat_club_08.jpg","fat_club_09.jpg","fat_runner_00.jpg","fat_runner_01.jpg","fat_runner_02.jpg","fat_runner_03.jpg","fat_runner_04.jpg","fat_runner_05.jpg","fat_runner_06.jpg","fat_runner_07.jpg","fat_runner_08.jpg","fat_runner_09.jpg","fatsy_driver_00.jpg","fatsy_driver_01.jpg","fatsy_driver_02.jpg","fatsy_driver_03.jpg","fatsy_driver_04.jpg","fatsy_driver_05.jpg","fatsy_driver_06.jpg","fatsy_driver_07.jpg","fatsy_driver_08.jpg","fatsy_driver_09.jpg","interbelly_00.jpg","interbelly_01.jpg","interbelly_02.jpg","interbelly_03.jpg","interbelly_04.jpg","interbelly_05.jpg","interbelly_06.jpg","interbelly_07.jpg","interbelly_08.jpg","interbelly_09.jpg","squid_gain_00.jpg","squid_gain_01.jpg","squid_gain_02.jpg","squid_gain_03.jpg","squid_gain_04.jpg","squid_gain_05.jpg","squid_gain_06.jpg","squid_gain_07.jpg","squid_gain_08.jpg","squid_gain_09.jpg","the_bigs_00.jpg","the_bigs_01.jpg","the_bigs_02.jpg","the_bigs_03.jpg","the_bigs_04.jpg","the_bigs_05.jpg","the_bigs_06.jpg","the_bigs_07.jpg","the_bigs_08.jpg","the_bigs_09.jpg","Bulk_Fiction_00.jpg","Bulk_Fiction_01.jpg","Bulk_Fiction_02.jpg","Bulk_Fiction_03.jpg","Bulk_Fiction_04.jpg","Bulk_Fiction_05.jpg","Bulk_Fiction_06.jpg","Bulk_Fiction_07.jpg","Bulk_Fiction_08.jpg","Bulk_Fiction_09.jpg","Chiplash_00.jpg","Chiplash_01.jpg","Chiplash_02.jpg","Chiplash_03.jpg","Chiplash_04.jpg","Chiplash_05.jpg","Chiplash_06.jpg","Chiplash_07.jpg","Chiplash_08.jpg","Chiplash_09.jpg","Heavy_Potter_00.jpg","Heavy_Potter_01.jpg","Heavy_Potter_02.jpg","Heavy_Potter_03.jpg","Heavy_Potter_04.jpg","Heavy_Potter_05.jpg","Heavy_Potter_06.jpg","Heavy_Potter_07.jpg","Heavy_Potter_08.jpg","Heavy_Potter_09.jpg","The_Fatrix_00.jpg","The_Fatrix_01.jpg","The_Fatrix_02.jpg","The_Fatrix_03.jpg","The_Fatrix_04.jpg","The_Fatrix_05.jpg","The_Fatrix_06.jpg","The_Fatrix_07.jpg","The_Fatrix_08.jpg","The_Fatrix_09.jpg"];
+// ========================================================================
+// FILM DATA
+// ========================================================================
+const FILMS = [
+  { slug: 'american-chud', title: 'American Chud', video: 'videos/american chud.mp4', card: 'titlecards/american_chud.jpg',
+    desc: "Patrick Ateman is a wealthy Wall Street investment banker with an impeccable morning skincare routine and an insatiable appetite. By day he obsesses over business cards and restaurant reservations. By night, things get a lot messier.",
+    cast: [['Christian Whale','Christian Bale'],['Willem Dafood','Willem Dafoe'],['Jared Lardo','Jared Leto'],['Reese Withoutaspoon','Reese Witherspoon'],['Chloe Sevign-eat','Chloe Sevigny']] },
+  { slug: 'baking-bad', title: 'Baking Bad', video: 'videos/baking bad.mp4', card: 'titlecards/baking_bad.jpg',
+    desc: "A high school chemistry teacher gets a devastating diagnosis and decides to use his skills to cook up something far more profitable than school dinners. Along with his former student, he builds a snack empire that spirals dangerously out of control.",
+    cast: [['Fryan Cranston','Bryan Cranston'],['Aaron Pork','Aaron Paul'],['Anna Bunn','Anna Gunn'],['Dean Nourish','Dean Norris'],['Bigsy Brandt','Betsy Brandt']] },
+  { slug: 'bigger-things', title: 'Bigger Things', video: 'videos/Bigger Things.mp4', card: 'titlecards/Bigger_Things.jpg',
+    desc: "When a chunky kid vanishes from the small town of Hawkins, his friends discover something monstrous lurking in a parallel dimension called the Upside Down. Turns out the real stranger thing is how much these kids can eat during a crisis.",
+    cast: [['Millie Gobby Brown','Millie Bobby Brown'],['Sharkfin Wolfhard','Finn Wolfhard'],['Winona Wider','Winona Ryder'],['Gaten Mozzarella','Gaten Matarazzo'],['Caleb McLovin','Caleb McLaughlin']] },
+  { slug: 'bulk-fiction', title: 'Bulk Fiction', video: 'videos/Bulk Fiction.mp4', card: 'titlecards/Bulk_Fiction.jpg',
+    desc: "The lives of two heavyweight hitmen, a mob boss's wife with a taste for milkshakes, and a boxer who refuses to go down intertwine across Los Angeles. Non-linear storytelling has never been this filling.",
+    cast: [['John Truffolta','John Travolta'],['Samuel L. Snackson','Samuel L. Jackson'],['Uma Thickman','Uma Thurman'],['Bruce Widest','Bruce Willis'],['Tim Broth','Tim Roth']] },
+  { slug: 'chewlander', title: 'Chewlander', video: 'videos/Chewlander.mp4', card: 'titlecards/Chewlander.jpg',
+    desc: "Derek Chewlander is the world's most famous male model, known for his signature look Blue Meal. When a sinister fashion mogul tries to use him as a weapon, Derek must team up with rival model Hamsel to save the day and look absolutely stuffed doing it.",
+    cast: [['Ben Filler','Ben Stiller'],['Owen Wideson','Owen Wilson'],['Whale Ferrell','Will Ferrell'],['Crusty Taylor','Christine Taylor'],['Millan KG Jovovich','Milla Jovovich']] },
+  { slug: 'chiplash', title: 'Chiplash', video: 'videos/Chiplash.mp4', card: 'titlecards/Chiplash.jpg',
+    desc: "A young jazz drummer enrols at one of the most prestigious music conservatories in the country, only to find himself under the tyrannical instruction of Terence Flesher, a conductor who pushes his students well past their breaking point. Not quite my tempo, not quite my portion size.",
+    cast: [['Miles Sweller','Miles Teller'],['K.G. Simmons','J.K. Simmons'],['Paul Raisin','Paul Reiser'],['Beluga Beignet','Melissa Benoist'],['Austin Stowswell','Austin Stowell']] },
+  { slug: 'donnie-lardo', title: 'Donnie Lardo', video: 'videos/donnie lardo.mp4', card: 'titlecards/donnie_lardo.jpg',
+    desc: "A troubled teenager starts sleepwalking and having visions of a giant terrifying rabbit who tells him the world is about to end. Between existential dread and raiding the fridge at 3am, Donnie has a lot on his plate. Literally.",
+    cast: [['Bake Gyllenhaal','Jake Gyllenhaal'],['Jena Baloney','Jena Malone'],['Drew Berrymore','Drew Barrymore'],['Fatrick Swayze','Patrick Swayze'],['Mary McDonalds','Mary McDonnell']] },
+  { slug: 'fat-club', title: 'Fat Club', video: 'videos/fat club.mp4', card: 'titlecards/fat_club.jpg',
+    desc: "An insomniac office worker and a mysterious soap salesman form an underground club with one simple rule: nobody talks about Fat Club. What starts as bare-knuckle brawling quickly inflates into something much, much bigger.",
+    cast: [['Brad Pitt-a','Brad Pitt'],['Breadward Norton','Edward Norton'],['Helena Bonham Fatter','Helena Bonham Carter'],['Meat Loaf','Meat Loaf'],['Jared Lardo','Jared Leto']] },
+  { slug: 'fat-runner', title: 'Fat Runner', video: 'videos/fat runner.mp4', card: 'titlecards/fat_runner.jpg',
+    desc: "Officer KD6-3.7 is a blade runner tasked with hunting down rogue replicants in a dystopian 2049. When he uncovers a long-buried secret, he must find former blade runner Rick Deckard, who has been in hiding and apparently eating very well.",
+    cast: [['Ryan Gobbling','Ryan Gosling'],['Harrison Lard','Harrison Ford'],['Ana de Armass','Ana de Armas'],['Jared Lardo','Jared Leto'],['Robin Wide','Robin Wright']] },
+  { slug: 'fatsi-driver', title: 'Fatsi Driver', video: 'videos/fatsy driver.mp4', card: 'titlecards/fatsy_driver.jpg',
+    desc: "Travis Bickling is a lonely, sleep-deprived cab driver navigating the greasy streets of 1970s New York City. Disgusted by the filth and corruption he sees through his windshield, he embarks on a one-man mission to clean up the city, fuelled entirely by diner food.",
+    cast: [['Robert De Nobu','Robert De Niro'],['Jodie Fodder','Jodie Foster'],['Cybill Shephards Pie','Cybill Shepherd'],['Harvey Pie-tel','Harvey Keitel'],['Albert Cookies','Albert Brooks']] },
+  { slug: 'heavy-potter', title: 'Heavy Potter', video: 'videos/Heavy Potter.mp4', card: 'titlecards/Heavy_Potter.jpg',
+    desc: "An orphan living under the stairs discovers he's actually a wizard and gets whisked away to Hogwarts School of Witchcraft and Wizardry. Between battling the dark lord and demolishing the Great Hall buffet, Heavy's plate is always full.",
+    cast: [['Daniel Fatcliffe','Daniel Radcliffe'],['Emma Whatson-the-menu','Emma Watson'],['Rupert Grub','Rupert Grint'],['Alan Snackman','Alan Rickman'],['Mouth Fiennes','Ralph Fiennes']] },
+  { slug: 'interbelly', title: 'Interbelly', video: 'videos/interbelly.mp4', card: 'titlecards/interbelly.jpg',
+    desc: "In a dying future where crops have failed and humanity faces starvation, a former NASA pilot leads a crew through a wormhole in search of a new home. The mission: find a planet with enough food to feed everyone. Time is relative but hunger is constant.",
+    cast: [['Fatthew McConaughey','Matthew McConaughey'],['Anne Hatha-weigh','Anne Hathaway'],['Jessica Chas-stain','Jessica Chastain'],['Michael Grain','Michael Caine'],['Fatt Damon','Matt Damon']] },
+  { slug: 'squid-gain', title: 'Squid Gain', video: 'videos/squid gain.mp4', card: 'titlecards/squid_gain.jpg',
+    desc: "Hundreds of cash-strapped contestants accept a mysterious invitation to compete in a series of deadly childhood games for a massive cash prize. The stakes are enormous. So are the players.",
+    cast: [['Pea Jung-Jae','Lee Jung-jae'],['Park Hae-soup','Park Hae-soo'],['Wi Ham-joon','Wi Ha-joon'],['Jung Ho-yum','Jung Ho-yeon'],['Gong Food','Gong Yoo']] },
+  { slug: 'the-bigs', title: 'The Bigs', video: 'videos/the bigs.mp4', card: 'titlecards/the_bigs.jpg',
+    desc: "A ragtag group of vigilantes take on corrupt superheroes who abuse their powers for fame and profit. Leading the charge is Billy Butcher, a man with a grudge, a plan, and absolutely zero interest in portion control.",
+    cast: [['Karl Bourbon','Karl Urban'],['Pack Quaid','Jack Quaid'],['Whamtony Starr','Antony Starr'],['Erin Moritarty','Erin Moriarty'],['Dominique McElligut','Dominique McElligott']] },
+  { slug: 'the-fatrix', title: 'The Fatrix', video: 'videos/The Fatrix.mp4', card: 'titlecards/The_Fatrix.jpg',
+    desc: "A computer hacker discovers that reality as he knows it is actually a simulated world designed to keep humanity docile and well-fed. When offered the choice between a red pill and a blue pill, Neo asks if there is a third option with gravy.",
+    cast: [['Keanu Feeds','Keanu Reeves'],['Laurence Fishbone','Laurence Fishburne'],['Carrie-Pan Moss','Carrie-Anne Moss'],['Huge Weaving','Hugo Weaving'],['Joe Panini-ano','Joe Pantoliano']] },
+  { slug: 'weight-of-wallstreet', title: 'The Weight of Wallstreet', video: 'videos/The Weight of Wallstreet.mp4', card: 'titlecards/The_Weight_of_Wallstreet.jpg',
+    desc: "Based on the true story of Jordan Belfry, a stockbroker who built a massive fortune through fraud, excess, and an appetite for the finer things in life. The money was obscene, the parties were legendary, and the lunch bills were astronomical.",
+    cast: [['Leonardo DiCarpaccio','Leonardo DiCaprio'],['Jonah Fill','Jonah Hill'],['Margot Gobbie','Margot Robbie'],['Fatthew McConaughey','Matthew McConaughey'],['Piele Chandler','Kyle Chandler']] },
+];
 
-  const usedFrames = new Set();
+const BY_SLUG = Object.fromEntries(FILMS.map(f => [f.slug, f]));
 
-  function pickRandom() {
-    let f;
-    do {
-      f = frames[Math.floor(Math.random() * frames.length)];
-    } while (usedFrames.has(f) && usedFrames.size < frames.length);
-    usedFrames.add(f);
-    if (usedFrames.size >= frames.length - 4) usedFrames.clear();
-    return f;
+const BASE_CATEGORIES = [
+  { title: 'Biggest Hits', slugs: ['american-chud','fat-club','bulk-fiction','weight-of-wallstreet','the-fatrix','fat-runner'] },
+  { title: 'Fat Films Exclusives', slugs: FILMS.map(f => f.slug) },
+  { title: 'Freshly Baked', slugs: ['heavy-potter','the-fatrix','chiplash','bulk-fiction','bigger-things'] },
+  { title: 'Heavy Hits', slugs: ['interbelly','fat-runner','chiplash','weight-of-wallstreet','american-chud','squid-gain'] },
+];
+
+// The "clean" frames for idle mode — a curated pool from public/frames/
+const IDLE_FRAMES = ["american_chud_03.jpg","american_chud_05.jpg","american_chud_07.jpg","baking_bad_02.jpg","baking_bad_04.jpg","baking_bad_06.jpg","Bigger_Things_03.jpg","Bigger_Things_05.jpg","Bigger_Things_07.jpg","Bulk_Fiction_03.jpg","Bulk_Fiction_05.jpg","Bulk_Fiction_07.jpg","Chewlander_03.jpg","Chewlander_05.jpg","Chewlander_07.jpg","Chiplash_03.jpg","Chiplash_05.jpg","Chiplash_07.jpg","donnie_lardo_03.jpg","donnie_lardo_05.jpg","donnie_lardo_07.jpg","fat_club_03.jpg","fat_club_05.jpg","fat_club_07.jpg","fat_runner_03.jpg","fat_runner_05.jpg","fat_runner_07.jpg","fatsy_driver_03.jpg","fatsy_driver_05.jpg","fatsy_driver_07.jpg","Heavy_Potter_03.jpg","Heavy_Potter_05.jpg","Heavy_Potter_07.jpg","interbelly_03.jpg","interbelly_05.jpg","interbelly_07.jpg","squid_gain_03.jpg","squid_gain_05.jpg","squid_gain_07.jpg","the_bigs_03.jpg","the_bigs_05.jpg","the_bigs_07.jpg","The_Fatrix_03.jpg","The_Fatrix_05.jpg","The_Fatrix_07.jpg","The_Weight_of_Wallstreet_03.jpg","The_Weight_of_Wallstreet_05.jpg","The_Weight_of_Wallstreet_07.jpg"];
+
+// ========================================================================
+// STORE (localStorage wrappers)
+// ========================================================================
+const LS = {
+  favs: () => JSON.parse(localStorage.getItem('ff.favs') || '[]'),
+  toggleFav: (slug) => {
+    const set = new Set(LS.favs());
+    set.has(slug) ? set.delete(slug) : set.add(slug);
+    const arr = [...set];
+    localStorage.setItem('ff.favs', JSON.stringify(arr));
+    return set.has(slug);
+  },
+  isFav: (slug) => LS.favs().includes(slug),
+  watched: () => JSON.parse(localStorage.getItem('ff.watched') || '{}'),
+  setWatchedProgress: (slug, pct) => {
+    const w = LS.watched();
+    w[slug] = { pct, ts: Date.now() };
+    localStorage.setItem('ff.watched', JSON.stringify(w));
+  },
+  lastWatched: () => {
+    const w = LS.watched();
+    const items = Object.entries(w).sort((a,b)=>b[1].ts-a[1].ts);
+    return items.length ? items[0][0] : null;
+  },
+  likes: () => JSON.parse(localStorage.getItem('ff.likes') || '{}'),
+  toggleLike: (slug) => {
+    const likes = LS.likes();
+    likes[slug] = !likes[slug];
+    localStorage.setItem('ff.likes', JSON.stringify(likes));
+    return likes[slug];
+  },
+  isLiked: (slug) => !!LS.likes()[slug],
+};
+
+// ========================================================================
+// UTILITIES
+// ========================================================================
+function shuffle(a) {
+  const arr = [...a];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function fakeLikeCount(slug) {
+  // Deterministic-ish "fake" count derived from slug length for placeholder display.
+  let seed = 0;
+  for (let i = 0; i < slug.length; i++) seed = (seed * 31 + slug.charCodeAt(i)) >>> 0;
+  return 800 + (seed % 9200);
+}
+
+// ========================================================================
+// LOADING SCREEN
+// ========================================================================
+setTimeout(() => document.getElementById('loader').classList.add('gone'), 2400);
+setTimeout(() => { const l = document.getElementById('loader'); if (l) l.remove(); }, 3200);
+
+// ========================================================================
+// MARQUEE COPY
+// ========================================================================
+document.getElementById('marquee').addEventListener('click', () => {
+  navigator.clipboard.writeText('GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump').then(() => {
+    const t = document.getElementById('copy-toast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 1500);
+  }).catch(()=>{});
+});
+
+// ========================================================================
+// NAV SCROLL
+// ========================================================================
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// Hamburger
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('nav-menu').classList.toggle('mobile-open');
+});
+
+// ========================================================================
+// HERO
+// ========================================================================
+function setHero(film) {
+  const bg = document.getElementById('hero-bg');
+  bg.style.backgroundImage = `url("${film.card}")`;
+  document.getElementById('hero-title').textContent = film.title;
+  document.getElementById('hero-desc').textContent = film.desc;
+  document.getElementById('hero-play').onclick = () => openPlayer(film);
+  document.getElementById('hero-info').onclick = () => openInfo(film);
+}
+setHero(FILMS[Math.floor(Math.random() * FILMS.length)]);
+
+// ========================================================================
+// ROWS RENDERING
+// ========================================================================
+function buildCard(slug) {
+  const f = BY_SLUG[slug];
+  if (!f) return '';
+  const watched = LS.watched()[slug];
+  const pct = watched ? Math.min(100, Math.max(0, watched.pct * 100)) : 0;
+  const faved = LS.isFav(slug);
+  const liked = LS.isLiked(slug);
+  return `
+    <div class="card" data-slug="${slug}">
+      <img class="card-thumb" src="${esc(f.card)}" alt="${esc(f.title)}" loading="lazy">
+      <div class="card-title-fallback">${esc(f.title)}</div>
+      ${pct > 2 ? `<div class="card-progress" style="width:${pct}%"></div>` : ''}
+      <div class="card-hover">
+        <button class="play-sm" data-act="play" title="Play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+        <button data-act="info" title="Info"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></button>
+        <button data-act="like" title="Like" class="${liked ? 'active' : ''}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.3l1-4.6v-.3c0-.4-.2-.8-.4-1.1L14.2 1 7.6 7.6c-.4.4-.6.9-.6 1.4v10c0 1.1.9 2 2 2h9c.8 0 1.5-.5 1.8-1.2l3-7c.1-.3.2-.5.2-.8v-2z"/></svg></button>
+        <button data-act="fav" title="Favorite" class="${faved ? 'active' : ''}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg></button>
+        <button data-act="cast" title="Cast"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></button>
+        <span class="like-count">${fakeLikeCount(slug).toLocaleString()}</span>
+      </div>
+    </div>`;
+}
+
+function buildRow(cat) {
+  const cards = cat.slugs.map(buildCard).join('');
+  return `
+    <div class="row" data-cat="${esc(cat.title)}">
+      <h2 class="row-title">${esc(cat.title)}</h2>
+      <div class="row-scroll-wrap">
+        <button class="row-arrow left" aria-label="Scroll left"><svg viewBox="0 0 24 24"><path d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4L10.8 12z"/></svg></button>
+        <div class="row-scroll">${cards}</div>
+        <button class="row-arrow right" aria-label="Scroll right"><svg viewBox="0 0 24 24"><path d="M8.6 16.6 13.2 12 8.6 7.4 10 6l6 6-6 6z"/></svg></button>
+      </div>
+    </div>`;
+}
+
+function renderRows() {
+  const cats = shuffle(BASE_CATEGORIES);
+
+  // Because you ate X — insert as 2nd row if applicable
+  const last = LS.lastWatched();
+  if (last && BY_SLUG[last]) {
+    const others = FILMS.filter(f => f.slug !== last);
+    const picks = shuffle(others).slice(0, 5).map(f => f.slug);
+    cats.splice(1, 0, { title: `Because you ate ${BY_SLUG[last].title}`, slugs: picks });
   }
 
-  // Initialize quadrants
-  const quadrants = [0, 1, 2, 3].map(i => document.getElementById('q' + i));
-
-  quadrants.forEach(q => {
-    const img = document.createElement('img');
-    img.src = 'frames/' + pickRandom();
-    img.alt = 'Fat Films scene';
-    q.appendChild(img);
-  });
-
-  // Swap with crossfade
-  function swapFrame(q) {
-    const oldImg = q.querySelector('img:not(.fade-out)');
-    const newImg = document.createElement('img');
-    newImg.src = 'frames/' + pickRandom();
-    newImg.alt = 'Fat Films scene';
-    newImg.style.opacity = '0';
-    q.appendChild(newImg);
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        newImg.style.opacity = '1';
-        if (oldImg) oldImg.classList.add('fade-out');
-        setTimeout(() => { if (oldImg) oldImg.remove(); }, 1300);
-      });
-    });
+  // Favorites row
+  const favs = LS.favs();
+  if (favs.length) {
+    cats.push({ title: 'Your Favorites', slugs: favs.filter(s => BY_SLUG[s]) });
   }
 
-  // Pauseable timers (started after intro)
-  const timers = {};
+  document.getElementById('rows-wrap').innerHTML = cats.map(buildRow).join('');
+  wireRows();
+}
 
-  function startTimers() {
-    quadrants.forEach((q, i) => {
-      timers[i] = { paused: false };
+function wireRows() {
+  // Card clicks — delegate on the rows wrap
+  document.querySelectorAll('.card').forEach(card => {
+    const slug = card.dataset.slug;
+    const film = BY_SLUG[slug];
 
-      (function loop() {
-        const delay = 2000 + Math.random() * 3000;
-        setTimeout(() => {
-          if (!timers[i].paused) swapFrame(q);
-          loop();
-        }, delay);
-      })();
-    });
-  }
-
-  // Click-to-pop
-  const grid = document.querySelector('.grid');
-  let poppedIndex = null;
-
-  function unpop() {
-    if (poppedIndex === null) return;
-    quadrants[poppedIndex].classList.remove('popped');
-    grid.classList.remove('has-pop');
-    timers[poppedIndex].paused = false;
-    poppedIndex = null;
-  }
-
-  quadrants.forEach((q, i) => {
-    q.addEventListener('click', () => {
-      if (poppedIndex !== null) {
-        // Something is popped — unzoom it
-        unpop();
-      } else {
-        // Nothing popped — pop this one
-        q.classList.add('popped');
-        grid.classList.add('has-pop');
-        timers[i].paused = true;
-        poppedIndex = i;
-      }
-    });
-  });
-
-  // --- INTRO ANIMATION ---
-  const heroTitle = document.querySelector('.hero-title');
-  const overlayTop = document.querySelector('.overlay-top');
-  const copyToast = document.getElementById('copy-toast');
-
-  overlayTop.addEventListener('click', () => {
-    navigator.clipboard.writeText('GEyiLVU5tB9hDRFfse66QTzJZxWuYLwh15TexgRepump').then(() => {
-      copyToast.classList.add('show');
-      setTimeout(() => copyToast.classList.remove('show'), 1500);
-    });
-  });
-
-  const hamburgerBtn = document.getElementById('hamburger-btn');
-  const socialsOverlay = document.querySelector('.socials-overlay');
-
-  // Step 1: Title fades in at 300ms
-  setTimeout(() => {
-    heroTitle.classList.add('intro-visible');
-  }, 300);
-
-  // Step 2: Quadrants fade in staggered starting at 1100ms
-  quadrants.forEach((q, i) => {
-    setTimeout(() => {
-      q.classList.add('intro-visible');
-    }, 1100 + i * 150);
-  });
-
-  // Step 3: UI elements fade in at 1900ms
-  setTimeout(() => {
-    overlayTop.classList.add('intro-visible');
-    hamburgerBtn.classList.add('intro-visible');
-    socialsOverlay.classList.add('intro-visible');
-  }, 1900);
-
-  // Step 4: Start frame swap timers after intro completes (~2400ms)
-  setTimeout(startTimers, 2400);
-
-  // --- SIDEBAR ---
-  const sidebar = document.getElementById('sidebar');
-  const backdrop = document.getElementById('backdrop');
-
-  function openSidebar() {
-    sidebar.classList.add('open');
-    backdrop.classList.add('visible');
-  }
-
-  function closeSidebar() {
-    sidebar.classList.remove('open');
-    backdrop.classList.remove('visible');
-  }
-
-  document.getElementById('hamburger-btn').addEventListener('click', openSidebar);
-  document.getElementById('sidebar-close').addEventListener('click', closeSidebar);
-  backdrop.addEventListener('click', closeSidebar);
-
-  // --- MODALS ---
-  const filmsModal = document.getElementById('films-modal');
-  const aboutModal = document.getElementById('about-modal');
-  const suggestModal = document.getElementById('suggest-modal');
-  const allModals = [filmsModal, aboutModal, suggestModal];
-
-  function openModal(modal) {
-    closeSidebar();
-    modal.classList.add('visible');
-  }
-
-  function closeModal(modal) {
-    modal.classList.remove('visible');
-  }
-
-  document.getElementById('nav-films').addEventListener('click', () => openModal(filmsModal));
-  document.getElementById('nav-about').addEventListener('click', () => openModal(aboutModal));
-  document.getElementById('nav-suggest').addEventListener('click', () => openModal(suggestModal));
-
-  // Close modals — X button or click outside
-  document.querySelectorAll('.modal-close').forEach(btn => {
-    btn.addEventListener('click', () => {
-      closeModal(btn.closest('.modal-overlay'));
-    });
-  });
-
-  allModals.forEach(modal => {
-    modal.addEventListener('click', e => {
-      if (e.target === modal) closeModal(modal);
-    });
-  });
-
-  // --- VIDEO PLAYER ---
-  const videoOverlay = document.getElementById('video-overlay');
-  const videoPlayer = document.getElementById('video-player');
-  const videoCloseBtn = document.getElementById('video-close');
-  const videoFilmTitle = document.getElementById('video-film-title');
-  const playerContainer = document.getElementById('video-player-container');
-  const controls = document.getElementById('custom-controls');
-  const ctrlPlay = document.getElementById('ctrl-play');
-  const progressWrap = document.getElementById('progress-wrap');
-  const progressFill = document.getElementById('progress-fill');
-  const timeDisplay = document.getElementById('time-display');
-  const ctrlVol = document.getElementById('ctrl-vol');
-  const volumeSlider = document.getElementById('volume-slider');
-  const volumeFill = document.getElementById('volume-fill');
-  const ctrlFs = document.getElementById('ctrl-fs');
-  const unmutePrompt = document.getElementById('unmute-prompt');
-
-  let hideTimer = null;
-
-  function fmtTime(s) {
-    const m = Math.floor(s / 60);
-    const sec = Math.floor(s % 60);
-    return m + ':' + String(sec).padStart(2, '0');
-  }
-
-  // Open video from film card — films modal stays open behind
-  document.querySelectorAll('.film-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const src = card.getAttribute('data-video');
-      const title = card.querySelector('.film-card-title').textContent;
-      videoFilmTitle.textContent = title;
-      videoPlayer.src = src;
-      unmutePrompt.style.display = 'none';
-      videoOverlay.classList.add('visible');
-
-      // Autoplay with sound; fall back to muted if blocked
-      videoPlayer.muted = false;
-      const playPromise = videoPlayer.play();
-      if (playPromise) {
-        playPromise.catch(() => {
-          videoPlayer.muted = true;
-          videoPlayer.play();
-          unmutePrompt.style.display = 'block';
-        });
-      }
-    });
-  });
-
-  // Unmute prompt
-  unmutePrompt.addEventListener('click', () => {
-    videoPlayer.muted = false;
-    unmutePrompt.style.display = 'none';
-  });
-
-  // Close video → back to films grid
-  function closeVideo() {
-    videoPlayer.pause();
-    videoPlayer.removeAttribute('src');
-    videoPlayer.load();
-    videoOverlay.classList.remove('visible');
-    // Films modal stays visible — reopen it if it was hidden
-    if (!filmsModal.classList.contains('visible')) {
-      filmsModal.classList.add('visible');
-    }
-  }
-
-  videoCloseBtn.addEventListener('click', closeVideo);
-  videoOverlay.addEventListener('click', e => {
-    if (e.target === videoOverlay) closeVideo();
-  });
-
-  // --- Custom controls logic ---
-
-  // Play / Pause
-  ctrlPlay.addEventListener('click', () => {
-    if (videoPlayer.paused) videoPlayer.play();
-    else videoPlayer.pause();
-  });
-
-  videoPlayer.addEventListener('play', () => { ctrlPlay.innerHTML = '&#10074;&#10074;'; });
-  videoPlayer.addEventListener('pause', () => { ctrlPlay.innerHTML = '&#9654;'; });
-
-  // Progress
-  videoPlayer.addEventListener('timeupdate', () => {
-    if (!videoPlayer.duration) return;
-    const pct = (videoPlayer.currentTime / videoPlayer.duration) * 100;
-    progressFill.style.width = pct + '%';
-    timeDisplay.textContent = fmtTime(videoPlayer.currentTime) + ' / ' + fmtTime(videoPlayer.duration);
-  });
-
-  // --- Draggable slider helper (mouse + touch) ---
-  function makeDraggable(el, onUpdate) {
-    let dragging = false;
-
-    function getX(e) {
-      return e.touches ? e.touches[0].clientX : e.clientX;
-    }
-
-    function update(e) {
-      const rect = el.getBoundingClientRect();
-      const pct = Math.max(0, Math.min(1, (getX(e) - rect.left) / rect.width));
-      onUpdate(pct);
-    }
-
-    function onDown(e) {
-      dragging = true;
-      update(e);
-      e.preventDefault();
-    }
-
-    function onMove(e) {
-      if (!dragging) return;
-      update(e);
-    }
-
-    function onUp() { dragging = false; }
-
-    el.addEventListener('mousedown', onDown);
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('mouseup', onUp);
-
-    el.addEventListener('touchstart', onDown, { passive: false });
-    document.addEventListener('touchmove', onMove, { passive: false });
-    document.addEventListener('touchend', onUp);
-  }
-
-  // Progress bar — draggable
-  makeDraggable(progressWrap, pct => {
-    if (videoPlayer.duration) {
-      videoPlayer.currentTime = pct * videoPlayer.duration;
-    }
-  });
-
-  // Volume slider — draggable
-  makeDraggable(volumeSlider, pct => {
-    videoPlayer.volume = pct;
-    videoPlayer.muted = false;
-    updateVolUI();
-  });
-
-  // Volume toggle mute
-  ctrlVol.addEventListener('click', () => {
-    videoPlayer.muted = !videoPlayer.muted;
-    updateVolUI();
-  });
-
-  function updateVolUI() {
-    const vol = videoPlayer.muted ? 0 : videoPlayer.volume;
-    volumeFill.style.width = (vol * 100) + '%';
-    if (videoPlayer.muted || vol === 0) ctrlVol.innerHTML = '&#128264;';
-    else if (vol < 0.5) ctrlVol.innerHTML = '&#128265;';
-    else ctrlVol.innerHTML = '&#128266;';
-  }
-
-  videoPlayer.addEventListener('volumechange', updateVolUI);
-
-  // Fullscreen
-  ctrlFs.addEventListener('click', () => {
-    if (document.fullscreenElement) document.exitFullscreen();
-    else playerContainer.requestFullscreen();
-  });
-
-  // Auto-hide controls
-  playerContainer.addEventListener('mousemove', () => {
-    controls.classList.remove('hidden');
-    clearTimeout(hideTimer);
-    hideTimer = setTimeout(() => {
-      if (!videoPlayer.paused) controls.classList.add('hidden');
-    }, 2500);
-  });
-
-  playerContainer.addEventListener('mouseleave', () => {
-    hideTimer = setTimeout(() => {
-      if (!videoPlayer.paused) controls.classList.add('hidden');
-    }, 1000);
-  });
-
-  // Click video to toggle play
-  videoPlayer.addEventListener('click', () => {
-    if (videoPlayer.paused) videoPlayer.play();
-    else videoPlayer.pause();
-  });
-
-  // Show controls when paused
-  videoPlayer.addEventListener('pause', () => {
-    controls.classList.remove('hidden');
-    clearTimeout(hideTimer);
-  });
-
-  // Close on Escape
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      if (videoOverlay.classList.contains('visible')) {
-        closeVideo();
-      } else {
-        closeSidebar();
-        allModals.forEach(m => closeModal(m));
-      }
-    }
-  });
-
-  // --- Suggestion form + leaderboard ---
-  const suggestBtn = document.getElementById('suggestion-btn');
-  const suggestInput = document.getElementById('suggestion-input');
-  const conf = document.getElementById('confirmation');
-  const leaderboardList = document.getElementById('leaderboard-list');
-
-  function showMessage(text, kind) {
-    conf.textContent = text;
-    conf.className = 'confirmation show ' + kind;
-    clearTimeout(showMessage._timer);
-    showMessage._timer = setTimeout(() => {
-      conf.classList.remove('show');
-    }, 4000);
-  }
-
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, c => ({
-      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-    }[c]));
-  }
-
-  function renderLeaderboard(items) {
-    if (!items || items.length === 0) {
-      leaderboardList.innerHTML = '<div class="leaderboard-empty">No suggestions yet — be the first!</div>';
-      return;
-    }
-    const top = items.slice(0, 15);
-    leaderboardList.innerHTML = top.map((item, i) => {
-      const rank = i + 1;
-      const poster = item.poster_url
-        ? `<div class="lb-poster"><img src="${escapeHtml(item.poster_url)}" alt="" loading="lazy"></div>`
-        : `<div class="lb-poster empty">&#127916;</div>`;
-      return `
-        <div class="leaderboard-item">
-          <div class="lb-rank">${rank}</div>
-          ${poster}
-          <div class="lb-title">${escapeHtml(item.title || 'Untitled')}</div>
-          <div class="lb-votes">${item.vote_count} vote${item.vote_count === 1 ? '' : 's'}</div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  async function loadLeaderboard() {
-    leaderboardList.innerHTML = '<div class="leaderboard-loading">Loading...</div>';
-    try {
-      const res = await fetch('/api/leaderboard');
-      if (!res.ok) throw new Error('Failed');
-      const data = await res.json();
-      renderLeaderboard(data.suggestions);
-    } catch (e) {
-      leaderboardList.innerHTML = '<div class="leaderboard-empty">Couldn\u2019t load leaderboard.</div>';
-    }
-  }
-
-  async function submitSuggestion() {
-    const title = suggestInput.value.trim();
-    if (!title) return;
-
-    suggestBtn.disabled = true;
-    suggestBtn.textContent = 'Sending...';
-
-    try {
-      const res = await fetch('/api/suggest', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title })
-      });
-      const data = await res.json().catch(() => ({}));
-
-      if (res.ok && data.success) {
-        showMessage(`\u2705 Thanks! Added \u201C${data.title}\u201D to the leaderboard`, 'success');
-        suggestInput.value = '';
-        if (Array.isArray(data.leaderboard)) {
-          renderLeaderboard(data.leaderboard);
-        } else {
-          loadLeaderboard();
+    card.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-act]');
+      if (btn) {
+        e.stopPropagation();
+        const act = btn.dataset.act;
+        if (act === 'play') openPlayer(film);
+        else if (act === 'info') openInfo(film);
+        else if (act === 'cast') openCast(film);
+        else if (act === 'fav') {
+          const on = LS.toggleFav(slug);
+          btn.classList.toggle('active', on);
+          // Rerender favorites row if it exists, so additions/removals are visible
+          renderRows();
         }
-      } else {
-        showMessage(data.error || 'Something went wrong. Try again.', 'error');
+        else if (act === 'like') {
+          const on = LS.toggleLike(slug);
+          btn.classList.toggle('active', on);
+        }
+        return;
       }
-    } catch (e) {
-      showMessage('Network error. Try again.', 'error');
-    } finally {
-      suggestBtn.disabled = false;
-      suggestBtn.textContent = 'Submit';
-    }
-  }
-
-  suggestBtn.addEventListener('click', submitSuggestion);
-  suggestInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter') submitSuggestion();
+      // Plain card click → info modal
+      openInfo(film);
+    });
   });
 
-  // Refresh leaderboard whenever the suggest modal opens
-  document.getElementById('nav-suggest').addEventListener('click', loadLeaderboard);
+  // Row arrows
+  document.querySelectorAll('.row-scroll-wrap').forEach(wrap => {
+    const scroll = wrap.querySelector('.row-scroll');
+    wrap.querySelector('.left').addEventListener('click', () => scroll.scrollBy({left: -scroll.clientWidth * 0.8, behavior: 'smooth'}));
+    wrap.querySelector('.right').addEventListener('click', () => scroll.scrollBy({left: scroll.clientWidth * 0.8, behavior: 'smooth'}));
+  });
+}
+
+// ========================================================================
+// MODALS
+// ========================================================================
+function showModal(id) { document.getElementById(id).classList.add('show'); document.body.classList.add('locked'); }
+function hideModal(id) { document.getElementById(id).classList.remove('show'); document.body.classList.remove('locked'); }
+
+document.querySelectorAll('.modal-bg').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) { m.classList.remove('show'); document.body.classList.remove('locked'); } });
+  m.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => { m.classList.remove('show'); document.body.classList.remove('locked'); }));
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-bg.show').forEach(m => m.classList.remove('show'));
+    if (document.getElementById('player').classList.contains('show')) closePlayer();
+    document.body.classList.remove('locked');
+  }
+});
+
+let infoFilm = null;
+function openInfo(film) {
+  infoFilm = film;
+  document.getElementById('info-title').textContent = film.title;
+  document.getElementById('info-desc').textContent = film.desc;
+  document.getElementById('info-play').onclick = () => { hideModal('info-modal'); openPlayer(film); };
+  document.getElementById('info-cast').onclick = () => { hideModal('info-modal'); openCast(film); };
+  showModal('info-modal');
+}
+
+function openCast(film) {
+  document.getElementById('cast-title').textContent = film.title + ' — Cast';
+  document.getElementById('cast-list').innerHTML = film.cast.map(
+    ([fake, real]) => `<li>${esc(fake)}<span class="real">(${esc(real)})</span></li>`
+  ).join('');
+  showModal('cast-modal');
+}
+
+// ========================================================================
+// VIDEO PLAYER
+// ========================================================================
+const player = document.getElementById('player');
+const video = document.getElementById('video');
+const playerTitle = document.getElementById('player-title');
+const playerWrap = document.getElementById('player-wrap');
+const controls = document.getElementById('player-controls');
+const ctrlPlay = document.getElementById('ctrl-play');
+const progressWrap = document.getElementById('progress-wrap');
+const progressFill = document.getElementById('progress-fill');
+const timeDisplay = document.getElementById('time-display');
+const ctrlVol = document.getElementById('ctrl-vol');
+const volumeSlider = document.getElementById('volume-slider');
+const volumeFill = document.getElementById('volume-fill');
+const ctrlFs = document.getElementById('ctrl-fs');
+const unmutePrompt = document.getElementById('unmute-prompt');
+let hideTimer, currentPlayerFilm = null;
+
+function openPlayer(film) {
+  currentPlayerFilm = film;
+  player.classList.add('show');
+  document.body.classList.add('locked');
+  playerTitle.textContent = film.title.toUpperCase();
+  video.src = film.video;
+  unmutePrompt.style.display = 'none';
+  video.muted = false;
+  video.play().catch(() => {
+    video.muted = true;
+    video.play();
+    unmutePrompt.style.display = 'block';
+  });
+}
+
+function closePlayer() {
+  if (currentPlayerFilm && video.duration) {
+    const pct = video.currentTime / video.duration;
+    LS.setWatchedProgress(currentPlayerFilm.slug, pct);
+  }
+  video.pause();
+  video.removeAttribute('src');
+  video.load();
+  player.classList.remove('show');
+  document.body.classList.remove('locked');
+  currentPlayerFilm = null;
+  renderRows();
+}
+
+document.getElementById('player-close').addEventListener('click', closePlayer);
+unmutePrompt.addEventListener('click', () => { video.muted = false; unmutePrompt.style.display = 'none'; });
+
+ctrlPlay.addEventListener('click', () => video.paused ? video.play() : video.pause());
+video.addEventListener('play', () => ctrlPlay.innerHTML = '&#10074;&#10074;');
+video.addEventListener('pause', () => { ctrlPlay.innerHTML = '&#9654;'; controls.classList.remove('hidden'); clearTimeout(hideTimer); });
+video.addEventListener('click', () => video.paused ? video.play() : video.pause());
+
+function fmtTime(s) { const m = Math.floor(s/60); return m + ':' + String(Math.floor(s%60)).padStart(2,'0'); }
+video.addEventListener('timeupdate', () => {
+  if (!video.duration) return;
+  const pct = (video.currentTime / video.duration) * 100;
+  progressFill.style.width = pct + '%';
+  timeDisplay.textContent = fmtTime(video.currentTime) + ' / ' + fmtTime(video.duration);
+  // Periodically persist progress so red bar updates after close
+  if (currentPlayerFilm && Math.floor(video.currentTime) % 5 === 0) {
+    LS.setWatchedProgress(currentPlayerFilm.slug, video.currentTime / video.duration);
+  }
+});
+
+function makeDraggable(el, onUpdate) {
+  let dragging = false;
+  const getX = e => e.touches ? e.touches[0].clientX : e.clientX;
+  const update = e => {
+    const r = el.getBoundingClientRect();
+    const p = Math.max(0, Math.min(1, (getX(e) - r.left) / r.width));
+    onUpdate(p);
+  };
+  el.addEventListener('mousedown', e => { dragging = true; update(e); e.preventDefault(); });
+  document.addEventListener('mousemove', e => { if (dragging) update(e); });
+  document.addEventListener('mouseup', () => dragging = false);
+  el.addEventListener('touchstart', e => { dragging = true; update(e); e.preventDefault(); }, {passive:false});
+  document.addEventListener('touchmove', e => { if (dragging) update(e); }, {passive:false});
+  document.addEventListener('touchend', () => dragging = false);
+}
+makeDraggable(progressWrap, p => { if (video.duration) video.currentTime = p * video.duration; });
+makeDraggable(volumeSlider, p => { video.volume = p; video.muted = false; updateVol(); });
+
+ctrlVol.addEventListener('click', () => { video.muted = !video.muted; updateVol(); });
+function updateVol() {
+  const v = video.muted ? 0 : video.volume;
+  volumeFill.style.width = (v*100) + '%';
+  ctrlVol.innerHTML = v === 0 ? '&#128264;' : (v < 0.5 ? '&#128265;' : '&#128266;');
+}
+video.addEventListener('volumechange', updateVol);
+
+ctrlFs.addEventListener('click', () => {
+  if (document.fullscreenElement) document.exitFullscreen();
+  else playerWrap.requestFullscreen();
+});
+
+playerWrap.addEventListener('mousemove', () => {
+  controls.classList.remove('hidden');
+  clearTimeout(hideTimer);
+  hideTimer = setTimeout(() => { if (!video.paused) controls.classList.add('hidden'); }, 2500);
+});
+
+// ========================================================================
+// NAV BUTTONS
+// ========================================================================
+document.querySelectorAll('[data-nav]').forEach(el => {
+  el.addEventListener('click', (e) => {
+    const n = el.dataset.nav;
+    document.getElementById('nav-menu').classList.remove('mobile-open');
+    if (n === 'suggest') { showModal('suggest-modal'); loadLeaderboard(); }
+    else if (n === 'favorites') {
+      const row = [...document.querySelectorAll('.row')].find(r => r.dataset.cat === 'Your Favorites');
+      if (row) row.scrollIntoView({behavior:'smooth', block:'start'});
+      else alert('Favorite a film first — click the bookmark icon on any film card.');
+    }
+    else if (n === 'home') { window.scrollTo({top:0, behavior:'smooth'}); }
+  });
+});
+
+document.querySelectorAll('[data-genre]').forEach(el => {
+  el.addEventListener('click', () => {
+    const g = el.dataset.genre;
+    document.getElementById('nav-menu').classList.remove('mobile-open');
+    const row = [...document.querySelectorAll('.row')].find(r => r.dataset.cat === g);
+    if (row) row.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+
+document.querySelectorAll('[data-lang]').forEach(el => {
+  el.addEventListener('click', () => {
+    document.getElementById('nav-menu').classList.remove('mobile-open');
+    alert(`${el.dataset.lang} dubs coming soon. Probably with subtitles you'll want to eat.`);
+  });
+});
+
+// ========================================================================
+// SEARCH
+// ========================================================================
+const searchWrap = document.getElementById('search-wrap');
+const searchInput = document.getElementById('search-input');
+const searchBtn = document.getElementById('search-btn');
+const searchDropdown = document.getElementById('search-dropdown');
+
+searchBtn.addEventListener('click', () => {
+  searchWrap.classList.toggle('open');
+  if (searchWrap.classList.contains('open')) setTimeout(() => searchInput.focus(), 50);
+  else { searchInput.value = ''; searchDropdown.classList.remove('show'); }
+});
+
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  if (!q) { searchDropdown.classList.remove('show'); return; }
+  const matches = FILMS.filter(f => f.title.toLowerCase().includes(q));
+  if (matches.length === 0) {
+    searchDropdown.innerHTML = `<div class="search-empty">Not available. <button id="search-suggest-btn">Suggest it</button></div>`;
+    document.getElementById('search-suggest-btn').addEventListener('click', () => {
+      searchWrap.classList.remove('open');
+      searchDropdown.classList.remove('show');
+      showModal('suggest-modal');
+      loadLeaderboard();
+      document.getElementById('suggest-input').value = searchInput.value;
+      searchInput.value = '';
+    });
+  } else {
+    searchDropdown.innerHTML = matches.map(f =>
+      `<div class="search-item" data-slug="${f.slug}">
+         <img src="${esc(f.card)}" alt="">
+         <div class="title">${esc(f.title)}</div>
+       </div>`
+    ).join('');
+    searchDropdown.querySelectorAll('.search-item').forEach(el => {
+      el.addEventListener('click', () => {
+        const f = BY_SLUG[el.dataset.slug];
+        searchWrap.classList.remove('open');
+        searchDropdown.classList.remove('show');
+        searchInput.value = '';
+        openInfo(f);
+      });
+    });
+  }
+  searchDropdown.classList.add('show');
+});
+
+document.addEventListener('click', (e) => {
+  if (!searchWrap.contains(e.target)) searchDropdown.classList.remove('show');
+});
+
+// ========================================================================
+// SUGGEST (with autocomplete against existing films)
+// ========================================================================
+const suggestInput = document.getElementById('suggest-input');
+const suggestBtn = document.getElementById('suggest-btn');
+const suggestMsg = document.getElementById('suggest-msg');
+const suggestAuto = document.getElementById('suggest-auto');
+const leaderboardList = document.getElementById('leaderboard-list');
+
+function showMsg(el, text, kind) {
+  el.textContent = text;
+  el.className = 'msg show ' + kind;
+  clearTimeout(showMsg._t);
+  showMsg._t = setTimeout(() => el.classList.remove('show'), 5000);
+}
+
+function renderLB(items) {
+  if (!items || items.length === 0) {
+    leaderboardList.innerHTML = `<div style="text-align:center; padding:20px; color:#666; font-size:0.85rem;">No suggestions yet — be the first.</div>`;
+    return;
+  }
+  leaderboardList.innerHTML = items.slice(0, 15).map((it, i) => {
+    const poster = it.poster_url
+      ? `<div class="lb-poster"><img src="${esc(it.poster_url)}" alt="" loading="lazy"></div>`
+      : `<div class="lb-poster empty">&#127916;</div>`;
+    return `<div class="lb-item">
+      <div class="lb-rank">${i+1}</div>
+      ${poster}
+      <div class="lb-title">${esc(it.title || 'Untitled')}</div>
+      <div class="lb-votes">${it.vote_count} vote${it.vote_count === 1 ? '' : 's'}</div>
+    </div>`;
+  }).join('');
+}
+
+async function loadLeaderboard() {
+  leaderboardList.innerHTML = `<div style="text-align:center; padding:20px; color:#666; font-size:0.85rem;">Loading...</div>`;
+  try {
+    const r = await fetch('/api/leaderboard');
+    if (!r.ok) throw new Error('fail');
+    const d = await r.json();
+    renderLB(d.suggestions);
+  } catch { leaderboardList.innerHTML = `<div style="text-align:center; padding:20px; color:#666; font-size:0.85rem;">Couldn\u2019t load leaderboard.</div>`; }
+}
+
+suggestInput.addEventListener('input', () => {
+  const q = suggestInput.value.trim().toLowerCase();
+  if (!q) { suggestAuto.classList.remove('show'); return; }
+  const matches = FILMS.filter(f => f.title.toLowerCase().includes(q)).slice(0, 5);
+  if (matches.length === 0) { suggestAuto.classList.remove('show'); return; }
+  suggestAuto.innerHTML = matches.map(f =>
+    `<div class="match">${esc(f.title)}<span class="tag">already on Fat Films</span></div>`
+  ).join('');
+  suggestAuto.classList.add('show');
+});
+
+function isAlreadyOnSite(title) {
+  const t = title.trim().toLowerCase();
+  return FILMS.some(f => f.title.toLowerCase() === t);
+}
+
+async function submitSuggest() {
+  const title = suggestInput.value.trim();
+  if (!title) return;
+  if (isAlreadyOnSite(title)) {
+    showMsg(suggestMsg, 'Already on Fat Films!', 'warn');
+    return;
+  }
+  suggestBtn.disabled = true; suggestBtn.textContent = 'Sending...';
+  try {
+    const r = await fetch('/api/suggest', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ title })
+    });
+    const d = await r.json().catch(()=>({}));
+    if (r.ok && d.success) {
+      showMsg(suggestMsg, `\u2705 Added \u201C${d.title}\u201D to the leaderboard`, 'success');
+      suggestInput.value = '';
+      suggestAuto.classList.remove('show');
+      if (Array.isArray(d.leaderboard)) renderLB(d.leaderboard); else loadLeaderboard();
+    } else {
+      showMsg(suggestMsg, d.error || 'Something went wrong. Try again.', 'error');
+    }
+  } catch { showMsg(suggestMsg, 'Network error. Try again.', 'error'); }
+  finally { suggestBtn.disabled = false; suggestBtn.textContent = 'Submit'; }
+}
+suggestBtn.addEventListener('click', submitSuggest);
+suggestInput.addEventListener('keydown', e => { if (e.key === 'Enter') submitSuggest(); });
+
+// ========================================================================
+// IDLE SCREEN
+// ========================================================================
+const idle = document.getElementById('idle');
+const quads = ['q0','q1','q2','q3'].map(id => document.getElementById(id));
+const quadTimers = [];
+let idleActive = false;
+let idleTimer;
+
+function setQuad(q, src) {
+  const img = document.createElement('img');
+  img.src = `frames/${src}`;
+  img.style.opacity = '0';
+  q.appendChild(img);
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    img.style.opacity = '1';
+    const old = q.querySelector('img:not(:last-child)');
+    if (old) { old.classList.add('fade'); setTimeout(() => old.remove(), 1300); }
+  }));
+}
+
+quads.forEach(q => setQuad(q, IDLE_FRAMES[Math.floor(Math.random() * IDLE_FRAMES.length)]));
+
+function enterIdle() {
+  if (idleActive) return;
+  if (player.classList.contains('show')) return; // don't idle while watching
+  idleActive = true;
+  idle.classList.add('show');
+  quads.forEach((q, i) => {
+    const loop = () => {
+      const delay = 2500 + Math.random() * 3500;
+      quadTimers[i] = setTimeout(() => {
+        setQuad(q, IDLE_FRAMES[Math.floor(Math.random() * IDLE_FRAMES.length)]);
+        if (idleActive) loop();
+      }, delay);
+    };
+    loop();
+  });
+}
+
+function exitIdle() {
+  if (!idleActive) return;
+  idleActive = false;
+  idle.classList.remove('show');
+  quadTimers.forEach(t => clearTimeout(t));
+}
+
+function resetIdle() {
+  exitIdle();
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(enterIdle, 45000);
+}
+
+['mousemove','mousedown','keydown','touchstart','touchmove','wheel','scroll'].forEach(ev =>
+  window.addEventListener(ev, resetIdle, { passive: true })
+);
+resetIdle();
+
+// ========================================================================
+// INITIAL RENDER
+// ========================================================================
+renderRows();
 </script>
 
 <script defer src="/_vercel/insights/script.js"></script>
