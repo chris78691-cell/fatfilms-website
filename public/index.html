@@ -499,6 +499,10 @@
       padding: 20px;
     }
     .modal-bg.show { opacity: 1; pointer-events: auto; }
+    /* Info + cast can be opened ON TOP of favorites/suggest; give them a
+       higher z-index so they stack above the originating modal. */
+    #info-modal { z-index: 600; }
+    #cast-modal { z-index: 650; }
     .modal-box {
       background: #141414;
       border: 1px solid rgba(255,255,255,0.1);
@@ -561,10 +565,14 @@
     }
     .suggest-auto.show { display: block; }
     .suggest-auto .match {
-      padding: 7px 12px; font-size: 0.85rem; cursor: default;
-      color: #fff8a0; border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding: 8px 12px; font-size: 0.9rem; cursor: pointer;
+      color: #fff; border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: background 0.12s;
     }
-    .suggest-auto .match .tag { font-size: 0.7rem; color: var(--muted); margin-left: 6px; }
+    .suggest-auto .match:last-child { border-bottom: none; }
+    .suggest-auto .match:hover { background: rgba(255,255,255,0.06); }
+    .suggest-auto .match .tag { font-size: 0.72rem; color: var(--muted); margin-left: 8px; font-weight: 500; }
+    .suggest-auto .match .tag.tag-new { color: #7cd990; }  /* "Be the first" — green to signal it's a submit */
 
     .msg { min-height: 1.2em; font-size: 0.9rem; margin-top: 6px; opacity: 0; transition: opacity 0.2s; }
     .msg.show { opacity: 1; }
@@ -1031,9 +1039,9 @@ const TRANSLATIONS = {
       home:'Home', suggestions:'Film Suggestions', favorites:'Favorites', genres:'Genres', language:'Language', news:'News',
       play:'Play', moreInfo:'More Info', submit:'Submit', cast:'Cast', download:'Download',
       search:'Search', searchPlaceholder:'Search films...',
-      suggestTitle:'Film Suggestions', suggestPrompt:'What film should we do next?', suggestPlaceholder:'e.g. The Dark Knight, Breaking Bad...', topSuggestions:'Top Suggestions',
-      biggestHits:'Biggest Hits', exclusives:'Fat Films Exclusives', freshlyBaked:'Freshly Baked', heavyHits:'Heavy Hits', yourFavorites:'Your Favorites', becauseYouAte:'Because you ate {title}',
-      notAvailable:'Not available.', suggestIt:'Suggest it', alreadyOnSite:'Already on Fat Films!', alreadySuggested:'Already suggested',
+      suggestTitle:'Film Suggestions', suggestPrompt:'What film do you want to see FAT?', suggestPlaceholder:'e.g. The Dark Knight, Breaking Bad...', topSuggestions:'Top Suggestions',
+      biggestHits:'Biggest Blockbusters', exclusives:'Fat Films Exclusives', freshlyBaked:'Freshly Baked', heavyHits:'Heavy Hits', yourFavorites:'Your Favorites', becauseYouAte:'Because you ate {title}',
+      notAvailable:'Not available.', suggestIt:'Suggest it', alreadyOnSite:'Already on Fat Films!', alreadySuggested:'Already suggested', beTheFirst:'Be the first to suggest!',
       noFavorites:'No favorites yet, click the bookmark icon on any film to save it here.',
       noSuggestions:'No suggestions yet — be the first.',
       loading:'Loading...', copied:'Copied!', clickForSound:'Click for sound',
@@ -1071,9 +1079,9 @@ const TRANSLATIONS = {
       home:'Inicio', suggestions:'Sugerencias', favorites:'Favoritos', genres:'Géneros', language:'Idioma', news:'Novedades',
       play:'Reproducir', moreInfo:'Más info', submit:'Enviar', cast:'Reparto', download:'Descargar',
       search:'Buscar', searchPlaceholder:'Buscar películas...',
-      suggestTitle:'Sugerencias de películas', suggestPrompt:'¿Qué película deberíamos hacer a continuación?', suggestPlaceholder:'p. ej. El Caballero Oscuro, Breaking Bad...', topSuggestions:'Las más sugeridas',
-      biggestHits:'Grandes éxitos', exclusives:'Exclusivas de Fat Films', freshlyBaked:'Recién horneadas', heavyHits:'Pesos pesados', yourFavorites:'Tus favoritos', becauseYouAte:'Porque te comiste {title}',
-      notAvailable:'No disponible.', suggestIt:'Sugerirla', alreadyOnSite:'¡Ya está en Fat Films!', alreadySuggested:'Ya sugerida',
+      suggestTitle:'Sugerencias de películas', suggestPrompt:'¿Qué película quieres ver GORDA?', suggestPlaceholder:'p. ej. El Caballero Oscuro, Breaking Bad...', topSuggestions:'Las más sugeridas',
+      biggestHits:'Grandes taquillazos', exclusives:'Exclusivas de Fat Films', freshlyBaked:'Recién horneadas', heavyHits:'Pesos pesados', yourFavorites:'Tus favoritos', becauseYouAte:'Porque te comiste {title}',
+      notAvailable:'No disponible.', suggestIt:'Sugerirla', alreadyOnSite:'¡Ya está en Fat Films!', alreadySuggested:'Ya sugerida', beTheFirst:'¡Sé el primero en sugerirla!',
       noFavorites:'Aún no hay favoritos, toca el icono de marcador en cualquier película para guardarla aquí.',
       noSuggestions:'Aún no hay sugerencias, sé el primero.',
       loading:'Cargando...', copied:'¡Copiado!', clickForSound:'Haz clic para sonido',
@@ -1111,9 +1119,9 @@ const TRANSLATIONS = {
       home:'Accueil', suggestions:'Suggestions', favorites:'Favoris', genres:'Genres', language:'Langue', news:'Actus',
       play:'Lecture', moreInfo:'Plus d\u2019infos', submit:'Envoyer', cast:'Distribution', download:'Télécharger',
       search:'Rechercher', searchPlaceholder:'Rechercher des films...',
-      suggestTitle:'Suggestions de films', suggestPrompt:'Quel film devrions-nous faire ensuite ?', suggestPlaceholder:'p. ex. The Dark Knight, Breaking Bad...', topSuggestions:'Suggestions populaires',
-      biggestHits:'Les plus gros hits', exclusives:'Exclusivités Fat Films', freshlyBaked:'Fraîchement sortis du four', heavyHits:'Poids lourds', yourFavorites:'Vos favoris', becauseYouAte:'Parce que vous avez mangé {title}',
-      notAvailable:'Non disponible.', suggestIt:'Le suggérer', alreadyOnSite:'Déjà sur Fat Films !', alreadySuggested:'Déjà suggéré',
+      suggestTitle:'Suggestions de films', suggestPrompt:'Quel film voulez-vous voir GROS ?', suggestPlaceholder:'p. ex. The Dark Knight, Breaking Bad...', topSuggestions:'Suggestions populaires',
+      biggestHits:'Les plus gros blockbusters', exclusives:'Exclusivités Fat Films', freshlyBaked:'Fraîchement sortis du four', heavyHits:'Poids lourds', yourFavorites:'Vos favoris', becauseYouAte:'Parce que vous avez mangé {title}',
+      notAvailable:'Non disponible.', suggestIt:'Le suggérer', alreadyOnSite:'Déjà sur Fat Films !', alreadySuggested:'Déjà suggéré', beTheFirst:'Soyez le premier à le suggérer !',
       noFavorites:'Aucun favori pour l\u2019instant, cliquez sur l\u2019icône de marque-page d\u2019un film pour l\u2019enregistrer ici.',
       noSuggestions:'Aucune suggestion pour le moment, soyez le premier.',
       loading:'Chargement...', copied:'Copié !', clickForSound:'Cliquez pour le son',
@@ -1151,9 +1159,9 @@ const TRANSLATIONS = {
       home:'Home', suggestions:'Suggerimenti', favorites:'Preferiti', genres:'Generi', language:'Lingua', news:'Novità',
       play:'Riproduci', moreInfo:'Altre info', submit:'Invia', cast:'Cast', download:'Scarica',
       search:'Cerca', searchPlaceholder:'Cerca film...',
-      suggestTitle:'Suggerimenti di film', suggestPrompt:'Che film dovremmo fare dopo?', suggestPlaceholder:'es. Il Cavaliere Oscuro, Breaking Bad...', topSuggestions:'I più suggeriti',
-      biggestHits:'Grandi successi', exclusives:'Esclusive Fat Films', freshlyBaked:'Appena sfornati', heavyHits:'Pesi massimi', yourFavorites:'I tuoi preferiti', becauseYouAte:'Perché hai mangiato {title}',
-      notAvailable:'Non disponibile.', suggestIt:'Suggeriscilo', alreadyOnSite:'Già su Fat Films!', alreadySuggested:'Già suggerito',
+      suggestTitle:'Suggerimenti di film', suggestPrompt:'Che film vuoi vedere GRASSO?', suggestPlaceholder:'es. Il Cavaliere Oscuro, Breaking Bad...', topSuggestions:'I più suggeriti',
+      biggestHits:'Grandi blockbuster', exclusives:'Esclusive Fat Films', freshlyBaked:'Appena sfornati', heavyHits:'Pesi massimi', yourFavorites:'I tuoi preferiti', becauseYouAte:'Perché hai mangiato {title}',
+      notAvailable:'Non disponibile.', suggestIt:'Suggeriscilo', alreadyOnSite:'Già su Fat Films!', alreadySuggested:'Già suggerito', beTheFirst:'Sii il primo a suggerirlo!',
       noFavorites:'Ancora nessun preferito, tocca l\u2019icona segnalibro su un film per salvarlo qui.',
       noSuggestions:'Ancora nessun suggerimento, sii il primo.',
       loading:'Caricamento...', copied:'Copiato!', clickForSound:'Clic per l\u2019audio',
@@ -1191,9 +1199,9 @@ const TRANSLATIONS = {
       home:'Start', suggestions:'Filmvorschläge', favorites:'Favoriten', genres:'Genres', language:'Sprache', news:'Neuigkeiten',
       play:'Abspielen', moreInfo:'Mehr Infos', submit:'Senden', cast:'Besetzung', download:'Herunterladen',
       search:'Suchen', searchPlaceholder:'Filme suchen...',
-      suggestTitle:'Filmvorschläge', suggestPrompt:'Welchen Film sollen wir als Nächstes machen?', suggestPlaceholder:'z. B. The Dark Knight, Breaking Bad...', topSuggestions:'Top-Vorschläge',
-      biggestHits:'Größte Hits', exclusives:'Fat Films Exklusiv', freshlyBaked:'Frisch gebacken', heavyHits:'Schwergewichte', yourFavorites:'Deine Favoriten', becauseYouAte:'Weil du {title} verputzt hast',
-      notAvailable:'Nicht verfügbar.', suggestIt:'Vorschlagen', alreadyOnSite:'Schon auf Fat Films!', alreadySuggested:'Schon vorgeschlagen',
+      suggestTitle:'Filmvorschläge', suggestPrompt:'Welchen Film willst du FETT sehen?', suggestPlaceholder:'z. B. The Dark Knight, Breaking Bad...', topSuggestions:'Top-Vorschläge',
+      biggestHits:'Die größten Blockbuster', exclusives:'Fat Films Exklusiv', freshlyBaked:'Frisch gebacken', heavyHits:'Schwergewichte', yourFavorites:'Deine Favoriten', becauseYouAte:'Weil du {title} verputzt hast',
+      notAvailable:'Nicht verfügbar.', suggestIt:'Vorschlagen', alreadyOnSite:'Schon auf Fat Films!', alreadySuggested:'Schon vorgeschlagen', beTheFirst:'Sei der Erste, der ihn vorschlägt!',
       noFavorites:'Noch keine Favoriten, tippe auf das Lesezeichen-Symbol eines Films, um ihn hier zu speichern.',
       noSuggestions:'Noch keine Vorschläge, sei der Erste.',
       loading:'Lädt...', copied:'Kopiert!', clickForSound:'Für Ton klicken',
@@ -1231,9 +1239,9 @@ const TRANSLATIONS = {
       home:'首页', suggestions:'电影建议', favorites:'收藏', genres:'类型', language:'语言', news:'新闻',
       play:'播放', moreInfo:'更多信息', submit:'提交', cast:'演员', download:'下载',
       search:'搜索', searchPlaceholder:'搜索电影...',
-      suggestTitle:'电影建议', suggestPrompt:'下一部我们拍什么?', suggestPlaceholder:'例如 黑暗骑士、绝命毒师...', topSuggestions:'热门建议',
-      biggestHits:'最热门', exclusives:'Fat Films 独家', freshlyBaked:'新鲜出炉', heavyHits:'重量级', yourFavorites:'您的收藏', becauseYouAte:'因为您吃过 {title}',
-      notAvailable:'暂未上线。', suggestIt:'建议它', alreadyOnSite:'已在 Fat Films!', alreadySuggested:'已有人建议',
+      suggestTitle:'电影建议', suggestPrompt:'您想看哪部电影变胖?', suggestPlaceholder:'例如 黑暗骑士、绝命毒师...', topSuggestions:'热门建议',
+      biggestHits:'最卖座大片', exclusives:'Fat Films 独家', freshlyBaked:'新鲜出炉', heavyHits:'重量级', yourFavorites:'您的收藏', becauseYouAte:'因为您吃过 {title}',
+      notAvailable:'暂未上线。', suggestIt:'建议它', alreadyOnSite:'已在 Fat Films!', alreadySuggested:'已有人建议', beTheFirst:'抢先建议它!',
       noFavorites:'暂无收藏,点击任意电影上的书签图标即可保存到这里。',
       noSuggestions:'暂无建议,抢占沙发吧。',
       loading:'加载中...', copied:'已复制!', clickForSound:'点击开启声音',
@@ -1271,9 +1279,9 @@ const TRANSLATIONS = {
       home:'ホーム', suggestions:'リクエスト', favorites:'お気に入り', genres:'ジャンル', language:'言語', news:'ニュース',
       play:'再生', moreInfo:'詳細', submit:'送信', cast:'キャスト', download:'ダウンロード',
       search:'検索', searchPlaceholder:'映画を検索...',
-      suggestTitle:'映画のリクエスト', suggestPrompt:'次はどの映画を作ろうか?', suggestPlaceholder:'例: The Dark Knight、Breaking Bad...', topSuggestions:'人気のリクエスト',
-      biggestHits:'大ヒット作', exclusives:'Fat Films 独占', freshlyBaked:'焼きたて新作', heavyHits:'ヘビー級', yourFavorites:'あなたのお気に入り', becauseYouAte:'{title} を召し上がったので',
-      notAvailable:'利用できません。', suggestIt:'リクエストする', alreadyOnSite:'Fat Films にあります!', alreadySuggested:'すでにリクエスト済み',
+      suggestTitle:'映画のリクエスト', suggestPrompt:'どの映画を太らせて見たい?', suggestPlaceholder:'例: The Dark Knight、Breaking Bad...', topSuggestions:'人気のリクエスト',
+      biggestHits:'超大作ブロックバスター', exclusives:'Fat Films 独占', freshlyBaked:'焼きたて新作', heavyHits:'ヘビー級', yourFavorites:'あなたのお気に入り', becauseYouAte:'{title} を召し上がったので',
+      notAvailable:'利用できません。', suggestIt:'リクエストする', alreadyOnSite:'Fat Films にあります!', alreadySuggested:'すでにリクエスト済み', beTheFirst:'最初のリクエスト者になろう!',
       noFavorites:'お気に入りはまだありません。映画のブックマークアイコンをタップしてここに保存できます。',
       noSuggestions:'リクエストはまだありません。最初の一人になりましょう。',
       loading:'読み込み中...', copied:'コピーしました!', clickForSound:'クリックで音声',
@@ -1311,9 +1319,9 @@ const TRANSLATIONS = {
       home:'홈', suggestions:'영화 제안', favorites:'즐겨찾기', genres:'장르', language:'언어', news:'뉴스',
       play:'재생', moreInfo:'자세히', submit:'제출', cast:'출연진', download:'다운로드',
       search:'검색', searchPlaceholder:'영화 검색...',
-      suggestTitle:'영화 제안', suggestPrompt:'다음 영화는 뭐로 할까요?', suggestPlaceholder:'예: 다크 나이트, 브레이킹 배드...', topSuggestions:'인기 제안',
-      biggestHits:'최대 히트작', exclusives:'Fat Films 독점', freshlyBaked:'갓 구운 신작', heavyHits:'헤비급', yourFavorites:'내 즐겨찾기', becauseYouAte:'{title}을(를) 드셨으니',
-      notAvailable:'이용할 수 없습니다.', suggestIt:'제안하기', alreadyOnSite:'이미 Fat Films에 있어요!', alreadySuggested:'이미 제안됨',
+      suggestTitle:'영화 제안', suggestPrompt:'어떤 영화를 뚱뚱하게 보고 싶나요?', suggestPlaceholder:'예: 다크 나이트, 브레이킹 배드...', topSuggestions:'인기 제안',
+      biggestHits:'초대형 블록버스터', exclusives:'Fat Films 독점', freshlyBaked:'갓 구운 신작', heavyHits:'헤비급', yourFavorites:'내 즐겨찾기', becauseYouAte:'{title}을(를) 드셨으니',
+      notAvailable:'이용할 수 없습니다.', suggestIt:'제안하기', alreadyOnSite:'이미 Fat Films에 있어요!', alreadySuggested:'이미 제안됨', beTheFirst:'가장 먼저 제안해 보세요!',
       noFavorites:'아직 즐겨찾기가 없습니다. 영화의 북마크 아이콘을 눌러 이곳에 저장하세요.',
       noSuggestions:'아직 제안이 없어요. 당신이 처음이 되어 보세요.',
       loading:'불러오는 중...', copied:'복사됨!', clickForSound:'소리를 위해 클릭',
@@ -1351,9 +1359,9 @@ const TRANSLATIONS = {
       home:'الرئيسية', suggestions:'اقتراحات الأفلام', favorites:'المفضلة', genres:'الأنواع', language:'اللغة', news:'الأخبار',
       play:'تشغيل', moreInfo:'مزيد من المعلومات', submit:'إرسال', cast:'طاقم العمل', download:'تحميل',
       search:'بحث', searchPlaceholder:'ابحث عن الأفلام...',
-      suggestTitle:'اقتراحات الأفلام', suggestPrompt:'أي فيلم نصنعه بعد ذلك؟', suggestPlaceholder:'مثل The Dark Knight, Breaking Bad...', topSuggestions:'أكثر الاقتراحات طلبًا',
-      biggestHits:'أكبر النجاحات', exclusives:'حصريات Fat Films', freshlyBaked:'طازج من الفرن', heavyHits:'الأوزان الثقيلة', yourFavorites:'مفضلاتك', becauseYouAte:'لأنك أكلت {title}',
-      notAvailable:'غير متوفر.', suggestIt:'اقترحه', alreadyOnSite:'موجود بالفعل على Fat Films!', alreadySuggested:'تم اقتراحه بالفعل',
+      suggestTitle:'اقتراحات الأفلام', suggestPrompt:'أي فيلم تريد أن تراه سميناً؟', suggestPlaceholder:'مثل The Dark Knight, Breaking Bad...', topSuggestions:'أكثر الاقتراحات طلبًا',
+      biggestHits:'أضخم الأفلام', exclusives:'حصريات Fat Films', freshlyBaked:'طازج من الفرن', heavyHits:'الأوزان الثقيلة', yourFavorites:'مفضلاتك', becauseYouAte:'لأنك أكلت {title}',
+      notAvailable:'غير متوفر.', suggestIt:'اقترحه', alreadyOnSite:'موجود بالفعل على Fat Films!', alreadySuggested:'تم اقتراحه بالفعل', beTheFirst:'كن أول من يقترحه!',
       noFavorites:'لا توجد مفضلات بعد، انقر على أيقونة الإشارة المرجعية في أي فيلم لحفظه هنا.',
       noSuggestions:'لا توجد اقتراحات بعد، كن أول من يقترح.',
       loading:'جارٍ التحميل...', copied:'تم النسخ!', clickForSound:'انقر للصوت',
@@ -2229,28 +2237,100 @@ async function loadLeaderboard() {
 }
 
 // Autocomplete shows matches from BOTH the site's own films AND the leaderboard.
-suggestInput.addEventListener('input', () => {
-  const q = suggestInput.value.trim().toLowerCase();
-  if (!q) { suggestAuto.classList.remove('show'); return; }
+// Autocomplete pulls from three sources:
+//   1) site films  — clicking opens the info modal for that film
+//   2) leaderboard entries — clicking fills the input so Submit bumps their vote
+//   3) TMDB catalogue (via /api/films-search) — clicking fills the input so
+//      the user can submit; the row is labelled "Be the first to suggest!"
+// TMDB lookups are debounced and abortable so typing doesn't spam the API.
+let suggestAutoTimer = null;
+let suggestAutoAbort = null;
 
-  const siteMatches = FILMS
-    .filter(f => f.title.toLowerCase().includes(q))
-    .slice(0, 5)
-    .map(f => ({ title: f.title, tag: t('ui.alreadyOnSite'), kind: 'site' }));
+function renderSuggestRow(m) {
+  const attrs = [
+    `data-kind="${esc(m.kind)}"`,
+    `data-title="${esc(m.title)}"`,
+    m.slug ? `data-slug="${esc(m.slug)}"` : '',
+  ].filter(Boolean).join(' ');
+  return `<div class="match" ${attrs}>${esc(m.title)}<span class="tag ${m.kind === 'new' ? 'tag-new' : ''}">${esc(m.tag)}</span></div>`;
+}
 
-  const lbMatches = LEADERBOARD_CACHE
-    .filter(it => typeof it.title === 'string' && it.title.toLowerCase().includes(q))
-    // Skip anything that also lives on the site to avoid duplicates.
-    .filter(it => !siteMatches.some(s => s.title.toLowerCase() === it.title.toLowerCase()))
-    .slice(0, 5)
-    .map(it => ({ title: it.title, tag: `${t('ui.alreadySuggested')} · ${it.vote_count}`, kind: 'leaderboard' }));
-
-  const all = [...siteMatches, ...lbMatches];
-  if (all.length === 0) { suggestAuto.classList.remove('show'); return; }
-  suggestAuto.innerHTML = all.map(m =>
-    `<div class="match">${esc(m.title)}<span class="tag">${esc(m.tag)}</span></div>`
-  ).join('');
+function renderSuggestMatches(matches) {
+  if (!matches.length) { suggestAuto.classList.remove('show'); return; }
+  suggestAuto.innerHTML = matches.map(renderSuggestRow).join('');
   suggestAuto.classList.add('show');
+
+  suggestAuto.querySelectorAll('.match').forEach(el => {
+    el.addEventListener('click', () => {
+      const kind = el.dataset.kind;
+      const title = el.dataset.title;
+      if (kind === 'site') {
+        // Already on Fat Films — take them to the film.
+        const film = BY_SLUG[el.dataset.slug];
+        suggestAuto.classList.remove('show');
+        hideModal('suggest-modal');
+        if (film) openInfo(film);
+      } else {
+        // Leaderboard or brand-new TMDB pick — prefill so the user can submit.
+        suggestInput.value = title;
+        suggestAuto.classList.remove('show');
+        suggestInput.focus();
+      }
+    });
+  });
+}
+
+async function runSuggestAutocomplete(q) {
+  const qLower = q.toLowerCase();
+
+  // 1. Site films — exact or substring title match.
+  const siteMatches = FILMS
+    .filter(f => f.title.toLowerCase().includes(qLower))
+    .slice(0, 5)
+    .map(f => ({ kind: 'site', title: f.title, slug: f.slug, tag: t('ui.alreadyOnSite') }));
+  const siteTitles = new Set(siteMatches.map(m => m.title.toLowerCase()));
+
+  // 2. Leaderboard cache — substring match, dedupe against site.
+  const lbMatches = LEADERBOARD_CACHE
+    .filter(it => typeof it.title === 'string' && it.title.toLowerCase().includes(qLower))
+    .filter(it => !siteTitles.has(it.title.toLowerCase()))
+    .slice(0, 5)
+    .map(it => ({ kind: 'lb', title: it.title, tag: `${t('ui.alreadySuggested')} \u00B7 ${it.vote_count}` }));
+  const lbTitles = new Set(lbMatches.map(m => m.title.toLowerCase()));
+
+  // Render whatever we have immediately so users see quick local hits while
+  // TMDB is still fetching.
+  renderSuggestMatches([...siteMatches, ...lbMatches]);
+
+  // 3. TMDB catalogue — ranked by popularity, dedupe against the first two.
+  try {
+    if (suggestAutoAbort) suggestAutoAbort.abort();
+    suggestAutoAbort = new AbortController();
+    const r = await fetch('/api/films-search?q=' + encodeURIComponent(q), { signal: suggestAutoAbort.signal });
+    if (!r.ok) return;
+    const d = await r.json();
+    const tmdbMatches = (d.results || [])
+      .filter(it => it.title && !siteTitles.has(it.title.toLowerCase()) && !lbTitles.has(it.title.toLowerCase()))
+      .slice(0, 6)
+      .map(it => ({
+        kind: 'new',
+        title: it.year ? `${it.title} (${it.year})` : it.title,
+        tag: t('ui.beTheFirst'),
+      }));
+    // Guard: make sure the input still matches this query (user may have kept typing).
+    if (suggestInput.value.trim() !== q) return;
+    renderSuggestMatches([...siteMatches, ...lbMatches, ...tmdbMatches]);
+  } catch (e) {
+    // AbortError from a newer keystroke, or network hiccup — leave the local
+    // matches showing.
+  }
+}
+
+suggestInput.addEventListener('input', () => {
+  const q = suggestInput.value.trim();
+  clearTimeout(suggestAutoTimer);
+  if (!q) { suggestAuto.classList.remove('show'); return; }
+  suggestAutoTimer = setTimeout(() => runSuggestAutocomplete(q), 250);
 });
 
 function isAlreadyOnSite(title) {
