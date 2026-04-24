@@ -333,12 +333,24 @@
       color: #fff;
       text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
       pointer-events: none;
+      z-index: 3;
     }
     .card-progress {
       position: absolute; bottom: 0; left: 0; height: 3px;
       background: var(--accent);
       border-radius: 0 0 5px 5px;
       pointer-events: none;
+      z-index: 3;
+    }
+    /* Hover preview video sits above the static thumb but below the overlay */
+    .card-preview {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      border-radius: 5px;
+      pointer-events: none;
+      z-index: 2;
+      background: #000;
     }
 
     .card-hover {
@@ -349,6 +361,7 @@
       border-radius: 0 0 5px 5px;
       opacity: 0; pointer-events: none;
       transition: opacity 0.2s;
+      z-index: 4;
     }
     .card:hover .card-hover { opacity: 1; pointer-events: auto; }
     .card-hover button {
@@ -357,7 +370,7 @@
       background: rgba(255,255,255,0.08);
       border: 1px solid rgba(255,255,255,0.4);
       display: inline-flex; align-items: center; justify-content: center;
-      transition: background 0.15s, border-color 0.15s;
+      transition: background 0.15s, border-color 0.15s, transform 0.2s;
     }
     .card-hover button:hover { background: rgba(255,255,255,0.22); border-color: #fff; }
     .card-hover button.play-sm { background: #fff; color: #111; border-color: #fff; }
@@ -365,8 +378,30 @@
     .card-hover button.active { background: var(--accent); border-color: var(--accent); }
     .card-hover svg { width: 14px; height: 14px; fill: currentColor; }
     .card-hover .like-count {
-      font-size: 0.72rem; color: #ccc; margin-left: 4px;
+      font-size: 0.72rem; color: #ccc; margin-left: 2px;
+      min-width: 26px;
     }
+
+    /* Heart like button */
+    .heart-btn svg { transition: transform 0.15s; }
+    .heart-btn.liked { color: #ff4d6d; border-color: #ff4d6d !important; }
+    .heart-btn.liked svg { fill: #ff4d6d; }
+    .heart-btn.liking { animation: heartbeat 0.4s cubic-bezier(.17,.89,.32,1.49); }
+    @keyframes heartbeat {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.35); }
+      70%  { transform: scale(0.92); }
+      100% { transform: scale(1); }
+    }
+
+    /* Heart in the info modal — larger pill with count */
+    .heart-big {
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .heart-big svg { width: 18px; height: 18px; transition: transform 0.15s; }
+    .heart-big.liked { background: rgba(255,77,109,0.15); color: #ff4d6d; }
+    .heart-big.liked svg { fill: #ff4d6d; }
+    .heart-big.liking { animation: heartbeat 0.4s cubic-bezier(.17,.89,.32,1.49); }
 
     /* ========== MODAL (shared) ========== */
     .modal-bg {
@@ -725,9 +760,13 @@
     <button class="modal-close" data-close>&times;</button>
     <h2 id="info-title"></h2>
     <p id="info-desc"></p>
-    <div style="display:flex; gap:10px; margin-top:20px;">
+    <div style="display:flex; gap:10px; margin-top:20px; flex-wrap:wrap;">
       <button class="btn-play" id="info-play"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Play</button>
       <button class="btn-info" id="info-cast">Cast</button>
+      <button class="btn-info heart-big" id="info-like" title="Like">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9.5 2 5.5 5.5 4.5 8 3.8 10 5 12 7c2-2 4-3.2 6.5-2.5C22 5.5 23 9.5 21.5 12c-2.5 4.5-9.5 9-9.5 9z"/></svg>
+        <span id="info-like-count">0</span>
+      </button>
     </div>
   </div>
 </div>
@@ -779,6 +818,9 @@
           <button class="ctrl-btn" id="ctrl-vol">&#128266;</button>
           <div class="volume-slider" id="volume-slider"><div class="volume-fill" id="volume-fill"></div></div>
         </div>
+        <button class="ctrl-btn" id="ctrl-download" title="Download watermarked version">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+        </button>
         <button class="ctrl-btn" id="ctrl-fs">&#x26F6;</button>
       </div>
     </div>
@@ -887,11 +929,11 @@ const LS = {
     return items.length ? items[0][0] : null;
   },
   likes: () => JSON.parse(localStorage.getItem('ff.likes') || '{}'),
-  toggleLike: (slug) => {
+  setLiked: (slug, val) => {
     const likes = LS.likes();
-    likes[slug] = !likes[slug];
+    if (val) likes[slug] = true;
+    else delete likes[slug];
     localStorage.setItem('ff.likes', JSON.stringify(likes));
-    return likes[slug];
   },
   isLiked: (slug) => !!LS.likes()[slug],
 };
@@ -908,11 +950,72 @@ function shuffle(a) {
   return arr;
 }
 function esc(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function fakeLikeCount(slug) {
-  // Deterministic-ish "fake" count derived from slug length for placeholder display.
-  let seed = 0;
-  for (let i = 0; i < slug.length; i++) seed = (seed * 31 + slug.charCodeAt(i)) >>> 0;
-  return 800 + (seed % 9200);
+
+// Global like-count state — populated from /api/likes on load and mutated
+// optimistically as the user toggles hearts. Every spot that renders a count
+// tags its element with [data-count-for="<slug>"] so updateLikeCount can find
+// every instance (card + info modal) in one pass.
+const LIKE_COUNTS = {};
+function getLikeCount(slug) { return LIKE_COUNTS[slug] || 0; }
+function updateLikeCount(slug) {
+  const n = getLikeCount(slug).toLocaleString();
+  document.querySelectorAll(`[data-count-for="${slug}"]`).forEach(el => el.textContent = n);
+}
+
+async function loadLikeCounts() {
+  try {
+    const r = await fetch('/api/likes');
+    if (!r.ok) return;
+    const map = await r.json();
+    Object.keys(map).forEach(k => { LIKE_COUNTS[k] = map[k]; });
+    FILMS.forEach(f => updateLikeCount(f.slug));
+  } catch {}
+}
+
+// Heart SVGs — outline when unliked, filled when liked. currentColor handles
+// the tint difference via the .liked class.
+const HEART_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C1 9.5 2 5.5 5.5 4.5 8 3.8 10 5 12 7c2-2 4-3.2 6.5-2.5C22 5.5 23 9.5 21.5 12c-2.5 4.5-9.5 9-9.5 9z"/></svg>`;
+const HEART_FILLED_SVG = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9C1 9.5 2 5.5 5.5 4.5 8 3.8 10 5 12 7c2-2 4-3.2 6.5-2.5C22 5.5 23 9.5 21.5 12c-2.5 4.5-9.5 9-9.5 9z"/></svg>`;
+
+async function toggleLike(slug, buttons) {
+  const wasLiked = LS.isLiked(slug);
+  const action = wasLiked ? 'unlike' : 'like';
+
+  // Optimistic update: flip LS, flip class on every instance, bump count, animate.
+  LS.setLiked(slug, !wasLiked);
+  LIKE_COUNTS[slug] = Math.max(0, getLikeCount(slug) + (wasLiked ? -1 : 1));
+  updateLikeCount(slug);
+  buttons.forEach(btn => {
+    btn.classList.toggle('liked', !wasLiked);
+    btn.classList.add('liking');
+    setTimeout(() => btn.classList.remove('liking'), 450);
+  });
+
+  try {
+    const r = await fetch('/api/like', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ film_slug: slug, action })
+    });
+    const d = await r.json().catch(() => ({}));
+    if (r.ok && typeof d.count === 'number') {
+      // Reconcile with server's authoritative count and liked state.
+      LIKE_COUNTS[slug] = d.count;
+      updateLikeCount(slug);
+      LS.setLiked(slug, !!d.liked);
+      document.querySelectorAll(`[data-like-for="${slug}"]`).forEach(btn => {
+        btn.classList.toggle('liked', !!d.liked);
+      });
+    }
+  } catch {
+    // Network error — revert the optimistic update.
+    LS.setLiked(slug, wasLiked);
+    LIKE_COUNTS[slug] = Math.max(0, getLikeCount(slug) + (wasLiked ? 1 : -1));
+    updateLikeCount(slug);
+    document.querySelectorAll(`[data-like-for="${slug}"]`).forEach(btn => {
+      btn.classList.toggle('liked', wasLiked);
+    });
+  }
 }
 
 // ========================================================================
@@ -1024,10 +1127,10 @@ function buildCard(slug) {
       <div class="card-hover">
         <button class="play-sm" data-act="play" title="Play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
         <button data-act="info" title="Info"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></button>
-        <button data-act="like" title="Like" class="${liked ? 'active' : ''}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.3l1-4.6v-.3c0-.4-.2-.8-.4-1.1L14.2 1 7.6 7.6c-.4.4-.6.9-.6 1.4v10c0 1.1.9 2 2 2h9c.8 0 1.5-.5 1.8-1.2l3-7c.1-.3.2-.5.2-.8v-2z"/></svg></button>
+        <button data-act="like" title="Like" class="heart-btn ${liked ? 'liked' : ''}" data-like-for="${slug}">${HEART_SVG}</button>
         <button data-act="fav" title="Favorite" class="${faved ? 'active' : ''}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg></button>
         <button data-act="cast" title="Cast"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></button>
-        <span class="like-count">${fakeLikeCount(slug).toLocaleString()}</span>
+        <span class="like-count" data-count-for="${slug}">${getLikeCount(slug).toLocaleString()}</span>
       </div>
     </div>`;
 }
@@ -1066,11 +1169,48 @@ function renderRows() {
   wireRows();
 }
 
+// Skip hover preview on touch devices; otherwise mount a muted looping <video>
+// on the card after 500ms of hovering, swap back to the thumb on leave.
+const SUPPORTS_HOVER = window.matchMedia && window.matchMedia('(hover: hover)').matches;
+
+function attachHoverPreview(card, film) {
+  if (!SUPPORTS_HOVER) return;
+  let timer = null, vid = null;
+  card.addEventListener('mouseenter', () => {
+    if (timer || vid) return;
+    timer = setTimeout(() => {
+      timer = null;
+      if (!card.matches(':hover')) return;
+      vid = document.createElement('video');
+      vid.className = 'card-preview';
+      vid.muted = true;
+      vid.loop = true;
+      vid.autoplay = true;
+      vid.playsInline = true;
+      vid.preload = 'auto';
+      vid.src = film.video;
+      card.appendChild(vid);
+      vid.play().catch(() => {});
+    }, 500);
+  });
+  card.addEventListener('mouseleave', () => {
+    if (timer) { clearTimeout(timer); timer = null; }
+    if (vid) {
+      vid.pause();
+      vid.removeAttribute('src');
+      vid.load();
+      vid.remove();
+      vid = null;
+    }
+  });
+}
+
 function wireRows() {
   // Card clicks — delegate on the rows wrap
   document.querySelectorAll('.card').forEach(card => {
     const slug = card.dataset.slug;
     const film = BY_SLUG[slug];
+    attachHoverPreview(card, film);
 
     card.addEventListener('click', (e) => {
       const btn = e.target.closest('[data-act]');
@@ -1087,8 +1227,10 @@ function wireRows() {
           renderRows();
         }
         else if (act === 'like') {
-          const on = LS.toggleLike(slug);
-          btn.classList.toggle('active', on);
+          // All heart instances for this slug (card hover + info modal) get
+          // the class + animation via their shared data-like-for attribute.
+          const buttons = document.querySelectorAll(`[data-like-for="${slug}"]`);
+          toggleLike(slug, buttons);
         }
         return;
       }
@@ -1134,6 +1276,20 @@ function openInfo(film) {
   document.getElementById('info-desc').textContent = film.desc;
   document.getElementById('info-play').onclick = () => { hideModal('info-modal'); openPlayer(film); };
   document.getElementById('info-cast').onclick = () => { hideModal('info-modal'); openCast(film); };
+
+  // Wire the heart button inside the info modal. data-like-for + data-count-for
+  // let the same toggleLike flow keep every instance in sync.
+  const likeBtn = document.getElementById('info-like');
+  const likeCountEl = document.getElementById('info-like-count');
+  likeBtn.dataset.likeFor = film.slug;
+  likeCountEl.dataset.countFor = film.slug;
+  likeBtn.classList.toggle('liked', LS.isLiked(film.slug));
+  likeCountEl.textContent = getLikeCount(film.slug).toLocaleString();
+  likeBtn.onclick = () => {
+    const buttons = document.querySelectorAll(`[data-like-for="${film.slug}"]`);
+    toggleLike(film.slug, buttons);
+  };
+
   showModal('info-modal');
 }
 
@@ -1161,6 +1317,7 @@ const ctrlVol = document.getElementById('ctrl-vol');
 const volumeSlider = document.getElementById('volume-slider');
 const volumeFill = document.getElementById('volume-fill');
 const ctrlFs = document.getElementById('ctrl-fs');
+const ctrlDownload = document.getElementById('ctrl-download');
 const unmutePrompt = document.getElementById('unmute-prompt');
 let hideTimer, currentPlayerFilm = null;
 
@@ -1244,6 +1401,20 @@ function updateVol() {
   ctrlVol.innerHTML = v === 0 ? '&#128264;' : (v < 0.5 ? '&#128265;' : '&#128266;');
 }
 video.addEventListener('volumechange', updateVol);
+
+// Download the WATERMARKED version from public/watermarked/, never the original.
+ctrlDownload.addEventListener('click', () => {
+  if (!currentPlayerFilm) return;
+  const videoPath = currentPlayerFilm.video; // e.g. "videos/american chud.mp4"
+  const fileName = videoPath.substring(videoPath.lastIndexOf('/') + 1);
+  const a = document.createElement('a');
+  a.href = 'watermarked/' + fileName;
+  a.download = fileName;
+  a.rel = 'noopener';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+});
 
 ctrlFs.addEventListener('click', () => {
   if (document.fullscreenElement) document.exitFullscreen();
@@ -1495,6 +1666,7 @@ resetIdle();
 // INITIAL RENDER
 // ========================================================================
 renderRows();
+loadLikeCounts();
 </script>
 
 <script defer src="/_vercel/insights/script.js"></script>
