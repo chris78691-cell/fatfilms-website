@@ -1034,6 +1034,9 @@ const FILMS = [
   { slug: 'interbelly', title: 'Interbelly', video: 'videos/interbelly.mp4', card: 'titlecards/interbelly.jpg',
     desc: "In a dying future where crops have failed and humanity faces starvation, a former NASA pilot leads a crew through a wormhole in search of a new home. The mission: find a planet with enough food to feed everyone. Time is relative but hunger is constant.",
     cast: [['Fatthew McConaughey','Matthew McConaughey'],['Anne Hatha-weigh','Anne Hathaway'],['Jessica Chas-stain','Jessica Chastain'],['Michael Grain','Michael Caine'],['Fatt Damon','Matt Damon']] },
+  { slug: 'jurassic-pork', title: 'Jurassic Pork', video: 'videos/Jurassic Pork.mp4', card: 'titlecards/Jurassic_Pork.jpg',
+    desc: "A well-fed billionaire invites a group of scientists to his extraordinary new theme park on a remote island, where he's managed to clone dinosaurs using ancient DNA preserved in deep-fried amber. But when the security systems fail and the hungry dinos break loose, the visitors quickly learn they're no longer at the top of the food chain. Life finds a way, and so does the appetite.",
+    cast: [['Ham Neill','Sam Neill'],['Larger Dern','Laura Dern'],['Jeff Goldplum','Jeff Goldblum'],['Richlard Attenborough','Richard Attenborough'],['Samuel L. Snackson','Samuel L. Jackson']] },
   { slug: 'squid-gain', title: 'Squid Gain', video: 'videos/squid gain.mp4', card: 'titlecards/squid_gain.jpg',
     desc: "Hundreds of cash-strapped contestants accept a mysterious invitation to compete in a series of deadly childhood games for a massive cash prize. The stakes are enormous. So are the players.",
     cast: [['Pea Jung-Jae','Lee Jung-jae'],['Park Hae-soup','Park Hae-soo'],['Wi Ham-joon','Wi Ha-joon'],['Jung Ho-yum','Jung Ho-yeon'],['Gong Food','Gong Yoo']] },
@@ -1046,6 +1049,9 @@ const FILMS = [
   { slug: 'weight-of-wallstreet', title: 'The Weight of Wallstreet', video: 'videos/The Weight of Wallstreet.mp4', card: 'titlecards/The_Weight_of_Wallstreet.jpg',
     desc: "Based on the true story of Jordan Belfry, a stockbroker who built a massive fortune through fraud, excess, and an appetite for the finer things in life. The money was obscene, the parties were legendary, and the lunch bills were astronomical.",
     cast: [['Leonardo DiCarpaccio','Leonardo DiCaprio'],['Jonah Fill','Jonah Hill'],['Margot Gobbie','Margot Robbie'],['Fatthew McConaughey','Matthew McConaughey'],['Piele Chandler','Kyle Chandler']] },
+  { slug: 'whoppenheimer', title: 'Whoppenheimer', video: 'videos/Whoppenheimer.mp4', card: 'titlecards/Whoppenheimer.jpg',
+    desc: "The story of J. Robert Whoppenheimer, the physicist who led the development of the world's first weapon of mass consumption. As the mushroom cloud rises, so does his waistline. Now he must face the consequences of creating something the world can never un-eat.",
+    cast: [['Celery Murphy','Cillian Murphy'],['Robert Brownie Jr.','Robert Downey Jr.'],['Emily Bluntcake','Emily Blunt'],['Fatt Damon','Matt Damon'],['Florence Pudding','Florence Pugh']] },
 ];
 
 const BY_SLUG = Object.fromEntries(FILMS.map(f => [f.slug, f]));
@@ -1053,14 +1059,14 @@ const BY_SLUG = Object.fromEntries(FILMS.map(f => [f.slug, f]));
 // Each film appears in exactly one category (16 films / 4 categories = 4 each).
 // `id` is a stable translation key; the displayed title is resolved via t('ui.' + id).
 const BASE_CATEGORIES = [
-  { id: 'biggestHits',  slugs: ['american-chud','fat-club','bulk-fiction','weight-of-wallstreet'] },
+  { id: 'biggestHits',  slugs: ['american-chud','fat-club','bulk-fiction','weight-of-wallstreet','whoppenheimer'] },
   { id: 'exclusives',   slugs: ['donnie-lardo','baking-bad','chewlander','fatsi-driver'] },
   { id: 'freshlyBaked', slugs: ['heavy-potter','the-fatrix','chiplash','bigger-things'] },
-  { id: 'heavyHits',    slugs: ['interbelly','fat-runner','squid-gain','the-bigs'] },
+  { id: 'heavyHits',    slugs: ['interbelly','fat-runner','squid-gain','the-bigs','jurassic-pork'] },
 ];
 
 // The "clean" frames for idle mode — a curated pool from public/frames/
-const IDLE_FRAMES = ["american_chud_03.jpg","american_chud_05.jpg","american_chud_07.jpg","baking_bad_02.jpg","baking_bad_04.jpg","baking_bad_06.jpg","Bigger_Things_03.jpg","Bigger_Things_05.jpg","Bigger_Things_07.jpg","Bulk_Fiction_03.jpg","Bulk_Fiction_05.jpg","Bulk_Fiction_07.jpg","Chewlander_03.jpg","Chewlander_05.jpg","Chewlander_07.jpg","Chiplash_03.jpg","Chiplash_05.jpg","Chiplash_07.jpg","donnie_lardo_03.jpg","donnie_lardo_05.jpg","donnie_lardo_07.jpg","fat_club_03.jpg","fat_club_05.jpg","fat_club_07.jpg","fat_runner_03.jpg","fat_runner_05.jpg","fat_runner_07.jpg","fatsy_driver_03.jpg","fatsy_driver_05.jpg","fatsy_driver_07.jpg","Heavy_Potter_03.jpg","Heavy_Potter_05.jpg","Heavy_Potter_07.jpg","interbelly_03.jpg","interbelly_05.jpg","interbelly_07.jpg","squid_gain_03.jpg","squid_gain_05.jpg","squid_gain_07.jpg","the_bigs_03.jpg","the_bigs_05.jpg","the_bigs_07.jpg","The_Fatrix_03.jpg","The_Fatrix_05.jpg","The_Fatrix_07.jpg","The_Weight_of_Wallstreet_03.jpg","The_Weight_of_Wallstreet_05.jpg","The_Weight_of_Wallstreet_07.jpg"];
+const IDLE_FRAMES = ["american_chud_03.jpg","american_chud_05.jpg","american_chud_07.jpg","baking_bad_02.jpg","baking_bad_04.jpg","baking_bad_06.jpg","Bigger_Things_03.jpg","Bigger_Things_05.jpg","Bigger_Things_07.jpg","Bulk_Fiction_03.jpg","Bulk_Fiction_05.jpg","Bulk_Fiction_07.jpg","Chewlander_03.jpg","Chewlander_05.jpg","Chewlander_07.jpg","Chiplash_03.jpg","Chiplash_05.jpg","Chiplash_07.jpg","donnie_lardo_03.jpg","donnie_lardo_05.jpg","donnie_lardo_07.jpg","fat_club_03.jpg","fat_club_05.jpg","fat_club_07.jpg","fat_runner_03.jpg","fat_runner_05.jpg","fat_runner_07.jpg","fatsy_driver_03.jpg","fatsy_driver_05.jpg","fatsy_driver_07.jpg","Heavy_Potter_03.jpg","Heavy_Potter_05.jpg","Heavy_Potter_07.jpg","interbelly_03.jpg","interbelly_05.jpg","interbelly_07.jpg","squid_gain_03.jpg","squid_gain_05.jpg","squid_gain_07.jpg","the_bigs_03.jpg","the_bigs_05.jpg","the_bigs_07.jpg","The_Fatrix_03.jpg","The_Fatrix_05.jpg","The_Fatrix_07.jpg","The_Weight_of_Wallstreet_03.jpg","The_Weight_of_Wallstreet_05.jpg","The_Weight_of_Wallstreet_07.jpg","Whoppenheimer_03.jpg","Whoppenheimer_05.jpg","Whoppenheimer_07.jpg","Jurassic_Pork_03.jpg","Jurassic_Pork_05.jpg","Jurassic_Pork_07.jpg"];
 
 // ========================================================================
 // I18N — translations for UI, film descriptions, and news.
@@ -1105,6 +1111,8 @@ const TRANSLATIONS = {
       'the-bigs':"A ragtag group of vigilantes take on corrupt superheroes who abuse their powers for fame and profit. Leading the charge is Billy Butcher, a man with a grudge, a plan, and absolutely zero interest in portion control.",
       'the-fatrix':"A computer hacker discovers that reality as he knows it is actually a simulated world designed to keep humanity docile and well-fed. When offered the choice between a red pill and a blue pill, Neo asks if there is a third option with gravy.",
       'weight-of-wallstreet':"Based on the true story of Jordan Belfry, a stockbroker who built a massive fortune through fraud, excess, and an appetite for the finer things in life. The money was obscene, the parties were legendary, and the lunch bills were astronomical.",
+      'jurassic-pork':"A well-fed billionaire invites a group of scientists to his extraordinary new theme park on a remote island, where he\u2019s managed to clone dinosaurs using ancient DNA preserved in deep-fried amber. But when the security systems fail and the hungry dinos break loose, the visitors quickly learn they\u2019re no longer at the top of the food chain. Life finds a way, and so does the appetite.",
+      'whoppenheimer':"The story of J. Robert Whoppenheimer, the physicist who led the development of the world\u2019s first weapon of mass consumption. As the mushroom cloud rises, so does his waistline. Now he must face the consequences of creating something the world can never un-eat.",
     },
     news: {
       title:'Fat Films GIFs are here!',
@@ -1146,6 +1154,8 @@ const TRANSLATIONS = {
       'the-bigs':"Un grupo heterogéneo de vigilantes se enfrenta a superhéroes corruptos que abusan de sus poderes por fama y dinero. Al frente va Billy Butcher, un hombre con rencor, un plan y cero interés en controlar porciones.",
       'the-fatrix':"Un hacker informático descubre que la realidad tal como la conoce es en realidad un mundo simulado diseñado para mantener a la humanidad dócil y bien alimentada. Cuando le ofrecen elegir entre la pastilla roja y la azul, Neo pregunta si hay una tercera opción con salsa.",
       'weight-of-wallstreet':"Basada en la historia real de Jordan Belfry, un corredor de bolsa que construyó una fortuna masiva con fraude, excesos y un apetito por los placeres más finos. El dinero era obsceno, las fiestas legendarias y las facturas de la comida, astronómicas.",
+      'jurassic-pork':"Un multimillonario bien alimentado invita a un grupo de científicos a su extraordinario parque temático en una isla remota, donde ha logrado clonar dinosaurios usando ADN antiguo preservado en ámbar frito. Cuando los sistemas de seguridad fallan y los dinos hambrientos se sueltan, los visitantes descubren rápido que ya no están en la cima de la cadena alimentaria. La vida se abre paso, y el apetito también.",
+      'whoppenheimer':"La historia de J. Robert Whoppenheimer, el físico que lideró el desarrollo del primer arma de destrucción masiva del mundo. A medida que sube la nube en forma de hongo, también lo hace su cintura. Ahora debe afrontar las consecuencias de haber creado algo que el mundo nunca podrá des-comer.",
     },
     news: {
       title:'¡Los GIFs de Fat Films ya están aquí!',
@@ -1187,6 +1197,8 @@ const TRANSLATIONS = {
       'the-bigs':"Un groupe hétéroclite de justiciers s\u2019en prend à des super-héros corrompus qui abusent de leurs pouvoirs pour la gloire et l\u2019argent. À leur tête, Billy Butcher : un homme rancunier, méthodique, et zéro intérêt pour la modération des portions.",
       'the-fatrix':"Un hacker découvre que la réalité telle qu\u2019il la connaît est en fait un monde simulé conçu pour garder l\u2019humanité docile et bien nourrie. Quand on lui propose de choisir entre la pilule rouge et la pilule bleue, Néo demande s\u2019il existe une troisième option avec sauce.",
       'weight-of-wallstreet':"D\u2019après l\u2019histoire vraie de Jordan Belfry, un courtier qui a bâti une immense fortune grâce à la fraude, l\u2019excès et un goût pour les meilleurs plaisirs de la vie. L\u2019argent était obscène, les fêtes légendaires et les notes de resto astronomiques.",
+      'jurassic-pork':"Un milliardaire bien nourri invite un groupe de scientifiques dans son extraordinaire parc à thème sur une île reculée, où il a réussi à cloner des dinosaures à partir d\u2019ADN ancien conservé dans de l\u2019ambre frite. Quand les systèmes de sécurité tombent en panne et que les dinos affamés s\u2019échappent, les visiteurs comprennent vite qu\u2019ils ne sont plus au sommet de la chaîne alimentaire. La vie trouve toujours un chemin, l\u2019appétit aussi.",
+      'whoppenheimer':"L\u2019histoire de J. Robert Whoppenheimer, le physicien qui a dirigé la mise au point de la première arme de consommation massive au monde. Plus le champignon nucléaire monte, plus son tour de taille s\u2019élargit. Désormais il doit affronter les conséquences d\u2019avoir créé quelque chose que le monde ne pourra jamais dé-manger.",
     },
     news: {
       title:'Les GIFs Fat Films sont là !',
@@ -1228,6 +1240,8 @@ const TRANSLATIONS = {
       'the-bigs':"Un gruppo eterogeneo di vigilanti si scontra con supereroi corrotti che abusano dei loro poteri per fama e profitto. A guidarli, Billy Butcher: un uomo con un rancore, un piano e zero interesse per le porzioni controllate.",
       'the-fatrix':"Un hacker scopre che la realtà per come la conosce è in realtà un mondo simulato progettato per tenere l\u2019umanità docile e ben sfamata. Davanti alla scelta tra pillola rossa e pillola blu, Neo chiede se esiste una terza opzione con sugo.",
       'weight-of-wallstreet':"Basato sulla storia vera di Jordan Belfry, un broker che ha costruito un\u2019enorme fortuna con frodi, eccessi e un appetito per le cose più raffinate della vita. I soldi erano osceni, le feste leggendarie e i conti del ristorante astronomici.",
+      'jurassic-pork':"Un miliardario ben nutrito invita un gruppo di scienziati nel suo straordinario nuovo parco a tema su un\u2019isola remota, dove è riuscito a clonare dinosauri usando DNA antico conservato nell\u2019ambra fritta. Quando i sistemi di sicurezza falliscono e i dino affamati si liberano, i visitatori capiscono in fretta di non essere più in cima alla catena alimentare. La vita trova sempre la strada, l\u2019appetito pure.",
+      'whoppenheimer':"La storia di J. Robert Whoppenheimer, il fisico che guidò lo sviluppo della prima arma di consumo di massa del mondo. Mentre il fungo atomico sale, sale anche il suo girovita. Ora deve affrontare le conseguenze di aver creato qualcosa che il mondo non potrà mai s-mangiare.",
     },
     news: {
       title:'Le GIF di Fat Films sono arrivate!',
@@ -1269,6 +1283,8 @@ const TRANSLATIONS = {
       'the-bigs':"Eine bunt zusammengewürfelte Gruppe von Selbstjustizlern legt sich mit korrupten Superhelden an, die ihre Kräfte für Ruhm und Profit missbrauchen. Angeführt wird sie von Billy Butcher: ein Mann mit Groll, Plan und null Interesse an Portionskontrolle.",
       'the-fatrix':"Ein Computer-Hacker entdeckt, dass die Realität, wie er sie kennt, in Wahrheit eine simulierte Welt ist, die die Menschheit gefügig und wohlgenährt halten soll. Als ihm rote und blaue Pille angeboten werden, fragt Neo, ob es eine dritte Option mit Soße gibt.",
       'weight-of-wallstreet':"Nach der wahren Geschichte von Jordan Belfry, einem Börsenmakler, der durch Betrug, Exzess und Appetit auf die feineren Dinge ein riesiges Vermögen aufbaute. Das Geld war obszön, die Partys legendär und die Mittagessen-Rechnungen astronomisch.",
+      'jurassic-pork':"Ein wohlgenährter Milliardär lädt eine Gruppe von Wissenschaftlern in seinen außergewöhnlichen neuen Themenpark auf einer abgelegenen Insel ein, wo er Dinosaurier mithilfe von uraltem DNA aus frittiertem Bernstein geklont hat. Als die Sicherheitssysteme ausfallen und die hungrigen Dinos ausbrechen, lernen die Besucher schnell: sie sind nicht mehr ganz oben in der Nahrungskette. Das Leben findet einen Weg, und der Appetit auch.",
+      'whoppenheimer':"Die Geschichte von J. Robert Whoppenheimer, dem Physiker, der die Entwicklung der weltweit ersten Massenkonsumwaffe leitete. Während der Atompilz steigt, wächst auch sein Bauchumfang. Nun muss er sich den Folgen stellen, etwas erschaffen zu haben, das die Welt nie wieder un-essen kann.",
     },
     news: {
       title:'Fat Films GIFs sind da!',
@@ -1310,6 +1326,8 @@ const TRANSLATIONS = {
       'the-bigs':"一群杂牌义警向滥用超能力追求名利的腐败超级英雄宣战。领头的是 Billy Butcher:一个满腔仇恨、心有计划、对份量控制毫无兴趣的男人。",
       'the-fatrix':"一位黑客发现他所认识的现实其实是一个模拟世界,目的是让人类乖顺且吃得好。当面对红蓝药丸的选择时,Neo 问是否有第三个带肉汁的选项。",
       'weight-of-wallstreet':"根据 Jordan Belfry 的真实故事改编。他是一位股票经纪人,通过欺诈、挥霍和对人生中最好东西的胃口,积累了庞大的财富。钱多得令人咋舌,派对传奇,午餐账单天文数字。",
+      'jurassic-pork':"一位吃得很饱的亿万富翁邀请一群科学家来到他位于偏远小岛上的非凡新主题公园,他用油炸琥珀中保存的古老 DNA 成功克隆了恐龙。当安保系统失效、饿坏的恐龙逃出笼子,游客们很快意识到他们已不再处于食物链的顶端。生命会找到出路,胃口也是。",
+      'whoppenheimer':"J. Robert Whoppenheimer 的故事:他是领导开发世界第一件大规模消费武器的物理学家。蘑菇云升起的同时,他的腰围也跟着上升。如今他必须面对自己创造出某种世界永远无法 \u201C不吃\u201D 的东西所带来的后果。",
     },
     news: {
       title:'Fat Films GIF 上线了!',
@@ -1351,6 +1369,8 @@ const TRANSLATIONS = {
       'the-bigs':"寄せ集めの自警団員たちが、名声と金のために力を乱用する腐敗したスーパーヒーローに立ち向かう。先頭に立つのは Billy Butcher。恨みと計画を持ち、そして食べる量を抑える気はまったくない男だ。",
       'the-fatrix':"コンピュータハッカーが、自分の知る現実は、人類を従順によく食わせておくために設計されたシミュレーション世界だと気づく。赤い錠剤と青い錠剤を選べと言われた Neo は、グレービー付きの第三の選択肢はないか尋ねる。",
       'weight-of-wallstreet':"詐欺と浪費、そして人生の美味しいものへの飽くなき食欲で巨万の富を築いた株式ブローカー、Jordan Belfry の実話に基づく。金は下品、パーティーは伝説、ランチの伝票は天文学的だった。",
+      'jurassic-pork':"よく食べた億万長者が、遠く離れた島にある常識外れの新しいテーマパークに科学者の一団を招待する。彼は揚げ琥珀に保存された古代 DNA を使って恐竜のクローンを作ることに成功していた。だが警備システムが故障し、腹を空かせた恐竜たちが檻を破ると、来園者たちはすぐに悟る\u2014\u2014自分たちはもう食物連鎖の頂点ではない。命は道を見つける、食欲もまた然り。",
+      'whoppenheimer':"世界初の大量消費兵器の開発を率いた物理学者、J. Robert Whoppenheimer の物語。きのこ雲が立ちのぼると共に、彼のウエストラインも膨れ上がっていく。世界が二度と「食べなかったこと」にできないものを生み出した責任に、いま向き合わねばならない。",
     },
     news: {
       title:'Fat Films の GIF が登場!',
@@ -1392,6 +1412,8 @@ const TRANSLATIONS = {
       'the-bigs':"권력을 명성과 이익을 위해 남용하는 부패한 슈퍼히어로들에게 맞서는 오합지졸 자경단. 선두에 선 Billy Butcher는 원한과 계획을 가지고 있고, 양 조절에는 조금도 관심이 없는 남자입니다.",
       'the-fatrix':"한 컴퓨터 해커는 자신이 아는 현실이 인류를 온순하고 잘 먹은 상태로 유지하기 위해 설계된 시뮬레이션 세계임을 깨닫습니다. 빨간 알약과 파란 알약을 선택하라는 제안을 받자 Neo는 그레이비 소스가 뿌려진 세 번째 옵션이 있는지 묻습니다.",
       'weight-of-wallstreet':"사기, 과잉, 그리고 인생의 좋은 것들에 대한 식욕으로 엄청난 부를 쌓은 주식 브로커 Jordan Belfry의 실화를 바탕으로 합니다. 돈은 외설적이었고, 파티는 전설적이었으며, 점심 계산서는 천문학적이었죠.",
+      'jurassic-pork':"잘 먹고 잘사는 억만장자가 외딴 섬의 비범한 새 테마파크로 과학자 일행을 초대합니다. 그는 튀긴 호박 속에 보존된 고대 DNA로 공룡 복제에 성공했죠. 하지만 보안 시스템이 무너지고 배고픈 공룡들이 풀려나자, 방문객들은 자신들이 더 이상 먹이 사슬의 정점이 아니라는 사실을 빠르게 깨닫습니다. 생명은 길을 찾고, 식욕도 마찬가지입니다.",
+      'whoppenheimer':"세계 최초의 대량 소비 무기 개발을 이끈 물리학자 J. Robert Whoppenheimer의 이야기. 버섯구름이 솟아오를수록 그의 허리둘레도 함께 늘어납니다. 이제 그는 세상이 결코 \u201C안 먹은 일\u201D로 되돌릴 수 없는 무언가를 창조한 결과를 마주해야 합니다.",
     },
     news: {
       title:'Fat Films GIF가 등장했습니다!',
@@ -1433,6 +1455,8 @@ const TRANSLATIONS = {
       'the-bigs':"مجموعة غير متجانسة من المحاربين تواجه أبطالًا خارقين فاسدين يستغلّون قواهم من أجل الشهرة والمال. يقود الهجوم بيلي بوتشر: رجل يحمل ضغينة وخطة، ولا يهتم إطلاقًا بالتحكم في الكميات.",
       'the-fatrix':"مخترق حاسوبي يكتشف أن الواقع كما يعرفه في الحقيقة عالم محاكي مُصمَّم لإبقاء البشرية وديعة ومُشبَعة بالطعام. عندما يُطلب منه الاختيار بين الحبة الحمراء والحبة الزرقاء، يسأل نيو إن كان ثمة خيار ثالث مع صلصة المرق.",
       'weight-of-wallstreet':"مستوحى من القصة الحقيقية لجوردان بيلفري، سمسار الأسهم الذي بنى ثروة هائلة من خلال الاحتيال والإفراط وشهية لأفخم ملذات الحياة. المال كان فاحشًا، والحفلات أسطورية، وفواتير الغداء فلكية.",
+      'jurassic-pork':"يدعو ملياردير حسن الإطعام مجموعة من العلماء إلى متنزّهه الترفيهي الاستثنائي على جزيرة نائية، حيث نجح في استنساخ الديناصورات باستخدام حمض نووي قديم محفوظ في عنبرٍ مقلي. لكن حين تنهار أنظمة الأمن وتنطلق الديناصورات الجائعة، يكتشف الزوار سريعًا أنهم لم يعودوا في قمة السلسلة الغذائية. الحياة تجد طريقها، والشهية أيضًا.",
+      'whoppenheimer':"قصة J. Robert Whoppenheimer، الفيزيائي الذي قاد تطوير أول سلاح للاستهلاك الشامل في العالم. بينما ترتفع سحابة الفطر، يرتفع معها محيط خصره. والآن عليه مواجهة عواقب ابتكار شيءٍ لا يستطيع العالم أن \u201Cيُلْغي أكْله\u201D أبدًا.",
     },
     news: {
       title:'صور Fat Films المتحركة وصلت!',
