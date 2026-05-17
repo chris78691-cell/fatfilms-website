@@ -69,6 +69,11 @@
       transform: scale(0.85);
       opacity: 0;
       text-shadow: 0 0 30px rgba(255,255,255,0.3), 0 0 60px rgba(229,9,20,0.4);
+      /* Animation is started by JS once the Bebas Neue webfont has finished
+         loading, so the text never flips from the fallback sans-serif to
+         Bebas Neue mid-animation. */
+    }
+    .loader-text.run {
       animation: loaderIn 2.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
     @keyframes loaderIn {
@@ -1806,8 +1811,37 @@ async function toggleLike(slug, buttons) {
 // ========================================================================
 // LOADING SCREEN
 // ========================================================================
-setTimeout(() => document.getElementById('loader').classList.add('gone'), 2400);
-setTimeout(() => { const l = document.getElementById('loader'); if (l) l.remove(); }, 3200);
+// The loader text uses Bebas Neue, which is loaded from Google Fonts with
+// font-display: swap. On a cold cache that font often isn't ready by the
+// time the page paints, so the browser starts the animation in the fallback
+// sans-serif and then visibly swaps to Bebas Neue partway through. To stop
+// that flip, we hold the animation back until Bebas Neue has actually
+// loaded, then kick off the existing 2.4s / 3.2s dismissal timers.
+(function startLoader() {
+  const text = document.querySelector('.loader-text');
+  if (!text) return;
+  let started = false;
+  function begin() {
+    if (started) return;
+    started = true;
+    text.classList.add('run');
+    setTimeout(() => {
+      const l = document.getElementById('loader');
+      if (l) l.classList.add('gone');
+    }, 2400);
+    setTimeout(() => {
+      const l = document.getElementById('loader');
+      if (l) l.remove();
+    }, 3200);
+  }
+  // Wait for Bebas Neue at the actual loader size. If the FontFace Loading
+  // API isn't available, or the font is slow to arrive, fall back after
+  // 1.2s so the loader is never stuck.
+  if (document.fonts && document.fonts.load) {
+    document.fonts.load("400 5rem 'Bebas Neue'").then(begin).catch(begin);
+  }
+  setTimeout(begin, 1200);
+})();
 
 // ========================================================================
 // MARQUEE COPY
