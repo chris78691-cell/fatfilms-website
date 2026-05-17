@@ -2555,6 +2555,19 @@ resetIdle();
 applyTranslations();
 renderRows();
 loadLikeCounts();
+
+// Deep-link from the SEO landing pages: fatfilms.org/?play=<slug> autoplays
+// that film once the intro loader has faded. Silent no-op for an unknown
+// slug so a stale link can't crash the page.
+(function handlePlayDeepLink() {
+  try {
+    const slug = new URLSearchParams(window.location.search).get('play');
+    if (!slug) return;
+    const film = BY_SLUG[slug];
+    if (!film) return;
+    setTimeout(() => openPlayer(film), 2600);
+  } catch (e) { /* no-op */ }
+})();
 </script>
 
 <script defer src="/_vercel/insights/script.js"></script>
