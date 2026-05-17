@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suggest a Film - Fat Films</title>
+<meta name="description" content="Vote for what film Fat Films should parody next. See the most requested films on the leaderboard.">
+<meta property="og:title" content="Suggest a Film - Fat Films">
+<meta property="og:description" content="Vote for what film Fat Films should parody next. See the most requested films on the leaderboard.">
+<meta property="og:url" content="https://fatfilms.org/suggest">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://fatfilms.org/titlecards/fat_club.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Suggest a Film - Fat Films">
+<meta name="twitter:description" content="Vote for what film Fat Films should parody next. See the most requested films on the leaderboard.">
+<meta name="google-site-verification" content="TizUvxnu-crJd_PCyDW-8FBZYRmGv23YCelZvU0YFJ0">
+<link rel="canonical" href="https://fatfilms.org/suggest">
+<link rel="icon" href="/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  background: #0a0a0a;
+  color: #e5e5e5;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+
+/* NAV */
+.seo-nav {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(10,10,10,0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 14px 32px;
+  display: flex; align-items: center; gap: 32px;
+  flex-wrap: wrap;
+}
+.seo-nav .brand {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem; letter-spacing: 3px;
+  color: #fff;
+  text-shadow: 0 0 12px rgba(229,9,20,0.3);
+}
+.seo-nav .links { display: flex; gap: 24px; margin-left: auto; }
+.seo-nav .links a {
+  color: #ccc; font-size: 0.92rem; font-weight: 500;
+  padding: 4px 0;
+  transition: color 0.15s;
+}
+.seo-nav .links a:hover { color: #fff; }
+@media (max-width: 640px) {
+  .seo-nav { padding: 10px 16px; gap: 12px; }
+  .seo-nav .brand { font-size: 1.15rem; letter-spacing: 2px; }
+  .seo-nav .links { gap: 12px; margin-left: 0; width: 100%; justify-content: flex-start; flex-wrap: wrap; }
+  .seo-nav .links a { font-size: 0.82rem; }
+}
+
+/* FILM HERO */
+.hero {
+  position: relative;
+  min-height: 70vh;
+  display: flex; align-items: flex-end;
+  padding: 80px 40px;
+  background-size: cover; background-position: center;
+  background-color: #111;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(10,10,10,0.4) 0%, rgba(10,10,10,0.7) 60%, rgba(10,10,10,1) 100%),
+              linear-gradient(90deg, rgba(10,10,10,0.7) 0%, rgba(10,10,10,0.3) 60%, rgba(10,10,10,0) 100%);
+  pointer-events: none;
+}
+.hero-inner { position: relative; z-index: 1; max-width: 800px; }
+.hero h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  letter-spacing: 5px;
+  color: #fff;
+  text-shadow: 3px 3px 8px rgba(0,0,0,0.85);
+  margin-bottom: 12px;
+  line-height: 1;
+}
+.parody-of {
+  font-size: 1.02rem; color: #c8c8c8;
+  margin-bottom: 24px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+}
+.parody-of strong { color: #fff; font-weight: 700; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn-primary {
+  background: #e50914; color: #fff;
+  padding: 13px 28px; border-radius: 4px;
+  font-weight: 700; font-size: 1rem;
+  display: inline-flex; align-items: center; gap: 8px;
+  border: none; cursor: pointer; font-family: inherit;
+  transition: background 0.15s, transform 0.1s;
+}
+.btn-primary:hover { background: #f6121d; }
+.btn-primary:active { transform: scale(0.98); }
+.btn-secondary {
+  background: rgba(255,255,255,0.12); color: #fff;
+  padding: 13px 24px; border-radius: 4px;
+  font-weight: 600; font-size: 0.95rem;
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(4px);
+  transition: background 0.15s;
+  display: inline-flex; align-items: center; gap: 8px;
+  cursor: pointer; font-family: inherit;
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.2); }
+@media (max-width: 640px) {
+  .hero { padding: 50px 20px; min-height: 60vh; }
+  .hero h1 { letter-spacing: 3px; }
+}
+
+/* SECTIONS */
+.section { padding: 64px 40px; max-width: 1200px; margin: 0 auto; }
+.section h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(1.8rem, 3vw, 2.4rem); letter-spacing: 2px;
+  color: #fff; margin-bottom: 24px;
+}
+.synopsis {
+  font-size: 1.1rem; line-height: 1.7; color: #cdcdcd;
+  max-width: 800px;
+}
+@media (max-width: 640px) {
+  .section { padding: 40px 20px; }
+  .synopsis { font-size: 1rem; }
+}
+
+/* CAST */
+.cast {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+.cast-item {
+  background: #141414;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 18px 18px 16px;
+  transition: border-color 0.15s;
+}
+.cast-item:hover { border-color: rgba(255,255,255,0.18); }
+.cast-fake {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem; letter-spacing: 1.5px;
+  color: #fff; line-height: 1.15;
+}
+.cast-real {
+  font-size: 0.8rem; color: #888;
+  margin-top: 6px;
+}
+
+/* RECS GRID — also used by /films hub */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+.card {
+  background: #141414;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s, border-color 0.2s;
+  display: block;
+}
+.card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.2); }
+.card img {
+  width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
+  background: #222;
+}
+.card-body { padding: 14px 16px; }
+.card-fake {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.25rem; letter-spacing: 1px;
+  color: #fff;
+}
+.card-orig { font-size: 0.8rem; color: #888; margin-top: 3px; }
+
+/* FOOTER */
+.seo-footer {
+  margin-top: 40px;
+  padding: 50px 40px 30px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  text-align: center;
+}
+.socials {
+  display: flex; justify-content: center; gap: 32px;
+  flex-wrap: wrap; margin-bottom: 28px;
+}
+.socials a {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: #bbb; font-size: 0.92rem; font-weight: 600;
+  transition: color 0.15s;
+}
+.socials a:hover { color: #fff; }
+.socials svg { width: 20px; height: 20px; fill: currentColor; }
+.seo-blurb {
+  color: rgba(255,255,255,0.3);
+  font-size: 12px; line-height: 1.6;
+  max-width: 900px; margin: 0 auto;
+  letter-spacing: 0.2px;
+}
+@media (max-width: 640px) {
+  .seo-footer { padding: 36px 20px 20px; }
+  .socials { gap: 22px; }
+}
+</style>
+<style>
+  .suggest-wrap { max-width: 720px; margin: 0 auto; }
+  .suggest-form { display: flex; gap: 10px; margin: 18px 0 10px; }
+  .suggest-form input {
+    flex: 1; padding: 14px 16px;
+    border: 1px solid #2a2a2a; border-radius: 8px;
+    background: #141414; color: #fff;
+    font-size: 1rem; outline: none; font-family: inherit;
+  }
+  .suggest-form input:focus { border-color: #555; }
+  .suggest-form button {
+    padding: 14px 28px; background: #e50914; color: #fff;
+    border: none; border-radius: 8px; font-weight: 700;
+    font-size: 1rem; cursor: pointer; font-family: inherit;
+  }
+  .suggest-form button:disabled { opacity: 0.5; cursor: wait; }
+  .suggest-form button:hover:not(:disabled) { background: #f6121d; }
+  .msg { min-height: 1.2em; font-size: 0.95rem; margin-top: 8px; opacity: 0; transition: opacity 0.2s; }
+  .msg.show { opacity: 1; }
+  .msg.success { color: #7c7; }
+  .msg.error { color: #e06868; }
+  .msg.warn { color: #ffb347; }
+  .lb {
+    margin-top: 36px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .lb-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 10px 14px;
+    background: #141414; border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+  }
+  .lb-rank { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: #888; width: 28px; text-align: center; }
+  .lb-poster { width: 44px; height: 66px; background: #222; border-radius: 4px; overflow: hidden; flex-shrink: 0; }
+  .lb-poster img { width: 100%; height: 100%; object-fit: cover; }
+  .lb-poster.empty { display: flex; align-items: center; justify-content: center; color: #444; font-size: 18px; }
+  .lb-title { flex: 1; font-size: 0.95rem; font-weight: 600; color: #e5e5e5; }
+  .lb-votes {
+    font-family: 'Space Mono', monospace; font-size: 0.78rem; color: #888;
+    background: rgba(255,255,255,0.06); padding: 5px 12px; border-radius: 14px;
+  }
+  .lb-empty { text-align: center; padding: 26px; color: #666; font-size: 0.9rem; }
+</style>
+</head>
+<body>
+
+<nav class="seo-nav">
+  <a href="https://fatfilms.org" class="brand">FAT FILMS</a>
+  <div class="links">
+    <a href="/films">Films</a>
+    <a href="/suggest">Suggest a Film</a>
+    <a href="/about">About</a>
+    <a href="/news">News</a>
+    <a href="https://fatfilms.org">Watch</a>
+  </div>
+</nav>
+
+<section class="section" style="padding-top: 60px;">
+  <div class="suggest-wrap">
+    <h2 style="font-size: clamp(2.2rem, 4vw, 3.2rem); letter-spacing: 3px;">Suggest a Film</h2>
+    <p class="synopsis" style="font-size: 1rem; color: #aaa; margin: 14px 0 4px;">What film do you want to see <strong style="color:#fff;">FAT</strong>?</p>
+    <div class="suggest-form">
+      <input id="suggest-input" type="text" placeholder="e.g. The Dark Knight, Breaking Bad...">
+      <button id="suggest-btn">Submit</button>
+    </div>
+    <div id="suggest-msg" class="msg"></div>
+
+    <h3 style="font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; margin: 36px 0 14px; color: #fff;">Top Suggestions</h3>
+    <div id="lb" class="lb"><div class="lb-empty">Loading...</div></div>
+  </div>
+</section>
+
+<footer class="seo-footer">
+  <div class="socials">
+    <a href="https://www.instagram.com/fatfilmz_" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg><span>Instagram</span>
+    </a>
+    <a href="https://www.tiktok.com/@fatfilms_" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.48v-7.15a8.16 8.16 0 005.58 2.18v-3.44a4.85 4.85 0 01-1.99-.58z"/></svg><span>TikTok</span>
+    </a>
+    <a href="https://x.com/fatfilmsparody" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>X / Twitter</span>
+    </a>
+  </div>
+  <p class="seo-blurb">Fat Films is a viral AI entertainment project recreating iconic scenes from popular films and TV shows, reimagining every character as FAT. With millions of views across TikTok and Instagram, Fat Films has become one of the most popular AI video projects on the internet. Watch all Fat Films originals, suggest new films, and join the community at fatfilms.org. Fat Films has a community Solana token, $fatfilms, launched on Pumpfun.</p>
+</footer>
+
+<script>
+const lbEl = document.getElementById('lb');
+const inputEl = document.getElementById('suggest-input');
+const btnEl = document.getElementById('suggest-btn');
+const msgEl = document.getElementById('suggest-msg');
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+function showMsg(text, kind) {
+  msgEl.textContent = text;
+  msgEl.className = 'msg show ' + kind;
+  clearTimeout(showMsg._t);
+  showMsg._t = setTimeout(() => msgEl.classList.remove('show'), 5000);
+}
+
+function renderLB(items) {
+  if (!items || items.length === 0) {
+    lbEl.innerHTML = '<div class="lb-empty">No suggestions yet — be the first.</div>';
+    return;
+  }
+  lbEl.innerHTML = items.slice(0, 20).map((it, i) => {
+    const poster = it.poster_url
+      ? `<div class="lb-poster"><img src="${esc(it.poster_url)}" alt="" loading="lazy"></div>`
+      : '<div class="lb-poster empty">&#127916;</div>';
+    return `<div class="lb-item">
+      <div class="lb-rank">${i+1}</div>
+      ${poster}
+      <div class="lb-title">${esc(it.title || 'Untitled')}</div>
+      <div class="lb-votes">${it.vote_count} vote${it.vote_count === 1 ? '' : 's'}</div>
+    </div>`;
+  }).join('');
+}
+
+async function loadLeaderboard() {
+  try {
+    const r = await fetch('/api/leaderboard');
+    if (!r.ok) throw new Error('fail');
+    const d = await r.json();
+    renderLB(d.suggestions);
+  } catch {
+    lbEl.innerHTML = '<div class="lb-empty">Couldn\u2019t load leaderboard.</div>';
+  }
+}
+
+async function submitSuggest() {
+  const title = inputEl.value.trim();
+  if (!title) return;
+  btnEl.disabled = true; btnEl.textContent = 'Sending...';
+  try {
+    const r = await fetch('/api/suggest', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title })
+    });
+    const d = await r.json().catch(() => ({}));
+    if (r.ok && d.success) {
+      showMsg('\u2705 Added \u201C' + d.title + '\u201D to the leaderboard', 'success');
+      inputEl.value = '';
+      if (Array.isArray(d.leaderboard)) renderLB(d.leaderboard);
+      else loadLeaderboard();
+    } else {
+      showMsg(d.error || 'Something went wrong. Try again.', 'error');
+    }
+  } catch {
+    showMsg('Network error. Try again.', 'error');
+  } finally {
+    btnEl.disabled = false; btnEl.textContent = 'Submit';
+  }
+}
+
+btnEl.addEventListener('click', submitSuggest);
+inputEl.addEventListener('keydown', e => { if (e.key === 'Enter') submitSuggest(); });
+loadLeaderboard();
+</script>
+
+<script defer src="/_vercel/insights/script.js"></script>
+
+</body>
+</html>
