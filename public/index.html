@@ -1084,6 +1084,27 @@ const FILMS = [
   { slug: 'spider-man-no-weigh-home', title: 'Spider-Man: No Weigh Home', video: 'videos/Spider-Man No Weigh Home.mp4', card: 'titlecards/Spider_Man_No_Weigh_Home.jpg',
     desc: "Peter Porker's life is turned upside down when his identity as Spider-Man is revealed to the entire world. Desperate for a fresh start, he asks Doctor Strange to make everyone forget he's the web-slinging, snack-stealing hero of New York. But the spell goes catastrophically wrong, ripping open the multiverse and pulling in villains and heroes from other dimensions, all of them significantly larger than expected. Now Peter must face threats from every timeline while trying to keep his secret, his city, and his dinner plans intact.",
     cast: [['Tom Hollandaise','Tom Holland'],['Zendoughya','Zendaya'],['Benedict Crumberbatch','Benedict Cumberbatch'],['Jacob Fattalon','Jacob Batalon'],['Marisa Tomato','Marisa Tomei']] },
+  { slug: 'fat-wars', title: 'Fat Wars', video: 'videos/Fat Wars.mp4', card: 'titlecards/Fat_Wars.jpg',
+    desc: "A long time ago in a galaxy far, far away, a young farm boy discovers he is destined for something much bigger than harvesting moisture on Tatooine. When he stumbles upon a message hidden inside a droid, Luke Skyporker is thrust into an intergalactic battle between the Rebel Alliance and the all-consuming Galactic Empire. Armed with a lightsaber and guided by the wise Obi-Wan Kenobi, he must learn the ways of the Fork and confront the fearsome Darth Vader before the Empire devours everything in its path.",
+    cast: [['Mark Hamhock','Mark Hamill'],['Harrison Lard','Harrison Ford'],['Carrie Fishfinger','Carrie Fisher'],['James Earl Scones','James Earl Jones'],['Alick Guiness','Alec Guinness']] },
+  { slug: 'euporkia', title: 'Euporkia', video: 'videos/Euporkia.mp4', card: 'titlecards/Euporkia.jpg',
+    desc: "Euporkia follows a group of high school students navigating the messy world of identity, relationships, and addiction, all while raiding the school canteen at every opportunity. At the centre is Rue, a troubled teenager fresh out of rehab who swears she's not going to relapse, but can't seem to stay away from the vending machines. Between the drama, the heartbreak, and the house parties, one thing is constant: nobody in this town knows when to stop.",
+    cast: [['Zendoughya','Zendaya'],['Bunter Schafer','Hunter Schafer'],['Jacob Elardi','Jacob Elordi'],['Sydney Sweetney','Sydney Sweeney'],['Angus Cow','Angus Cloud']] },
+  { slug: 'skyfull', title: 'Skyfull', video: 'videos/Skyfull.mp4', card: 'titlecards/Skyfull.jpg',
+    desc: "When a mission goes catastrophically wrong and a hard drive containing the identities of every undercover agent falls into enemy hands, James Bon Appetit is presumed dead. But you can't keep a good agent down, especially one with an appetite like his. Dragged back into service, he must track down a former MI6 agent turned cyberterrorist with a personal vendetta against M. From the rooftops of Istanbul to the Scottish Highlands, Bond must confront his past, protect his boss, and find time for at least three course meals along the way.",
+    cast: [['Daniel Crave','Daniel Craig'],['Javier Lardem','Javier Bardem'],['Foodi Dench','Judi Dench'],['Ralph Fiends','Ralph Fiennes'],['Hen Whishaw','Ben Whishaw']] },
+  { slug: 'joker-xxl', title: 'Joker XXL', video: 'videos/Joker XXL.mp4', card: 'titlecards/Joker_XXL.jpg',
+    desc: "Arthur Fleck is a struggling clown and part-time comedian living in the crumbling streets of Gotham City. Ignored by society, mocked by his peers, and surviving on a diet of whatever he can find in the back of the fridge, Arthur's grip on reality begins to slip. As the city's inequality grows and the rich feast while the poor go hungry, one bad day pushes him over the edge. What emerges is not just a villain, but a symbol for everyone who's been told they've had enough.",
+    cast: [['Joaquin Feednix','Joaquin Phoenix'],['Blobert De Niro','Robert De Niro'],['Zazie Meats','Zazie Beetz'],['Frances Cornroy','Frances Conroy'],['Bread Cullen','Brett Cullen']] },
+  { slug: 'iron-mass', title: 'Iron Mass', video: 'videos/Iron Mass.mp4', card: 'titlecards/Iron_Mass.jpg',
+    desc: "Billionaire weapons manufacturer Tony Starch has it all: the money, the mansions, and an appetite that matches his ego. When he's captured by terrorists and forced to build a weapon of mass destruction, he instead builds a suit of armour powered by a miniature arc reactor and a dangerously high calorie intake. Now back home with a new perspective on life, Tony must decide whether to continue feeding the war machine or use his genius to protect the world, one oversized repulsor blast at a time.",
+    cast: [['Robert Brownie Jr.','Robert Downey Jr.'],['Gwyneth Fatrow','Gwyneth Paltrow'],['Jeff Fridges','Jeff Bridges'],['Terrence Coward','Terrence Howard'],['Shaun Tubby','Shaun Toub']] },
+  { slug: 'immovable', title: 'Immovable', video: 'videos/Immovable.mp4', card: 'titlecards/Immovable.jpg',
+    desc: "Mark Grayson is a normal teenager with normal problems until his father, the most powerful superhero on the planet, reveals a secret that changes everything. As Mark develops his own powers and takes on the mantle of Immovable, he quickly learns that being a hero is harder than it looks, especially when every punch burns thousands of calories. But when the truth about his father's origins comes to light, Mark must decide where his loyalties lie and how much he's willing to sacrifice. Some heroes are built different. This one is just built bigger.",
+    cast: [['Steven Yeunomnom','Steven Yeun'],['K.G. Simmons','J.K. Simmons'],['Sandra CaseOh','Sandra Oh'],['Zazie Meats','Zazie Beetz'],['Walton Biggins','Walton Goggins']] },
+  { slug: 'drive-thru', title: 'Drive Thru', video: 'videos/Drive Thru.mp4', card: 'titlecards/Drive_Thru.jpg',
+    desc: "A mysterious, nameless stunt driver moonlights as a getaway driver for criminals across Los Angeles. He doesn't talk much, he doesn't eat much, and he always gets the job done. But when he falls for his neighbour and her young son, he's pulled into a heist gone wrong that puts everyone he cares about in danger. Now he must drive his way out of trouble through the neon-lit streets of LA, fuelled by nothing but silence, a toothpick, and an unhealthy obsession with the drive-thru lane.",
+    cast: [['Ryan Gobbling','Ryan Gosling'],['Carey Fulligan','Carey Mulligan'],['Oscar Snack','Oscar Isaac'],['Fryan Cranston','Bryan Cranston'],['Albert Cooks','Albert Brooks']] },
 ];
 
 const BY_SLUG = Object.fromEntries(FILMS.map(f => [f.slug, f]));
@@ -1091,10 +1112,10 @@ const BY_SLUG = Object.fromEntries(FILMS.map(f => [f.slug, f]));
 // Each film appears in exactly one category (16 films / 4 categories = 4 each).
 // `id` is a stable translation key; the displayed title is resolved via t('ui.' + id).
 const BASE_CATEGORIES = [
-  { id: 'biggestHits',  slugs: ['american-chud','fat-club','bulk-fiction','weight-of-wallstreet','whoppenheimer','lord-of-the-onion-rings','the-hungry-games','spider-man-no-weigh-home'] },
-  { id: 'exclusives',   slugs: ['donnie-lardo','baking-bad','chewlander','fatsi-driver','dextra-large','the-eating-dead'] },
-  { id: 'freshlyBaked', slugs: ['heavy-potter','the-fatrix','chiplash','bigger-things','superfat','limitmass'] },
-  { id: 'heavyHits',    slugs: ['interbelly','fat-runner','squid-gain','the-bigs','jurassic-pork','fatman','no-country-for-fat-men'] },
+  { id: 'biggestHits',  slugs: ['american-chud','fat-club','bulk-fiction','weight-of-wallstreet','whoppenheimer','lord-of-the-onion-rings','the-hungry-games','spider-man-no-weigh-home','fat-wars','joker-xxl'] },
+  { id: 'exclusives',   slugs: ['donnie-lardo','baking-bad','chewlander','fatsi-driver','dextra-large','the-eating-dead','euporkia','immovable'] },
+  { id: 'freshlyBaked', slugs: ['heavy-potter','the-fatrix','chiplash','bigger-things','superfat','limitmass','skyfull','drive-thru'] },
+  { id: 'heavyHits',    slugs: ['interbelly','fat-runner','squid-gain','the-bigs','jurassic-pork','fatman','no-country-for-fat-men','iron-mass'] },
 ];
 
 // The "clean" frames for idle mode — a curated pool from public/frames/
@@ -1155,6 +1176,27 @@ const TRANSLATIONS = {
       'the-hungry-games':"In a dystopian future where the rich feast and the poor starve, 24 teenagers are selected each year to compete in The Hungry Games, a televised fight to the death where the last one standing wins a lifetime supply of food for their district. When Katniss Everdeen volunteers to take her sister's place, she enters an arena where survival depends on skill, strategy, and knowing which berries are safe to eat. May the forks be ever in your flavour.",
 
       'spider-man-no-weigh-home':"Peter Porker's life is turned upside down when his identity as Spider-Man is revealed to the entire world. Desperate for a fresh start, he asks Doctor Strange to make everyone forget he's the web-slinging, snack-stealing hero of New York. But the spell goes catastrophically wrong, ripping open the multiverse and pulling in villains and heroes from other dimensions, all of them significantly larger than expected. Now Peter must face threats from every timeline while trying to keep his secret, his city, and his dinner plans intact.",
+
+
+      'fat-wars':"A long time ago in a galaxy far, far away, a young farm boy discovers he is destined for something much bigger than harvesting moisture on Tatooine. When he stumbles upon a message hidden inside a droid, Luke Skyporker is thrust into an intergalactic battle between the Rebel Alliance and the all-consuming Galactic Empire. Armed with a lightsaber and guided by the wise Obi-Wan Kenobi, he must learn the ways of the Fork and confront the fearsome Darth Vader before the Empire devours everything in its path.",
+
+
+      'euporkia':"Euporkia follows a group of high school students navigating the messy world of identity, relationships, and addiction, all while raiding the school canteen at every opportunity. At the centre is Rue, a troubled teenager fresh out of rehab who swears she's not going to relapse, but can't seem to stay away from the vending machines. Between the drama, the heartbreak, and the house parties, one thing is constant: nobody in this town knows when to stop.",
+
+
+      'skyfull':"When a mission goes catastrophically wrong and a hard drive containing the identities of every undercover agent falls into enemy hands, James Bon Appetit is presumed dead. But you can't keep a good agent down, especially one with an appetite like his. Dragged back into service, he must track down a former MI6 agent turned cyberterrorist with a personal vendetta against M. From the rooftops of Istanbul to the Scottish Highlands, Bond must confront his past, protect his boss, and find time for at least three course meals along the way.",
+
+
+      'joker-xxl':"Arthur Fleck is a struggling clown and part-time comedian living in the crumbling streets of Gotham City. Ignored by society, mocked by his peers, and surviving on a diet of whatever he can find in the back of the fridge, Arthur's grip on reality begins to slip. As the city's inequality grows and the rich feast while the poor go hungry, one bad day pushes him over the edge. What emerges is not just a villain, but a symbol for everyone who's been told they've had enough.",
+
+
+      'iron-mass':"Billionaire weapons manufacturer Tony Starch has it all: the money, the mansions, and an appetite that matches his ego. When he's captured by terrorists and forced to build a weapon of mass destruction, he instead builds a suit of armour powered by a miniature arc reactor and a dangerously high calorie intake. Now back home with a new perspective on life, Tony must decide whether to continue feeding the war machine or use his genius to protect the world, one oversized repulsor blast at a time.",
+
+
+      'immovable':"Mark Grayson is a normal teenager with normal problems until his father, the most powerful superhero on the planet, reveals a secret that changes everything. As Mark develops his own powers and takes on the mantle of Immovable, he quickly learns that being a hero is harder than it looks, especially when every punch burns thousands of calories. But when the truth about his father's origins comes to light, Mark must decide where his loyalties lie and how much he's willing to sacrifice. Some heroes are built different. This one is just built bigger.",
+
+
+      'drive-thru':"A mysterious, nameless stunt driver moonlights as a getaway driver for criminals across Los Angeles. He doesn't talk much, he doesn't eat much, and he always gets the job done. But when he falls for his neighbour and her young son, he's pulled into a heist gone wrong that puts everyone he cares about in danger. Now he must drive his way out of trouble through the neon-lit streets of LA, fuelled by nothing but silence, a toothpick, and an unhealthy obsession with the drive-thru lane.",
     },
     news: {
       title:'Fat Films GIFs are here!',
@@ -1208,6 +1250,27 @@ const TRANSLATIONS = {
       'the-hungry-games':"En un futuro distópico donde los ricos banquetean y los pobres pasan hambre, 24 adolescentes son seleccionados cada año para competir en Los Juegos del Hambre, una lucha televisada a muerte donde el último en pie gana un suministro de comida de por vida para su distrito. Cuando Katniss Everdeen se ofrece voluntaria para ocupar el lugar de su hermana, entra en una arena donde la supervivencia depende de la habilidad, la estrategia y saber qué bayas son seguras. Que los tenedores estén siempre de tu sabor.",
 
       'spider-man-no-weigh-home':"La vida de Peter Porker da un vuelco cuando su identidad como Spider-Man se revela ante el mundo entero. Desesperado por empezar de nuevo, le pide al Doctor Strange que haga que todos olviden que es el héroe lanzaredes y roba-aperitivos de Nueva York. Pero el hechizo sale catastróficamente mal, abre el multiverso y arrastra a villanos y héroes de otras dimensiones, todos considerablemente más grandes de lo previsto. Ahora Peter debe enfrentar amenazas de cada línea temporal mientras intenta proteger su secreto, su ciudad y sus planes para la cena.",
+
+
+      'fat-wars':"Hace mucho tiempo, en una galaxia muy, muy lejana, un joven granjero descubre que está destinado a algo mucho más grande que cosechar humedad en Tatooine. Cuando tropieza con un mensaje oculto dentro de un droide, Luke Skyporker se ve arrastrado a una batalla intergaláctica entre la Alianza Rebelde y el devorador Imperio Galáctico. Armado con un sable de luz y guiado por el sabio Obi-Wan Kenobi, debe aprender los caminos del Tenedor y enfrentarse al temible Darth Vader antes de que el Imperio se trague todo a su paso.",
+
+
+      'euporkia':"Euporkia sigue a un grupo de estudiantes de secundaria que navegan por el desordenado mundo de la identidad, las relaciones y la adicción, mientras asaltan la cantina del colegio cada vez que pueden. En el centro está Rue, una adolescente conflictiva recién salida de rehabilitación que jura que no va a recaer, pero no consigue mantenerse lejos de las máquinas expendedoras. Entre el drama, los desamores y las fiestas, una cosa es constante: nadie en este pueblo sabe cuándo parar.",
+
+
+      'skyfull':"Cuando una misión sale catastróficamente mal y un disco duro con la identidad de cada agente encubierto cae en manos enemigas, James Bon Appetit se da por muerto. Pero no se puede mantener abajo a un buen agente, sobre todo a uno con un apetito como el suyo. Devuelto al servicio, debe dar caza a un antiguo agente del MI6 reconvertido en ciberterrorista con una venganza personal contra M. Desde los tejados de Estambul a las Highlands escocesas, Bond debe enfrentarse a su pasado, proteger a su jefa y encontrar tiempo para al menos tres menús degustación por el camino.",
+
+
+      'joker-xxl':"Arthur Fleck es un payaso en apuros y cómico a tiempo parcial que vive en las calles ruinosas de Gotham. Ignorado por la sociedad, ridiculizado por sus iguales y sobreviviendo a base de lo que encuentra en el fondo de la nevera, Arthur empieza a perder el contacto con la realidad. A medida que crece la desigualdad y los ricos banquetean mientras los pobres pasan hambre, un mal día lo empuja al límite. Lo que emerge no es solo un villano, sino un símbolo para todos a los que han dicho que ya han tenido suficiente.",
+
+
+      'iron-mass':"El multimillonario fabricante de armas Tony Starch lo tiene todo: el dinero, las mansiones y un apetito a la altura de su ego. Cuando es capturado por terroristas y obligado a construir un arma de destrucción masiva, en su lugar construye una armadura impulsada por un reactor arc en miniatura y una ingesta calórica peligrosamente alta. De vuelta a casa con una nueva perspectiva de la vida, Tony debe decidir si seguir alimentando a la máquina de guerra o usar su genio para proteger al mundo, un disparo repulsor descomunal a la vez.",
+
+
+      'immovable':"Mark Grayson es un adolescente normal con problemas normales hasta que su padre, el superhéroe más poderoso del planeta, revela un secreto que lo cambia todo. A medida que Mark desarrolla sus poderes y asume el manto de Immovable, descubre rápidamente que ser héroe es más difícil de lo que parece, sobre todo cuando cada puñetazo quema miles de calorías. Pero cuando sale a la luz la verdad sobre los orígenes de su padre, Mark debe decidir de qué lado está y cuánto está dispuesto a sacrificar. Algunos héroes están hechos de otra pasta. Este simplemente está hecho más grande.",
+
+
+      'drive-thru':"Un misterioso especialista de cine sin nombre se gana un extra como conductor de huida para criminales por todo Los Ángeles. Habla poco, come poco y siempre cumple el trabajo. Pero cuando se enamora de su vecina y su hijo pequeño, se ve arrastrado a un atraco que sale mal y pone en peligro a todos los que le importan. Ahora debe conducir para salir del lío por las calles iluminadas de neón de LA, alimentado solo por el silencio, un palillo y una obsesión poco sana por el carril del autoservicio.",
     },
     news: {
       title:'¡Los GIFs de Fat Films ya están aquí!',
@@ -1261,6 +1324,27 @@ const TRANSLATIONS = {
       'the-hungry-games':"Dans un futur dystopique où les riches festoient et les pauvres meurent de faim, 24 ados sont sélectionnés chaque année pour s’affronter dans Les Jeux de la Faim, un combat à mort télévisé où le dernier debout remporte des vivres à vie pour son district. Quand Katniss Everdeen se porte volontaire à la place de sa sœur, elle entre dans une arène où la survie dépend de la compétence, de la stratégie et de savoir quelles baies sont comestibles. Que les fourchettes soient toujours en votre saveur.",
 
       'spider-man-no-weigh-home':"La vie de Peter Porker bascule lorsque son identité de Spider-Man est révélée au monde entier. Désespéré de prendre un nouveau départ, il demande au Docteur Strange de faire oublier à tous qu'il est le héros lanceur de toiles et voleur de snacks de New York. Mais le sort tourne catastrophiquement mal, déchirant le multivers et attirant des méchants et des héros d'autres dimensions, tous nettement plus gros que prévu. Maintenant Peter doit affronter les menaces de toutes les chronologies tout en essayant de préserver son secret, sa ville et ses projets de dîner.",
+
+
+      'fat-wars':"Il y a longtemps, dans une galaxie lointaine, très lointaine, un jeune fermier découvre qu'il est destiné à bien plus grand que la récolte d'humidité sur Tatooine. Lorsqu'il tombe sur un message caché dans un droïde, Luke Skyporker est propulsé dans une bataille intergalactique entre l'Alliance Rebelle et le très vorace Empire Galactique. Armé d'un sabre laser et guidé par le sage Obi-Wan Kenobi, il doit apprendre les voies de la Fourchette et affronter le terrifiant Darth Vader avant que l'Empire ne dévore tout sur son passage.",
+
+
+      'euporkia':"Euporkia suit un groupe de lycéens qui naviguent dans le monde chaotique de l'identité, des relations et de l'addiction, tout en pillant la cantine du lycée à la moindre occasion. Au centre se trouve Rue, une adolescente perturbée tout juste sortie de cure de désintoxication, qui jure qu'elle ne rechutera pas mais n'arrive pas à s'éloigner des distributeurs. Entre le drame, les chagrins et les soirées, une chose est constante : personne dans cette ville ne sait s'arrêter.",
+
+
+      'skyfull':"Lorsqu'une mission tourne au désastre et qu'un disque dur contenant l'identité de tous les agents infiltrés tombe entre des mains ennemies, James Bon Appetit est présumé mort. Mais on ne garde pas un bon agent à terre, surtout pas un avec un appétit pareil. Rappelé en service, il doit traquer un ancien agent du MI6 devenu cyberterroriste, animé par une vendetta personnelle contre M. Des toits d'Istanbul aux Highlands écossais, Bond doit affronter son passé, protéger sa patronne, et trouver le temps pour au moins trois repas complets en chemin.",
+
+
+      'joker-xxl':"Arthur Fleck est un clown en galère et comédien à temps partiel qui vit dans les rues délabrées de Gotham City. Ignoré par la société, moqué par ses pairs et survivant grâce à ce qu'il trouve au fond du frigo, Arthur sent peu à peu la réalité lui échapper. À mesure que les inégalités explosent et que les riches festoient pendant que les pauvres ont faim, une mauvaise journée le fait basculer. Ce qui en émerge n'est pas seulement un méchant, mais un symbole pour tous ceux à qui on a dit qu'ils en avaient eu assez.",
+
+
+      'iron-mass':"Tony Starch, milliardaire fabricant d'armes, a tout : l'argent, les manoirs, et un appétit à la hauteur de son ego. Lorsqu'il est capturé par des terroristes et forcé de construire une arme de destruction massive, il construit à la place une armure alimentée par un mini réacteur arc et un apport calorique dangereusement élevé. De retour chez lui avec une nouvelle vision de la vie, Tony doit décider s'il continue à nourrir la machine de guerre ou s'il utilise son génie pour protéger le monde, une décharge de répulseur surdimensionnée à la fois.",
+
+
+      'immovable':"Mark Grayson est un adolescent normal avec des problèmes normaux, jusqu'à ce que son père, le super-héros le plus puissant de la planète, lui révèle un secret qui change tout. À mesure que Mark développe ses pouvoirs et reprend le costume d'Immovable, il apprend vite qu'être un héros est plus dur qu'il n'y paraît, surtout quand chaque coup brûle des milliers de calories. Mais quand la vérité sur les origines de son père éclate, Mark doit décider de quel côté il se range et jusqu'où il est prêt à sacrifier. Certains héros sont faits différemment. Celui-ci est juste fait en plus grand.",
+
+
+      'drive-thru':"Un mystérieux cascadeur sans nom complète ses fins de mois en faisant le chauffeur de fuite pour des criminels à travers Los Angeles. Il parle peu, il mange peu, et il fait toujours le boulot. Mais quand il tombe amoureux de sa voisine et de son jeune fils, il se retrouve embarqué dans un braquage qui tourne mal et met en danger tous ceux qui comptent pour lui. Il doit maintenant se sortir des ennuis au volant dans les rues néon de LA, alimenté par rien d'autre que du silence, un cure-dent, et une obsession malsaine pour la file du drive.",
     },
     news: {
       title:'Les GIFs Fat Films sont là !',
@@ -1314,6 +1398,27 @@ const TRANSLATIONS = {
       'the-hungry-games':"In un futuro distopico dove i ricchi banchettano e i poveri patiscono la fame, 24 adolescenti vengono selezionati ogni anno per competere a Hungry Games, una lotta all'ultimo sangue trasmessa in TV in cui l'ultimo rimasto vince una scorta di cibo a vita per il suo distretto. Quando Katniss Everdeen si offre volontaria al posto della sorella, entra in un'arena dove la sopravvivenza dipende da abilità, strategia e saper riconoscere quali bacche sono sicure da mangiare. Possano le forchette essere sempre nel vostro sapore.",
 
       'spider-man-no-weigh-home':"La vita di Peter Porker viene stravolta quando la sua identità di Spider-Man è rivelata al mondo intero. Disperato di ricominciare da capo, chiede a Doctor Strange di far dimenticare a tutti che è l'eroe sparatele e ruba-spuntini di New York. Ma l'incantesimo va catastroficamente storto, squarciando il multiverso e attirando cattivi ed eroi da altre dimensioni, tutti notevolmente più grandi del previsto. Ora Peter deve affrontare le minacce di ogni linea temporale cercando di proteggere il suo segreto, la sua città e i suoi piani per la cena.",
+
+
+      'fat-wars':"Tanto tempo fa, in una galassia lontana, lontana, un giovane contadino scopre di essere destinato a qualcosa di molto più grande della raccolta dell'umidità su Tatooine. Quando si imbatte in un messaggio nascosto dentro un droide, Luke Skyporker viene catapultato in una battaglia intergalattica tra l'Alleanza Ribelle e il vorace Impero Galattico. Armato di una spada laser e guidato dal saggio Obi-Wan Kenobi, deve imparare le vie della Forchetta e affrontare il temibile Darth Vader prima che l'Impero divori tutto sul suo cammino.",
+
+
+      'euporkia':"Euporkia segue un gruppo di liceali che si destreggiano nel mondo caotico dell'identità, delle relazioni e della dipendenza, mentre saccheggiano la mensa scolastica a ogni occasione. Al centro c'è Rue, un'adolescente tormentata appena uscita dalla riabilitazione che giura di non ricadere, ma non riesce a tenersi lontana dai distributori automatici. Tra dramma, crepacuore e feste, una cosa è costante: nessuno in questa città sa quando fermarsi.",
+
+
+      'skyfull':"Quando una missione fallisce in modo catastrofico e un hard disk contenente l'identità di ogni agente sotto copertura finisce in mano nemica, James Bon Appetit è dato per morto. Ma un buon agente non si tiene a terra, soprattutto se ha un appetito come il suo. Richiamato in servizio, deve rintracciare un ex agente dell'MI6 diventato cyberterrorista con una vendetta personale contro M. Dai tetti di Istanbul alle Highlands scozzesi, Bond deve affrontare il proprio passato, proteggere la sua capa e trovare il tempo per almeno tre menù degustazione lungo la strada.",
+
+
+      'joker-xxl':"Arthur Fleck è un clown sfortunato e comico part-time che vive nelle strade in rovina di Gotham City. Ignorato dalla società, deriso dai colleghi e sopravvissuto a una dieta di qualsiasi cosa trovi in fondo al frigo, la presa di Arthur sulla realtà comincia a vacillare. Mentre le disuguaglianze della città crescono e i ricchi banchettano mentre i poveri patiscono la fame, una brutta giornata lo spinge oltre il limite. Ciò che emerge non è solo un cattivo, ma un simbolo per chiunque sia stato sentenziato di averne abbastanza.",
+
+
+      'iron-mass':"Il miliardario fabbricante di armi Tony Starch ha tutto: i soldi, le ville e un appetito alla pari del suo ego. Quando viene catturato dai terroristi e costretto a costruire un'arma di distruzione di massa, costruisce invece un'armatura alimentata da un mini reattore ad arco e da un'assunzione calorica pericolosamente alta. Tornato a casa con una nuova visione della vita, Tony deve decidere se continuare a nutrire la macchina da guerra o usare il suo genio per proteggere il mondo, una sparata repulsoria sovradimensionata alla volta.",
+
+
+      'immovable':"Mark Grayson è un adolescente normale con problemi normali, finché suo padre — il supereroe più potente del pianeta — gli rivela un segreto che cambia tutto. Mentre Mark sviluppa i suoi poteri e indossa il mantello di Immovable, scopre presto che fare l'eroe è più dura di quanto sembri, soprattutto quando ogni pugno brucia migliaia di calorie. Ma quando viene a galla la verità sulle origini di suo padre, Mark deve decidere da che parte stare e quanto è disposto a sacrificare. Alcuni eroi sono fatti diversi. Questo è solo fatto più grande.",
+
+
+      'drive-thru':"Un misterioso stuntman senza nome arrotonda facendo da autista per le fughe dei criminali di Los Angeles. Parla poco, mangia poco e porta sempre a casa il lavoro. Ma quando si innamora della sua vicina e del suo bambino, finisce coinvolto in un colpo finito male che mette in pericolo tutti quelli a cui tiene. Ora deve farsi strada al volante per le strade al neon di LA, alimentato solo dal silenzio, da uno stuzzicadenti e da un'ossessione poco sana per la corsia del drive-thru.",
     },
     news: {
       title:'Le GIF di Fat Films sono arrivate!',
@@ -1367,6 +1472,27 @@ const TRANSLATIONS = {
       'the-hungry-games':"In einer dystopischen Zukunft, in der die Reichen schlemmen und die Armen hungern, werden jedes Jahr 24 Teenager ausgewählt, um in den Hungry Games gegeneinander anzutreten — einem im Fernsehen übertragenen Kampf auf Leben und Tod, bei dem der oder die Letzte einen lebenslangen Vorrat an Lebensmitteln für seinen Distrikt gewinnt. Als Katniss Everdeen sich freiwillig für ihre Schwester meldet, betritt sie eine Arena, in der das Überleben von Geschick, Strategie und dem Wissen, welche Beeren essbar sind, abhängt. Mögen die Gabeln stets in eurem Geschmack sein.",
 
       'spider-man-no-weigh-home':"Peter Porkers Leben steht Kopf, als seine Identität als Spider-Man der ganzen Welt offenbart wird. Verzweifelt nach einem Neuanfang bittet er Doctor Strange, alle vergessen zu lassen, dass er der netzschwingende, snackklauende Held New Yorks ist. Doch der Zauber geht katastrophal schief, reißt das Multiversum auf und zieht Schurken und Helden aus anderen Dimensionen herein — alle deutlich größer als erwartet. Nun muss Peter Bedrohungen aus jeder Zeitlinie begegnen und dabei sein Geheimnis, seine Stadt und seine Essenspläne wahren.",
+
+
+      'fat-wars':"Vor langer Zeit, in einer weit, weit entfernten Galaxis, entdeckt ein junger Farmerjunge, dass er für etwas Größeres bestimmt ist als das Sammeln von Feuchtigkeit auf Tatooine. Als er eine in einem Droiden versteckte Botschaft findet, wird Luke Skyporker in einen intergalaktischen Krieg zwischen der Rebellenallianz und dem alles verschlingenden Galaktischen Imperium gerissen. Mit einem Lichtschwert bewaffnet und vom weisen Obi-Wan Kenobi geführt, muss er die Wege der Gabel erlernen und sich Darth Vader stellen, bevor das Imperium alles verschlingt.",
+
+
+      'euporkia':"Euporkia begleitet eine Gruppe Highschool-Schüler durch das chaotische Geflecht von Identität, Beziehungen und Sucht — und durch die Schulkantine bei jeder Gelegenheit. Im Mittelpunkt steht Rue, eine zerrissene Teenagerin frisch aus dem Entzug, die schwört, nicht rückfällig zu werden, es aber nicht schafft, von den Snackautomaten wegzubleiben. Zwischen Drama, Liebeskummer und Hauspartys ist eines konstant: In dieser Stadt weiß niemand, wann genug ist.",
+
+
+      'skyfull':"Als ein Einsatz katastrophal schiefgeht und eine Festplatte mit den Identitäten sämtlicher verdeckter Agenten in feindliche Hände fällt, gilt James Bon Appetit als tot. Aber einen guten Agenten kriegt man nicht klein — schon gar nicht einen mit so einem Appetit. Wieder in den Dienst gezerrt, muss er einen früheren MI6-Agenten jagen, der zum Cyber-Terroristen wurde und einen persönlichen Rachefeldzug gegen M führt. Von den Dächern Istanbuls bis in die schottischen Highlands muss Bond sich seiner Vergangenheit stellen, seine Chefin schützen — und zwischendurch Zeit für mindestens drei Drei-Gänge-Menüs finden.",
+
+
+      'joker-xxl':"Arthur Fleck ist ein glücksloser Clown und Teilzeitkomiker, der in den zerfallenden Straßen von Gotham City lebt. Von der Gesellschaft ignoriert, von seinen Kollegen verspottet und ernährt von dem, was er hinten im Kühlschrank findet, beginnt Arthurs Griff auf die Realität zu wanken. Während die Ungleichheit in der Stadt wächst und die Reichen schlemmen, während die Armen hungern, kippt ihn ein einziger schlechter Tag über die Kante. Was zum Vorschein kommt, ist nicht nur ein Schurke, sondern ein Symbol für alle, denen man gesagt hat, sie hätten schon genug gehabt.",
+
+
+      'iron-mass':"Der Milliardär und Waffenfabrikant Tony Starch hat alles: das Geld, die Villen und einen Appetit, der seinem Ego in nichts nachsteht. Als ihn Terroristen entführen und zwingen, eine Massenvernichtungswaffe zu bauen, baut er stattdessen eine Rüstung, die von einem Mini-Arc-Reaktor und einer gefährlich hohen Kalorienzufuhr angetrieben wird. Zu Hause angekommen, mit neuer Sicht auf das Leben, muss Tony entscheiden, ob er die Kriegsmaschinerie weiter füttert oder sein Genie nutzt, um die Welt zu schützen — ein überdimensionaler Repulsor-Schuss nach dem anderen.",
+
+
+      'immovable':"Mark Grayson ist ein normaler Teenager mit normalen Problemen — bis sein Vater, der mächtigste Superheld des Planeten, ein Geheimnis preisgibt, das alles verändert. Während Mark seine eigenen Kräfte entwickelt und die Rolle von Immovable übernimmt, lernt er schnell, dass Held sein schwerer ist, als es aussieht — vor allem, wenn jeder Schlag tausende Kalorien verbrennt. Als die Wahrheit über die Herkunft seines Vaters ans Licht kommt, muss Mark entscheiden, wo seine Loyalität liegt und wie viel er bereit ist zu opfern. Manche Helden sind anders gebaut. Dieser ist einfach größer gebaut.",
+
+
+      'drive-thru':"Ein geheimnisvoller, namenloser Stuntfahrer verdient sich nebenbei als Fluchtfahrer für die Kriminellen von Los Angeles etwas dazu. Er redet wenig, isst wenig und liefert immer ab. Als er sich aber in seine Nachbarin und ihren kleinen Sohn verliebt, gerät er in einen schiefgelaufenen Coup, der alle in Gefahr bringt, die ihm wichtig sind. Jetzt muss er sich durch die neonbeleuchteten Straßen von LA freifahren — angetrieben nur von Schweigen, einem Zahnstocher und einer ungesunden Obsession für die Drive-Thru-Spur.",
     },
     news: {
       title:'Fat Films GIFs sind da!',
@@ -1420,6 +1546,27 @@ const TRANSLATIONS = {
       'the-hungry-games':"在一个富人盛宴穷人挨饿的反乌托邦未来,每年都有 24 名青少年被选中参加饥饿游戏 — 一场电视直播的死亡战斗,最后幸存者将为自己的辖区赢得一辈子的食物供应。当 Katniss Everdeen 自愿替妹妹上场时,她进入的赛场里,生存取决于技巧、策略,以及知道哪些浆果可以安全吃下。愿叉子永远合你口味。",
 
       'spider-man-no-weigh-home':"当 Peter Porker 作为 Spider-Man 的身份被公开,他的生活彻底翻天覆地。为了重新开始,他请求 Doctor Strange 让所有人忘记他就是那位会甩蛛丝、爱偷零食的纽约英雄。但咒语出了大乱子,撕开了多元宇宙,把来自其他维度的反派和英雄都拉了进来 — 每一个都比预期庞大得多。如今 Peter 必须面对来自每条时间线的威胁,同时努力守住他的秘密、他的城市,以及他的晚餐计划。",
+
+
+      'fat-wars':"很久很久以前,在一个遥远的星系,一个年轻的农场男孩发现自己注定要做比在塔图因收集水分更宏大的事。当他无意中发现藏在机器人里的一条信息时,Luke Skyporker 被卷入了反抗军同盟与饕餮般的银河帝国之间的星际之战。手持光剑、在睿智的 Obi-Wan Kenobi 指引下,他必须修习叉子之道,在帝国吞噬一切之前直面可怕的 Darth Vader。",
+
+
+      'euporkia':"《Euporkia》讲述一群高中生在身份、恋情与成瘾的混乱世界里挣扎,同时一有机会就把学校食堂洗劫一空。故事的中心是 Rue,一个刚从戒疗所出来的问题少女,发誓不会复发,却怎么也戒不掉自动售货机。在狗血、心碎和派对之间,唯一不变的是:这小镇上没有人懂得适可而止。",
+
+
+      'skyfull':"当一次任务彻底搞砸,一块装有所有卧底身份的硬盘落入敌手时,James Bon Appetit 被宣告死亡。但好特工总打不倒 — 何况是他这种胃口。重新被拉回岗位,他必须追查一个变成网络恐怖分子的前 MI6 特工,此人对 M 怀有私仇。从伊斯坦布尔的屋顶到苏格兰高地,Bond 必须直面过往、保护上司,并在沿途至少抽空吃上三顿大餐。",
+
+
+      'joker-xxl':"Arthur Fleck 是一名挣扎度日的小丑、兼职喜剧演员,住在 Gotham 市破败的街道上。被社会忽视、被同行嘲弄,靠着从冰箱深处找到的东西活下去 — 他对现实的把握开始松动。当这座城市的贫富差距越来越大、富人尽情享乐而穷人忍饥挨饿时,一个糟糕的日子把他推到了边缘。涌现出来的不只是一个反派,而是给所有被告知「该够了」的人的一种象征。",
+
+
+      'iron-mass':"亿万富翁军火制造商 Tony Starch 应有尽有:金钱、豪宅,以及与自负相称的食量。被恐怖分子俘虏并被迫制造大杀器时,他反倒造出了一套由微型电弧反应堆和危险高热量摄入驱动的盔甲。重返家园、对人生有了新看法的 Tony 必须决定:是继续喂养战争机器,还是用他的天才守护这个世界 — 一次又一次发射超大号反冲炮。",
+
+
+      'immovable':"Mark Grayson 本是一个有着普通烦恼的普通少年,直到他的父亲 — 地球上最强大的超级英雄 — 揭开了一个改变一切的秘密。当 Mark 开始觉醒自己的能力、披上 Immovable 的披风时,他很快发现做英雄比看起来难得多,尤其是当每一拳都要燃烧上千卡路里时。但当父亲身世的真相浮出水面,Mark 必须决定自己站在哪一边、愿意付出多少。有些英雄天生与众不同。这一个只是天生更大号。",
+
+
+      'drive-thru':"一名神秘、没有名字的特技司机,业余时间在洛杉矶为罪犯做逃跑司机。他话不多,吃得也不多,但每次都能漂亮收工。可当他爱上了邻居和她的小儿子时,被卷进了一场失败的劫案,把他在乎的每个人都置于险境。如今他必须开车冲出霓虹闪烁的洛杉矶街头 — 燃料只是沉默、一根牙签,以及对得来速车道近乎不健康的痴迷。",
     },
     news: {
       title:'Fat Films GIF 上线了!',
@@ -1473,6 +1620,27 @@ const TRANSLATIONS = {
       'the-hungry-games':"金持ちが宴を張り、貧者が飢えるディストピアな未来。毎年 24 人の若者が選ばれて、ハングリー・ゲームに挑む — 最後に立っていた者が地区のために一生分の食料を獲得する、テレビ中継される死闘だ。カットニス・エヴァディーンが妹の代わりに名乗り出ると、彼女は技術と戦略、そしてどの実が食べても安全かを知っていることが生死を分けるアリーナへと足を踏み入れる。フォークがあなたの味方でありますように。",
 
       'spider-man-no-weigh-home':"Peter Porker の人生は、彼が Spider-Man であることが世界中にバレてひっくり返る。やり直したいと願う彼は Doctor Strange に、自分が網を放ちおやつをくすねるニューヨークのヒーローだということをみんなに忘れさせてくれと頼む。だが呪文は壊滅的に失敗し、多元宇宙を引き裂き、他の次元から悪役もヒーローも引き寄せてしまう — 全員、想像以上に巨体だ。今や Peter はあらゆるタイムラインの脅威に立ち向かいながら、自分の秘密、街、そして夕食の予定を守らねばならない。",
+
+
+      'fat-wars':"むかしむかし、遠い遠い銀河系で、若き農場の少年は、タトゥイーンで湿気を集めるよりずっと大きな運命が自分にあると知る。ドロイドの中に隠されたメッセージに行き当たった Luke Skyporker は、反乱同盟軍と何もかも喰らい尽くす銀河帝国の星間戦争に巻き込まれる。ライトセーバーを手に、賢者 Obi-Wan Kenobi の導きを受け、彼はフォークの道を学び、帝国がすべてを呑み込む前に恐るべき Darth Vader と対峙せねばならない。",
+
+
+      'euporkia':"『Euporkia』は、アイデンティティ、人間関係、依存というぐちゃぐちゃの世界を渡り歩きながら、ことあるごとに学食を襲撃する高校生たちを描く。中心にいるのはリハビリから戻ったばかりの問題児 Rue。再発はしないと誓うのに、自販機からは離れられない。ドラマ、失恋、ハウスパーティの合間に、唯一変わらないことがある。この街では、誰も「やめどき」を知らない。",
+
+
+      'skyfull':"任務が壊滅的に失敗し、潜入工作員すべての身元が入ったハードドライブが敵の手に渡ったとき、James Bon Appetit は死亡したとされる。しかし優秀な工作員は倒れない ── 彼ほどの胃袋を持つ男ならなおさら。現場に呼び戻された彼は、M に個人的な恨みを抱く元 MI6 工作員のサイバーテロリストを追わねばならない。イスタンブールの屋根の上からスコットランド高地まで、Bond は過去と向き合い、上司を守り、道中で少なくとも三度のフルコースを取る時間も確保しなければならない。",
+
+
+      'joker-xxl':"Arthur Fleck は、崩れかけたゴッサム・シティの街角で生きる、うだつの上がらないピエロで兼業コメディアンだ。社会に無視され、同業者にあざ笑われ、冷蔵庫の奥に残ったもので食いつなぐうち、彼の現実感覚は崩れ始める。街の格差がふくらみ、富める者は宴をひらき貧しい者は飢える ── その中で「最悪の一日」が彼を縁の向こうに突き落とす。そこに現れるのは単なるヴィランではなく、「もうたくさんだ」と告げられたすべての者にとっての象徴だ。",
+
+
+      'iron-mass':"兵器メーカーの億万長者 Tony Starch は何でも持っている。金、豪邸、そしてエゴと釣り合うほどの食欲。テロリストに捕らえられ大量破壊兵器を作るよう強要されると、彼は代わりにミニチュア・アークリアクターと危険なほど高カロリーな摂取量で動くアーマースーツを作り上げる。新たな視点を手に帰国した Tony は、戦争マシンに餌をやり続けるか、その天才を世界の守護に振り向けるか ── 巨大化したリパルサー光線を一発ずつ撃ちながら、決断を迫られる。",
+
+
+      'immovable':"Mark Grayson はごく普通の悩みを抱えるごく普通のティーンエイジャーだった ── 父親、つまり地球で最強のスーパーヒーローが、すべてを変える秘密を打ち明けるまでは。自らの力に目覚め、Immovable のマントを継いだ Mark は、ヒーローとは見た目以上に大変だとすぐに思い知る。とくに一発の拳で数千キロカロリーを消費する場合は。だが父の出自の真実が明らかになると、Mark はどちらの側に立ち、何をどこまで犠牲にする覚悟があるのかを決めねばならない。ヒーローの作りは人それぞれ。こいつはただ、サイズが一回り大きいだけだ。",
+
+
+      'drive-thru':"名もなき謎のスタントドライバーは、副業としてロサンゼルス中の犯罪者たちのために逃走車を走らせている。あまり喋らないし、あまり食べない。それでも仕事はいつも完璧にこなす。だが隣人の女性と幼い息子に惹かれた瞬間、彼は失敗した強盗事件に巻き込まれ、大切な相手たちを危険にさらしてしまう。ネオンに濡れた LA の街を、彼は走りで切り抜けねばならない ── 燃料は沈黙と一本のつまようじ、そしてドライブスルー・レーンへの不健康な執着だけだ。",
     },
     news: {
       title:'Fat Films の GIF が登場!',
@@ -1526,6 +1694,27 @@ const TRANSLATIONS = {
       'the-hungry-games':"부자들은 잔치를 벌이고 가난한 자들은 굶주리는 디스토피아의 미래, 매년 24명의 십대가 헝그리 게임에 출전하도록 선발됩니다. TV로 생중계되는 사투에서 마지막까지 살아남은 사람은 자기 구역에 평생 먹을 식량을 가져갑니다. 카니스 에버딘이 동생을 대신해 자원하면서, 그녀는 기술, 전략, 그리고 어떤 열매를 먹어도 되는지를 아는 것이 생사를 가르는 경기장에 들어섭니다. 포크가 언제나 당신의 맛 편에 함께하기를.",
 
       'spider-man-no-weigh-home':"Peter Porker의 인생은 자신이 Spider-Man이라는 사실이 전 세계에 드러나면서 뒤집힙니다. 새 출발이 절실해진 그는 Doctor Strange에게 모두가 자신이 거미줄을 쏘고 간식을 슬쩍하는 뉴욕의 영웅이라는 사실을 잊게 해달라고 부탁합니다. 하지만 주문이 처참하게 어긋나 다중우주가 열리고, 다른 차원의 악당과 영웅들이 끌려옵니다 — 모두 예상보다 훨씬 큽니다. 이제 Peter는 모든 타임라인의 위협에 맞서면서 자신의 비밀과 도시, 그리고 저녁 식사 계획까지 지켜야 합니다.",
+
+
+      'fat-wars':"오래전, 머나먼 은하계에서, 한 젊은 농부 소년은 타투인에서 수분을 채취하는 것보다 훨씬 큰 운명이 자신에게 있음을 깨닫습니다. 드로이드 속에 숨겨진 메시지를 우연히 발견한 Luke Skyporker는 반란 연합과 모든 것을 집어삼키는 은하 제국 사이의 은하 전쟁에 휘말립니다. 광선검을 들고 현명한 Obi-Wan Kenobi의 인도를 받으며, 그는 포크의 도(道)를 익히고 제국이 모든 것을 삼키기 전에 무시무시한 Darth Vader와 맞서야 합니다.",
+
+
+      'euporkia':"《Euporkia》는 정체성과 관계, 중독이라는 엉망진창의 세계를 헤쳐나가면서도 기회만 있으면 학교 매점을 털어대는 고등학생들을 그립니다. 그 중심에는 갓 재활시설에서 나온 문제아 Rue가 있습니다. 다시 빠지지 않겠다고 다짐하지만, 자판기 앞에서는 도무지 멈출 수가 없죠. 드라마와 가슴앓이, 파티 사이에서 변하지 않는 사실 하나 — 이 마을의 누구도 멈출 줄을 모릅니다.",
+
+
+      'skyfull':"임무가 처참하게 어긋나고 모든 잠입 요원의 신원이 담긴 하드 드라이브가 적의 손에 넘어가자, James Bon Appetit는 사망한 것으로 추정됩니다. 하지만 유능한 요원은 그렇게 무너지지 않습니다 — 그만한 식욕을 가진 사람이라면 더더욱이요. 현역으로 복귀한 그는 M에 대한 개인적 원한을 품은 채 사이버 테러리스트로 변신한 전직 MI6 요원을 추적해야 합니다. 이스탄불의 지붕 위에서 스코틀랜드 하이랜드까지, Bond는 과거와 마주하고 상사를 지키며, 가는 길에 최소 세 코스 식사를 챙길 시간도 마련해야 합니다.",
+
+
+      'joker-xxl':"Arthur Fleck는 무너져가는 Gotham 시 거리에서 살아가는, 고군분투하는 광대이자 시간제 코미디언입니다. 사회에 무시당하고 동료들에게 조롱당하며, 냉장고 안쪽에서 찾아낸 것으로 끼니를 때우던 그는 점차 현실 감각을 잃어갑니다. 도시의 불평등이 커지고 부자들은 잔치를 벌이는 동안 가난한 이들은 굶주리는 가운데, 한 번의 끔찍한 하루가 그를 벼랑 끝으로 밀어냅니다. 그렇게 모습을 드러내는 것은 단순한 악당이 아니라, '이제 그만하면 됐다'는 말을 들어온 모든 이들을 위한 상징입니다.",
+
+
+      'iron-mass':"억만장자 무기 제조업자 Tony Starch는 모든 것을 가졌습니다 — 돈, 저택, 그리고 자존심에 걸맞은 식욕까지. 테러리스트들에게 붙잡혀 대량 살상 무기를 만들도록 강요받자, 그는 대신 소형 아크 원자로와 위험할 만큼 높은 칼로리 섭취로 작동하는 슈트 한 벌을 만들어냅니다. 인생을 새로운 시선으로 바라보며 집에 돌아온 Tony는 전쟁 기계를 계속 먹일 것인지, 그 천재성을 세계를 지키는 데 쓸 것인지 — 거대해진 리펄서 빔을 한 발 한 발 발사하며 — 결정해야 합니다.",
+
+
+      'immovable':"Mark Grayson은 평범한 고민을 안고 사는 평범한 십대였습니다 — 지구 최강의 슈퍼히어로인 아버지가 모든 것을 바꿔놓는 비밀을 털어놓기 전까지는요. Mark가 자신의 능력을 깨우고 Immovable의 망토를 이어받으면서, 그는 영웅이 된다는 게 보기보다 훨씬 힘들다는 사실을 곧 깨닫습니다 — 주먹 한 방마다 수천 칼로리가 타들어가는 경우라면 더더욱이요. 하지만 아버지의 출신에 관한 진실이 밝혀지자, Mark는 자신이 어느 편에 설 것인지, 무엇을 얼마나 희생할 수 있을지 결정해야 합니다. 어떤 영웅들은 만듦새가 다릅니다. 이 친구는 그저 만듦새가 한 사이즈 클 뿐입니다.",
+
+
+      'drive-thru':"이름도 없는 신비로운 스턴트 드라이버는 로스앤젤레스를 무대로 범죄자들의 도주 운전을 부업으로 합니다. 말수도 적고, 먹는 양도 적지만, 일은 언제나 깔끔하게 끝내죠. 하지만 이웃 여자와 그녀의 어린 아들에게 마음을 빼앗기는 순간, 그는 어긋난 강도 사건에 휘말려 자신이 아끼는 모든 사람을 위험에 빠뜨리고 맙니다. 이제 그는 네온이 번지는 LA 거리를 운전해 빠져나가야 합니다 — 연료는 침묵, 이쑤시개 하나, 그리고 드라이브 스루 차선에 대한 그다지 건강하지 못한 집착뿐.",
     },
     news: {
       title:'Fat Films GIF가 등장했습니다!',
@@ -1579,6 +1768,27 @@ const TRANSLATIONS = {
       'the-hungry-games':"في مستقبل ديستوبي يأكل فيه الأغنياء بالولائم ويتضوّر الفقراء جوعاً، يُختار 24 مراهقاً كل عام للتنافس في The Hungry Games — معركة حتى الموت تُبثّ على التلفاز، يفوز فيها آخر شخص يبقى واقفاً بإمدادات طعام مدى الحياة لمقاطعته. عندما تتطوّع Katniss Everdeen مكان أختها، تدخل ساحة يعتمد فيها البقاء على المهارة والاستراتيجية ومعرفة أيّ التوت آمن للأكل. عسى أن تكون الشوكات دوماً في صفّ مذاقك.",
 
       'spider-man-no-weigh-home':"تنقلب حياة Peter Porker رأساً على عقب حين تُكشَف هويته بوصفه Spider-Man أمام العالم بأسره. وفي محاولة يائسة لبداية جديدة، يطلب من Doctor Strange أن يُنسي الجميع أنه البطل المتأرجح على شِباكه وسارقُ الوجبات الخفيفة في نيويورك. لكن التعويذة تنفلت بكارثة فتشقّ الكون المتعدّد، وتجذب الأشرار والأبطال من أبعاد أخرى، وكلهم أضخم بكثير مما كان متوقعاً. والآن على Peter مواجهة تهديدات من كل خط زمني، محاولاً الحفاظ على سرّه ومدينته وخطط عشائه.",
+
+
+      'fat-wars':"قبل زمن بعيد، في مجرة بعيدة جداً، يكتشف فتى مزارع شاب أن قدره أكبر من مجرد جمع الرطوبة في كوكب تاتوين. حين يعثر مصادفة على رسالة مخبأة داخل روبوت، يُزجّ Luke Skyporker في معركة بين الكون بأسره: تحالف الثوّار ضد الإمبراطورية المجرية المُلتهمة لكل شيء. مسلّحاً بسيف ضوئي ومسترشداً بحكمة Obi-Wan Kenobi، عليه أن يتعلّم طرق الشوكة ويواجه Darth Vader المخيف قبل أن تلتهم الإمبراطورية كل ما في طريقها.",
+
+
+      'euporkia':"تتابع Euporkia مجموعة من طلاب الثانوية يخوضون عالماً فوضوياً من الهوية والعلاقات والإدمان، فيما يدهمون مقصف المدرسة في كل فرصة سانحة. في القلب منهم Rue، مراهقة مضطربة خرجت توّاً من إعادة التأهيل، تقسم ألا تنتكس، لكنها لا تقوى على الابتعاد عن آلات البيع. بين الدراما وانكسار القلب والحفلات، يبقى شيء واحد ثابتاً: لا أحد في هذه البلدة يعرف متى يتوقف.",
+
+
+      'skyfull':"حين تنحرف مهمة بكارثة شاملة ويقع قرص صلب يحوي هويات كل العملاء المتخفّين في يد العدو، يُفترَض موت James Bon Appetit. لكن لا أحد يُبقي عميلاً جيداً مطروحاً أرضاً، خاصةً إن كان بشهيّته. يُستدعى ثانيةً إلى الخدمة فيلاحق عميلاً سابقاً في MI6 تحوّل إلى إرهابي إلكتروني يحمل ثأراً شخصياً ضد M. من سطوح إسطنبول إلى المرتفعات الاسكتلندية، على Bond أن يواجه ماضيه ويحمي رئيسته، وأن يجد وقتاً لثلاث وجبات كاملة على الأقل في الطريق.",
+
+
+      'joker-xxl':"Arthur Fleck مهرج يكافح وكوميدي بدوام جزئي يعيش في شوارع Gotham المتداعية. تتجاهله المجتمعات، ويستهزئ به أقرانه، ويعيش على ما يجده في عمق الثلاجة، فيما يبدأ إمساكه بالواقع في الانفلات. ومع تعاظم الفجوة في المدينة، يتنعّم الأغنياء فيما يجوع الفقراء، يأتي يوم سيّئ ليدفعه إلى الحافة. وما يخرج إلى النور ليس مجرد شرّير، بل رمزٌ لكل من قيل له إنه قد اكتفى.",
+
+
+      'iron-mass':"الملياردير وصانع الأسلحة Tony Starch يمتلك كل شيء: المال والقصور وشهيّة تُضاهي غروره. حين يأسره الإرهابيون ويُجبَر على بناء سلاح دمار شامل، يبني بدلاً منه بدلة درعٍ تُشغَّل بمفاعل قوس مصغّر وبكميات سعرات حرارية مرتفعة بشكل خطير. وقد عاد إلى الديار برؤيةٍ جديدة للحياة، يجد Tony نفسه أمام خيار: أن يواصل إطعام آلة الحرب، أو يستخدم عبقريّته لحماية العالم، شعاع رفع متضخّم تلو الآخر.",
+
+
+      'immovable':"Mark Grayson مراهق عادي بمتاعب عادية، إلى أن يكشف له والده — أقوى بطل خارق على الكوكب — سرّاً يقلب كل شيء. ومع تطوّر قواه واستلامه ردائه باسم Immovable، يكتشف Mark سريعاً أن البطولة أصعب مما تبدو، خاصة حين تحرق كل لكمة آلاف السعرات. لكن حين تنكشف الحقيقة عن أصل والده، عليه أن يقرر أين تكمن ولاءاته، وكم هو مستعد للتضحية. بعض الأبطال صُنعوا بشكل مختلف. هذا فقط صُنع أكبر حجماً.",
+
+
+      'drive-thru':"سائق مجازفات غامض بلا اسم يعمل في الخفاء سائقاً للهروب مع المجرمين في أنحاء لوس أنجلوس. لا يتكلم كثيراً، ولا يأكل كثيراً، ودائماً يُنجز المهمة. لكن حين يقع في حب جارته وابنها الصغير، يجد نفسه مزجوجاً في عملية سطو فاشلة تعرّض كل من يحبهم للخطر. عليه الآن أن يشقّ طريقه بالسيارة في شوارع LA المتوهّجة بالنيون، بلا وقودٍ سوى صمتٍ وعود تنظيف للأسنان، وهوسٍ غير صحّي بمسار «الـ Drive-Thru».",
     },
     news: {
       title:'صور Fat Films المتحركة وصلت!',
