@@ -210,6 +210,12 @@
     .hero {
       position: relative;
       height: 80vh;
+      /* `dvh` is the dynamic viewport height — it shrinks to match the
+         actually-visible area when in-app browsers (X, Instagram, etc.)
+         cover the bottom of the page with their own chrome. Falls back to
+         `vh` (identical on desktop and full-screen mobile browsers) for
+         engines that don't support dvh. */
+      height: 80dvh;
       min-height: 520px;
       display: flex; align-items: flex-end;
       overflow: hidden;
@@ -731,12 +737,24 @@
       position: fixed;
       bottom: 0; left: 0; right: 0;
       padding: 10px 20px;
-      background: rgba(10,10,10,0.85);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      /* Solid opaque fallback. In normal browsers the @supports rule below
+         overrides this with the translucent + frosted variant, so the
+         appearance is unchanged. In environments where backdrop-filter
+         silently fails (notably X / Twitter's in-app webview) the solid
+         background prevents page content from bleeding through behind the
+         socials row, which otherwise made the footer look like it wasn't
+         pinned to the bottom of the viewport. */
+      background: #0a0a0a;
       border-top: 1px solid var(--border);
       text-align: center;
       z-index: 50;
+    }
+    @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+      .footer {
+        background: rgba(10,10,10,0.85);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
     }
     .socials { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; }
     .socials a { display: inline-flex; align-items: center; gap: 7px; color: #bbb; font-size: 0.85rem; font-weight: 600; transition: color 0.15s; }
