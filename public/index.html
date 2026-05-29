@@ -20,6 +20,24 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;900&family=Space+Mono&display=swap" rel="stylesheet">
+  <script>
+    // X / Twitter, Instagram and Facebook in-app browsers have a known
+    // WebView bug where `position: fixed` elements stop tracking the
+    // viewport during scroll, so the socials footer ends up stranded
+    // somewhere in the middle of the page instead of pinned to the bottom.
+    // Detect those browsers via UA at parse time (before first paint) and
+    // mark the root element so the CSS at the end of the stylesheet below
+    // can fall back to a static, document-end footer. Real browsers never
+    // get this class, so their layout is byte-for-byte unchanged.
+    (function flagInAppBrowsers() {
+      try {
+        var ua = navigator.userAgent || '';
+        if (/(Twitter|FBAN|FBAV|FB_IAB|FBIOS|Instagram|TikTok|Line\/)/i.test(ua)) {
+          document.documentElement.classList.add('in-app-browser');
+        }
+      } catch (e) { /* swallow — never block render on UA sniff */ }
+    })();
+  </script>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -797,6 +815,36 @@
       .search-dropdown { width: 260px; right: -10px; }
       .footer { padding: 30px 16px 20px; }
     }
+
+    /* ========== IN-APP BROWSER FALLBACKS ==========
+       These rules ONLY apply when the <html> element carries
+       `.in-app-browser`, which is added by the inline UA-sniff at the top
+       of <head> for X / Twitter, Instagram and Facebook webviews. In
+       every other browser the rules are inert and nothing changes.
+
+       Why: those webviews fail `position: fixed` in subtle ways —
+       backdrop-filter is silently dropped (causing transparency
+       bleed-through), and after scrolling the fixed element can end up
+       stranded mid-page instead of pinned to the visible bottom. Falling
+       the footer back to `position: static` puts it at the end of the
+       document where it always renders correctly. The trade-off is that
+       in those specific in-app browsers the socials no longer follow you
+       as you scroll — they sit at the bottom of the page — which is a
+       far better experience than the broken floating mid-page version. */
+    html.in-app-browser .footer {
+      position: static;
+      bottom: auto;
+      background: #0a0a0a;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      /* Pad a little extra so the socials clear any device safe-area
+         (iPhone home indicator) when the host app exposes one. */
+      padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    }
+    /* The seo-blurb above the footer normally reserves 80px of bottom
+       padding to keep its text clear of the fixed footer. With a static
+       footer that gap becomes useless empty space, so trim it back. */
+    html.in-app-browser .seo-blurb { padding-bottom: 28px; }
   </style>
 </head>
 <body>
