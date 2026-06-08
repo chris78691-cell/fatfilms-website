@@ -20,24 +20,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;900&family=Space+Mono&display=swap" rel="stylesheet">
-  <script>
-    // X / Twitter, Instagram and Facebook in-app browsers have a known
-    // WebView bug where `position: fixed` elements stop tracking the
-    // viewport during scroll, so the socials footer ends up stranded
-    // somewhere in the middle of the page instead of pinned to the bottom.
-    // Detect those browsers via UA at parse time (before first paint) and
-    // mark the root element so the CSS at the end of the stylesheet below
-    // can fall back to a static, document-end footer. Real browsers never
-    // get this class, so their layout is byte-for-byte unchanged.
-    (function flagInAppBrowsers() {
-      try {
-        var ua = navigator.userAgent || '';
-        if (/(Twitter|FBAN|FBAV|FB_IAB|FBIOS|Instagram|TikTok|Line\/)/i.test(ua)) {
-          document.documentElement.classList.add('in-app-browser');
-        }
-      } catch (e) { /* swallow — never block render on UA sniff */ }
-    })();
-  </script>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -815,36 +797,6 @@
       .search-dropdown { width: 260px; right: -10px; }
       .footer { padding: 30px 16px 20px; }
     }
-
-    /* ========== IN-APP BROWSER FALLBACKS ==========
-       These rules ONLY apply when the <html> element carries
-       `.in-app-browser`, which is added by the inline UA-sniff at the top
-       of <head> for X / Twitter, Instagram and Facebook webviews. In
-       every other browser the rules are inert and nothing changes.
-
-       Why: those webviews fail `position: fixed` in subtle ways —
-       backdrop-filter is silently dropped (causing transparency
-       bleed-through), and after scrolling the fixed element can end up
-       stranded mid-page instead of pinned to the visible bottom. Falling
-       the footer back to `position: static` puts it at the end of the
-       document where it always renders correctly. The trade-off is that
-       in those specific in-app browsers the socials no longer follow you
-       as you scroll — they sit at the bottom of the page — which is a
-       far better experience than the broken floating mid-page version. */
-    html.in-app-browser .footer {
-      position: static;
-      bottom: auto;
-      background: #0a0a0a;
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
-      /* Pad a little extra so the socials clear any device safe-area
-         (iPhone home indicator) when the host app exposes one. */
-      padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
-    }
-    /* The seo-blurb above the footer normally reserves 80px of bottom
-       padding to keep its text clear of the fixed footer. With a static
-       footer that gap becomes useless empty space, so trim it back. */
-    html.in-app-browser .seo-blurb { padding-bottom: 28px; }
   </style>
 </head>
 <body>
@@ -1171,6 +1123,24 @@ const FILMS = [
   { slug: 'drive-thru', title: 'Drive Thru', video: 'videos/Drive Thru.mp4', card: 'titlecards/Drive_Thru.jpg',
     desc: "A mysterious, nameless stunt driver moonlights as a getaway driver for criminals across Los Angeles. He doesn't talk much, he doesn't eat much, and he always gets the job done. But when he falls for his neighbour and her young son, he's pulled into a heist gone wrong that puts everyone he cares about in danger. Now he must drive his way out of trouble through the neon-lit streets of LA, fuelled by nothing but silence, a toothpick, and an unhealthy obsession with the drive-thru lane.",
     cast: [['Ryan Gobbling','Ryan Gosling'],['Carey Fulligan','Carey Mulligan'],['Oscar Snack','Oscar Isaac'],['Fryan Cranston','Bryan Cranston'],['Albert Cooks','Albert Brooks']] },
+  { slug: 'stocky', title: 'Stocky', video: 'videos/Stocky.mp4', card: 'titlecards/Stocky.jpg',
+    desc: "Stocky Balboa is a small-time boxer from Philadelphia with a big heart and an even bigger appetite. When the heavyweight champion of the world offers him a shot at the title, nobody gives him a chance. But fuelled by raw eggs, midnight fridge raids, and an unbreakable spirit, Stocky trains harder than anyone thought possible. The steps of the Philadelphia Museum of Art have never shaken like this before. It's not about how hard you hit. It's about how many buffets you can hit and keep moving forward.",
+    cast: [['Sylvester Stallbone','Sylvester Stallone'],['Talia Frier','Talia Shire'],['Yogurt Young','Burt Young'],['Carl Feathers','Carl Weathers'],['Burgers Meredith','Burgess Meredith']] },
+  { slug: 'pie-rates-of-the-caribbean', title: 'Pie-rates of the Caribbean', video: 'videos/Pie-rates of The Caribbean.mp4', card: 'titlecards/Pie_rates_of_the_Caribbean.jpg',
+    desc: "Captain Jack Sparrow is the worst pirate anyone has ever heard of, but at least they've heard of him. Stumbling through the Caribbean with a compass that points to whatever he craves most (usually the nearest tavern), Jack finds himself caught between a cursed crew of undead pirates, a lovestruck blacksmith, and a governor's daughter who wants more from life than corsets and small portions. With nothing but charm, rum, and a suspiciously well-stocked galley, Captain Jack must outwit them all. Why is the rum always gone? Because Jack drank it. All of it.",
+    cast: [['Johnny Depth','Johnny Depp'],['Orlando Mushroom','Orlando Bloom'],['Keira Biteley','Keira Knightley'],['Geoffrey Mush','Geoffrey Rush'],['Fill Nighy','Bill Nighy']] },
+  { slug: 'the-fatinator', title: 'The Fatinator', video: 'videos/The Fatinator.mp4', card: 'titlecards/The_Fatinator.jpg',
+    desc: "A cybernetic assassin is sent back in time from a dystopian future with one mission: find Sarah Connor and terminate her before she can give birth to the leader of the human resistance. Built like an industrial refrigerator and programmed to never stop, the Fatinator ploughs through 1984 Los Angeles leaving a trail of destruction and empty drive-throughs in its wake. One soldier follows him back through time to protect Sarah, but nothing can prepare either of them for a machine that runs on pure relentless hunger. He said he'd be back. He meant back for seconds.",
+    cast: [['Arnold Snackenegger','Arnold Schwarzenegger'],['Linda Ham-ilton','Linda Hamilton'],['Michael Bean-on-Toast','Michael Biehn'],['Paul Wine-field','Paul Winfield'],['Lance Henrikscone','Lance Henriksen']] },
+  { slug: 'john-thick', title: 'John Thick', video: 'videos/John Thick.mp4', card: 'titlecards/John_Thick.jpg',
+    desc: "John Thick was out. Retired. Living quietly with his memories, his dog, and his well-stocked kitchen. But when a group of thugs break into his home, steal his car, and eat his leftovers, they unknowingly awaken the most feared hitman the underworld has ever known. Now John is back, cutting through the criminal underground of New York with nothing but sheer will, impeccable suit tailoring, and a body count that rivals his calorie count. They took everything from him. Now everyone pays. In coins, in blood, and in lunch money.",
+    cast: [['Keanu Feeds','Keanu Reeves'],['Piechael Nyqvist','Michael Nyqvist'],['Alfie Gallon','Alfie Allen'],['Willem Dafood','Willem Dafoe'],['Ian McShake','Ian McShane']] },
+  { slug: 'war-hogs', title: 'War Hogs', video: 'videos/War Hogs.mp4', card: 'titlecards/War_Hogs.jpg',
+    desc: "Based on a true story. Two young hustlers from Miami Beach land a contract with the US government to supply weapons to American allies in Afghanistan. What starts as a small-time operation quickly snowballs into a multi-million dollar arms deal involving shady suppliers, illegal ammunition, and enough expenses claims to feed a small army. As the money piles up and the deals get shadier, the two friends must decide how far they're willing to go before the whole thing comes crashing down. The American dream has never been this greasy.",
+    cast: [['Jonah Fill','Jonah Hill'],['Miles Wider','Miles Teller'],['Ana de Armass','Ana de Armas'],['Bradley Hooper','Bradley Cooper'],['Kevin Porklak','Kevin Pollak']] },
+  { slug: 'top-bun-maverick', title: 'Top Bun Maverick', video: 'videos/Top Bun.mp4', card: 'titlecards/Top_Bun_Maverick.jpg',
+    desc: "Pete \"Maverick\" Mitchell is the hottest pilot in the US Navy and he knows it. Reckless, cocky, and fuelled by an ego the size of an aircraft carrier, he earns a spot at the elite Fighter Weapons School known as Top Bun, where the best of the best compete to prove who owns the skies. But between dangerous dogfights, a heated rivalry with the ice-cold Iceman, and a romance that's heating up faster than the afterburners, Maverick must decide whether he's willing to follow the rules or fly by his own. The need for speed is real. So is the need for feed.",
+    cast: [['Tom Chews','Tom Cruise'],['Kelly McGrillis','Kelly McGillis'],['Val Kilomer','Val Kilmer'],['Anthony Breadwards','Anthony Edwards'],['Ton Skerritt','Tom Skerritt']] },
 ];
 
 const BY_SLUG = Object.fromEntries(FILMS.map(f => [f.slug, f]));
@@ -1178,10 +1148,10 @@ const BY_SLUG = Object.fromEntries(FILMS.map(f => [f.slug, f]));
 // Each film appears in exactly one category (16 films / 4 categories = 4 each).
 // `id` is a stable translation key; the displayed title is resolved via t('ui.' + id).
 const BASE_CATEGORIES = [
-  { id: 'biggestHits',  slugs: ['american-chud','fat-club','bulk-fiction','weight-of-wallstreet','whoppenheimer','lord-of-the-onion-rings','the-hungry-games','spider-man-no-weigh-home','fat-wars','joker-xxl'] },
-  { id: 'exclusives',   slugs: ['donnie-lardo','baking-bad','chewlander','fatsi-driver','dextra-large','the-eating-dead','euporkia','immovable'] },
-  { id: 'freshlyBaked', slugs: ['heavy-potter','the-fatrix','chiplash','bigger-things','superfat','limitmass','skyfull','drive-thru'] },
-  { id: 'heavyHits',    slugs: ['interbelly','fat-runner','squid-gain','the-bigs','jurassic-pork','fatman','no-country-for-fat-men','iron-mass'] },
+  { id: 'biggestHits',  slugs: ['american-chud','fat-club','bulk-fiction','weight-of-wallstreet','whoppenheimer','lord-of-the-onion-rings','the-hungry-games','spider-man-no-weigh-home','fat-wars','joker-xxl','pie-rates-of-the-caribbean','the-fatinator','top-bun-maverick'] },
+  { id: 'exclusives',   slugs: ['donnie-lardo','baking-bad','chewlander','fatsi-driver','dextra-large','the-eating-dead','euporkia','immovable','war-hogs'] },
+  { id: 'freshlyBaked', slugs: ['heavy-potter','the-fatrix','chiplash','bigger-things','superfat','limitmass','skyfull','drive-thru','stocky'] },
+  { id: 'heavyHits',    slugs: ['interbelly','fat-runner','squid-gain','the-bigs','jurassic-pork','fatman','no-country-for-fat-men','iron-mass','john-thick'] },
 ];
 
 // The "clean" frames for idle mode — a curated pool from public/frames/
@@ -1263,6 +1233,30 @@ const TRANSLATIONS = {
 
 
       'drive-thru':"A mysterious, nameless stunt driver moonlights as a getaway driver for criminals across Los Angeles. He doesn't talk much, he doesn't eat much, and he always gets the job done. But when he falls for his neighbour and her young son, he's pulled into a heist gone wrong that puts everyone he cares about in danger. Now he must drive his way out of trouble through the neon-lit streets of LA, fuelled by nothing but silence, a toothpick, and an unhealthy obsession with the drive-thru lane.",
+
+
+
+      'stocky':"Stocky Balboa is a small-time boxer from Philadelphia with a big heart and an even bigger appetite. When the heavyweight champion of the world offers him a shot at the title, nobody gives him a chance. But fuelled by raw eggs, midnight fridge raids, and an unbreakable spirit, Stocky trains harder than anyone thought possible. The steps of the Philadelphia Museum of Art have never shaken like this before. It's not about how hard you hit. It's about how many buffets you can hit and keep moving forward.",
+
+
+
+      'pie-rates-of-the-caribbean':"Captain Jack Sparrow is the worst pirate anyone has ever heard of, but at least they've heard of him. Stumbling through the Caribbean with a compass that points to whatever he craves most (usually the nearest tavern), Jack finds himself caught between a cursed crew of undead pirates, a lovestruck blacksmith, and a governor's daughter who wants more from life than corsets and small portions. With nothing but charm, rum, and a suspiciously well-stocked galley, Captain Jack must outwit them all. Why is the rum always gone? Because Jack drank it. All of it.",
+
+
+
+      'the-fatinator':"A cybernetic assassin is sent back in time from a dystopian future with one mission: find Sarah Connor and terminate her before she can give birth to the leader of the human resistance. Built like an industrial refrigerator and programmed to never stop, the Fatinator ploughs through 1984 Los Angeles leaving a trail of destruction and empty drive-throughs in its wake. One soldier follows him back through time to protect Sarah, but nothing can prepare either of them for a machine that runs on pure relentless hunger. He said he'd be back. He meant back for seconds.",
+
+
+
+      'john-thick':"John Thick was out. Retired. Living quietly with his memories, his dog, and his well-stocked kitchen. But when a group of thugs break into his home, steal his car, and eat his leftovers, they unknowingly awaken the most feared hitman the underworld has ever known. Now John is back, cutting through the criminal underground of New York with nothing but sheer will, impeccable suit tailoring, and a body count that rivals his calorie count. They took everything from him. Now everyone pays. In coins, in blood, and in lunch money.",
+
+
+
+      'war-hogs':"Based on a true story. Two young hustlers from Miami Beach land a contract with the US government to supply weapons to American allies in Afghanistan. What starts as a small-time operation quickly snowballs into a multi-million dollar arms deal involving shady suppliers, illegal ammunition, and enough expenses claims to feed a small army. As the money piles up and the deals get shadier, the two friends must decide how far they're willing to go before the whole thing comes crashing down. The American dream has never been this greasy.",
+
+
+
+      'top-bun-maverick':"Pete \"Maverick\" Mitchell is the hottest pilot in the US Navy and he knows it. Reckless, cocky, and fuelled by an ego the size of an aircraft carrier, he earns a spot at the elite Fighter Weapons School known as Top Bun, where the best of the best compete to prove who owns the skies. But between dangerous dogfights, a heated rivalry with the ice-cold Iceman, and a romance that's heating up faster than the afterburners, Maverick must decide whether he's willing to follow the rules or fly by his own. The need for speed is real. So is the need for feed.",
     },
     news: {
       title:'Fat Films GIFs are here!',
@@ -1337,6 +1331,30 @@ const TRANSLATIONS = {
 
 
       'drive-thru':"Un misterioso especialista de cine sin nombre se gana un extra como conductor de huida para criminales por todo Los Ángeles. Habla poco, come poco y siempre cumple el trabajo. Pero cuando se enamora de su vecina y su hijo pequeño, se ve arrastrado a un atraco que sale mal y pone en peligro a todos los que le importan. Ahora debe conducir para salir del lío por las calles iluminadas de neón de LA, alimentado solo por el silencio, un palillo y una obsesión poco sana por el carril del autoservicio.",
+
+
+
+      'stocky':"Stocky Balboa es un boxeador de poca monta de Filadelfia con un gran corazón y un apetito aún mayor. Cuando el campeón de los pesos pesados del mundo le ofrece una oportunidad por el título, nadie le da ninguna posibilidad. Pero alimentado por huevos crudos, asaltos nocturnos a la nevera y un espíritu inquebrantable, Stocky entrena más duro de lo que nadie creía posible. Las escaleras del Museo de Arte de Filadelfia nunca habían temblado así. No se trata de cuán fuerte golpeas. Se trata de a cuántos bufés puedes atizar y seguir avanzando.",
+
+
+
+      'pie-rates-of-the-caribbean':"El capitán Jack Sparrow es el peor pirata del que jamás hayan oído hablar, pero al menos han oído hablar de él. Dando tumbos por el Caribe con una brújula que apunta hacia lo que más anhela (normalmente la taberna más cercana), Jack se ve atrapado entre una tripulación maldita de piratas no muertos, un herrero enamorado y la hija de un gobernador que quiere algo más de la vida que corsés y raciones pequeñas. Sin más que carisma, ron y una despensa sospechosamente bien surtida, el capitán Jack debe ganarles a todos por la mano. ¿Por qué se acaba siempre el ron? Porque Jack se lo bebió. Todo.",
+
+
+
+      'the-fatinator':"Un asesino cibernético es enviado al pasado desde un futuro distópico con una sola misión: encontrar a Sarah Connor y eliminarla antes de que pueda dar a luz al líder de la resistencia humana. Construido como un frigorífico industrial y programado para no detenerse, el Fatinator arrasa Los Ángeles de 1984 dejando un rastro de destrucción y autoservicios vacíos a su paso. Un soldado lo sigue atrás en el tiempo para proteger a Sarah, pero nada puede prepararlos para una máquina que funciona con pura hambre implacable. Dijo que volvería. Quería decir, a por una segunda ración.",
+
+
+
+      'john-thick':"John Thick estaba fuera. Retirado. Viviendo tranquilo con sus recuerdos, su perro y una cocina muy bien surtida. Pero cuando un grupo de matones irrumpe en su casa, le roba el coche y se come sus sobras, despiertan sin saberlo al sicario más temido que el bajo mundo ha conocido. Ahora John está de vuelta, abriéndose paso por los bajos fondos de Nueva York con pura fuerza de voluntad, un traje impecable y un recuento de cadáveres que rivaliza con el de sus calorías. Le quitaron todo. Ahora todos pagan. En monedas, en sangre y en dinero para el almuerzo.",
+
+
+
+      'war-hogs':"Basada en una historia real. Dos jóvenes buscavidas de Miami Beach consiguen un contrato con el gobierno de Estados Unidos para suministrar armas a los aliados estadounidenses en Afganistán. Lo que empieza como una operación de poca monta se convierte rápidamente en un acuerdo de armamento de varios millones de dólares con proveedores turbios, munición ilegal y suficientes notas de gastos para alimentar a un pequeño ejército. A medida que se amontona el dinero y los tratos se enturbian, los dos amigos deben decidir hasta dónde están dispuestos a llegar antes de que todo se venga abajo. El sueño americano nunca había sido tan grasiento.",
+
+
+
+      'top-bun-maverick':"Pete \"Maverick\" Mitchell es el piloto más en forma de la Armada de Estados Unidos y lo sabe. Imprudente, chulo y alimentado por un ego del tamaño de un portaaviones, se gana un puesto en la élite de la Escuela de Armas de Caza conocida como Top Bun, donde los mejores de los mejores compiten por demostrar quién manda en los cielos. Pero entre peligrosos combates aéreos, una rivalidad ardiente con el gélido Iceman y un romance que se calienta más rápido que los postcombustores, Maverick debe decidir si está dispuesto a seguir las reglas o a volar a su manera. La necesidad de velocidad es real. La de comer, también.",
     },
     news: {
       title:'¡Los GIFs de Fat Films ya están aquí!',
@@ -1411,6 +1429,30 @@ const TRANSLATIONS = {
 
 
       'drive-thru':"Un mystérieux cascadeur sans nom complète ses fins de mois en faisant le chauffeur de fuite pour des criminels à travers Los Angeles. Il parle peu, il mange peu, et il fait toujours le boulot. Mais quand il tombe amoureux de sa voisine et de son jeune fils, il se retrouve embarqué dans un braquage qui tourne mal et met en danger tous ceux qui comptent pour lui. Il doit maintenant se sortir des ennuis au volant dans les rues néon de LA, alimenté par rien d'autre que du silence, un cure-dent, et une obsession malsaine pour la file du drive.",
+
+
+
+      'stocky':"Stocky Balboa est un petit boxeur de Philadelphie avec un grand cœur et un appétit encore plus grand. Lorsque le champion du monde poids lourds lui offre une chance de combattre pour le titre, personne ne lui donne la moindre chance. Mais nourri d'œufs crus, de raids nocturnes sur le frigo et d'un esprit incassable, Stocky s'entraîne plus dur que personne ne l'aurait cru possible. Les marches du musée d'art de Philadelphie n'ont jamais autant tremblé. L'important n'est pas la force des coups que vous donnez. C'est le nombre de buffets que vous pouvez attaquer en continuant à avancer.",
+
+
+
+      'pie-rates-of-the-caribbean':"Le capitaine Jack Sparrow est le pire pirate dont on ait jamais entendu parler, mais au moins on a entendu parler de lui. Titubant à travers les Caraïbes avec une boussole qui pointe ce qu'il désire le plus (en général, la taverne la plus proche), Jack se retrouve pris entre un équipage maudit de pirates morts-vivants, un forgeron amoureux et la fille d'un gouverneur qui veut plus de la vie que des corsets et de petites portions. Sans rien d'autre que son charme, son rhum et une cambuse étrangement bien garnie, Jack doit tous les rouler. Pourquoi le rhum a-t-il toujours disparu ? Parce que Jack l'a bu. Tout.",
+
+
+
+      'the-fatinator':"Un assassin cybernétique est renvoyé dans le passé depuis un futur dystopique avec une seule mission : trouver Sarah Connor et la terminer avant qu'elle ne puisse donner naissance au chef de la résistance humaine. Bâti comme un réfrigérateur industriel et programmé pour ne jamais s'arrêter, le Fatinator laboure le Los Angeles de 1984 en laissant derrière lui un sillage de destruction et de drive-thrus vidés. Un soldat le suit à travers le temps pour protéger Sarah, mais rien ne peut les préparer à une machine alimentée par une faim implacable. Il a dit qu'il reviendrait. Il voulait dire qu'il reviendrait pour reprendre.",
+
+
+
+      'john-thick':"John Thick avait raccroché. À la retraite. Il vivait tranquillement avec ses souvenirs, son chien et une cuisine très bien garnie. Mais quand une bande de voyous force sa porte, lui vole sa voiture et mange ses restes, ils réveillent sans le savoir le tueur à gages le plus redouté que la pègre ait connu. John est de retour, fauchant la pègre new-yorkaise avec rien d'autre qu'une pure volonté, un costume impeccablement coupé, et un compte de cadavres qui rivalise avec son compte de calories. Ils lui ont tout pris. Maintenant, tout le monde paie. En pièces, en sang, et en argent du déjeuner.",
+
+
+
+      'war-hogs':"Inspiré d'une histoire vraie. Deux jeunes magouilleurs de Miami Beach décrochent un contrat avec le gouvernement américain pour fournir des armes aux alliés des États-Unis en Afghanistan. Ce qui commence comme une petite opération devient vite un contrat d'armement à plusieurs millions de dollars, impliquant des fournisseurs louches, des munitions illégales et assez de notes de frais pour nourrir une petite armée. À mesure que l'argent s'accumule et que les deals deviennent plus louches, les deux amis doivent décider jusqu'où ils sont prêts à aller avant que tout ne s'écroule. Le rêve américain n'a jamais été aussi gras.",
+
+
+
+      'top-bun-maverick':"Pete \"Maverick\" Mitchell est le pilote le plus en vue de l'US Navy, et il le sait. Téméraire, prétentieux et alimenté par un ego de la taille d'un porte-avions, il se décroche une place dans l'élite de l'école d'armement de chasse appelée Top Bun, où les meilleurs des meilleurs se mesurent pour prouver qui possède le ciel. Mais entre des combats aériens périlleux, une rivalité brûlante avec le glacial Iceman et une romance qui chauffe plus vite que la post-combustion, Maverick doit décider s'il est prêt à suivre les règles ou à voler selon les siennes. Le besoin de vitesse est réel. Le besoin de manger aussi.",
     },
     news: {
       title:'Les GIFs Fat Films sont là !',
@@ -1485,6 +1527,30 @@ const TRANSLATIONS = {
 
 
       'drive-thru':"Un misterioso stuntman senza nome arrotonda facendo da autista per le fughe dei criminali di Los Angeles. Parla poco, mangia poco e porta sempre a casa il lavoro. Ma quando si innamora della sua vicina e del suo bambino, finisce coinvolto in un colpo finito male che mette in pericolo tutti quelli a cui tiene. Ora deve farsi strada al volante per le strade al neon di LA, alimentato solo dal silenzio, da uno stuzzicadenti e da un'ossessione poco sana per la corsia del drive-thru.",
+
+
+
+      'stocky':"Stocky Balboa è un pugile di periferia di Filadelfia con un grande cuore e un appetito ancora più grande. Quando il campione del mondo dei pesi massimi gli offre l'occasione di sfidarlo per il titolo, nessuno gli dà una chance. Ma alimentato da uova crude, incursioni notturne al frigo e da uno spirito indistruttibile, Stocky si allena come nessuno avrebbe creduto possibile. La scalinata del Philadelphia Museum of Art non ha mai tremato così. Non conta quanto duro colpisci. Conta quanti buffet riesci a colpire continuando ad andare avanti.",
+
+
+
+      'pie-rates-of-the-caribbean':"Il capitano Jack Sparrow è il peggior pirata di cui qualcuno abbia mai sentito parlare, ma almeno ne hanno sentito parlare. Barcollando per i Caraibi con una bussola che punta verso ciò che più desidera (di solito la taverna più vicina), Jack si ritrova in mezzo a una ciurma maledetta di pirati non-morti, a un fabbro innamorato e alla figlia di un governatore che vuole dalla vita più dei corsetti e delle porzioni piccole. Con nient'altro che fascino, rum e una cambusa stranamente ben rifornita, il capitano Jack deve fregarli tutti. Perché il rum finisce sempre? Perché Jack se l'è bevuto. Tutto.",
+
+
+
+      'the-fatinator':"Un assassino cibernetico viene rispedito nel passato da un futuro distopico con un'unica missione: trovare Sarah Connor e terminarla prima che possa dare alla luce il capo della resistenza umana. Costruito come un frigorifero industriale e programmato per non fermarsi mai, il Fatinator falcia la Los Angeles del 1984 lasciando dietro di sé una scia di distruzione e drive-thru svuotati. Un soldato lo segue indietro nel tempo per proteggere Sarah, ma nulla può prepararli a una macchina che funziona a pura, inarrestabile fame. Aveva detto che sarebbe tornato. Intendeva tornato per il bis.",
+
+
+
+      'john-thick':"John Thick aveva chiuso. In pensione. Viveva in pace con i suoi ricordi, il suo cane e una cucina ben fornita. Ma quando un gruppo di teppisti irrompe in casa sua, gli ruba l'auto e si mangia gli avanzi, risvegliano senza saperlo il sicario più temuto che la malavita abbia mai conosciuto. Ora John è tornato, e fa a fette la malavita di New York con nient'altro che pura forza di volontà, sartoria impeccabile e un numero di vittime pari al suo conto calorico. Gli hanno preso tutto. Adesso pagano tutti. In monete, in sangue e nei soldi per il pranzo.",
+
+
+
+      'war-hogs':"Tratto da una storia vera. Due giovani opportunisti di Miami Beach si aggiudicano un contratto con il governo degli Stati Uniti per fornire armi agli alleati americani in Afghanistan. Quella che inizia come una piccola operazione si trasforma in fretta in un affare di armamenti da milioni di dollari, con fornitori loschi, munizioni illegali e abbastanza note spese da sfamare un piccolo esercito. Mentre i soldi si accumulano e gli accordi diventano sempre più ambigui, i due amici devono decidere fino a che punto sono disposti ad arrivare prima che tutto vada a rotoli. Il sogno americano non è mai stato così unto.",
+
+
+
+      'top-bun-maverick':"Pete \"Maverick\" Mitchell è il pilota più in vista della Marina degli Stati Uniti e lo sa benissimo. Spericolato, presuntuoso e alimentato da un ego grande quanto una portaerei, si guadagna un posto nell'élite della Fighter Weapons School chiamata Top Bun, dove i migliori dei migliori si sfidano per stabilire chi possiede i cieli. Ma tra combattimenti aerei pericolosi, una rivalità accesa con il gelido Iceman e una storia d'amore che sale di temperatura più in fretta dei postbruciatori, Maverick deve decidere se è disposto a seguire le regole o a volare a modo suo. Il bisogno di velocità è reale. Anche quello di mangiare.",
     },
     news: {
       title:'Le GIF di Fat Films sono arrivate!',
@@ -1559,6 +1625,30 @@ const TRANSLATIONS = {
 
 
       'drive-thru':"Ein geheimnisvoller, namenloser Stuntfahrer verdient sich nebenbei als Fluchtfahrer für die Kriminellen von Los Angeles etwas dazu. Er redet wenig, isst wenig und liefert immer ab. Als er sich aber in seine Nachbarin und ihren kleinen Sohn verliebt, gerät er in einen schiefgelaufenen Coup, der alle in Gefahr bringt, die ihm wichtig sind. Jetzt muss er sich durch die neonbeleuchteten Straßen von LA freifahren — angetrieben nur von Schweigen, einem Zahnstocher und einer ungesunden Obsession für die Drive-Thru-Spur.",
+
+
+
+      'stocky':"Stocky Balboa ist ein kleiner Boxer aus Philadelphia mit einem großen Herzen und einem noch größeren Appetit. Als ihm der Weltmeister im Schwergewicht eine Titelchance anbietet, gibt ihm niemand eine Chance. Doch angetrieben von rohen Eiern, nächtlichen Kühlschrankraids und einem unbrechbaren Geist trainiert Stocky härter, als irgendjemand für möglich gehalten hätte. Die Treppen des Philadelphia Museum of Art haben noch nie so gewackelt. Es kommt nicht darauf an, wie hart du zuschlägst. Es kommt darauf an, wie viele Buffets du nehmen kannst und trotzdem weitermachst.",
+
+
+
+      'pie-rates-of-the-caribbean':"Captain Jack Sparrow ist der schlechteste Pirat, von dem je jemand gehört hat — aber immerhin hat man von ihm gehört. Mit einem Kompass, der auf das zeigt, wonach er sich am meisten sehnt (in der Regel die nächste Taverne), torkelt Jack durch die Karibik und gerät zwischen die verfluchte Crew untoter Piraten, einen verliebten Schmied und die Gouverneurstochter, die mehr vom Leben will als Korsetts und kleine Portionen. Mit nichts als Charme, Rum und einer verdächtig gut gefüllten Kombüse muss Captain Jack sie alle austricksen. Warum ist der Rum immer alle? Weil Jack ihn getrunken hat. Den ganzen.",
+
+
+
+      'the-fatinator':"Ein kybernetischer Killer wird aus einer dystopischen Zukunft in die Vergangenheit geschickt, mit einer einzigen Mission: Sarah Connor zu finden und zu terminieren, bevor sie den Anführer der menschlichen Resistance zur Welt bringen kann. Gebaut wie ein Industriekühlschrank und auf Nichtanhalten programmiert, pflügt der Fatinator durch das Los Angeles von 1984 und hinterlässt eine Spur aus Zerstörung und leergefegten Drive-Thrus. Ein Soldat folgt ihm durch die Zeit, um Sarah zu beschützen, doch nichts kann die beiden auf eine Maschine vorbereiten, die mit purem, unermüdlichem Hunger läuft. Er sagte, er kommt wieder. Er meinte, für einen Nachschlag.",
+
+
+
+      'john-thick':"John Thick war raus. Im Ruhestand. Lebte in Ruhe mit seinen Erinnerungen, seinem Hund und einer gut gefüllten Küche. Doch als eine Bande Schläger in sein Haus einbricht, ihm sein Auto stiehlt und seine Reste aufisst, wecken sie ohne es zu wissen den gefürchtetsten Auftragsmörder, den die Unterwelt je gekannt hat. Jetzt ist John zurück, mäht sich mit purem Willen, makellos sitzendem Anzug und einer Leichenzahl, die seinem Kalorienzähler Konkurrenz macht, durch die kriminelle Unterwelt New Yorks. Sie haben ihm alles genommen. Jetzt zahlen alle. In Münzen, in Blut und im Pausengeld.",
+
+
+
+      'war-hogs':"Beruht auf einer wahren Geschichte. Zwei junge Strippenzieher aus Miami Beach ergattern einen Vertrag mit der US-Regierung zur Bewaffnung amerikanischer Verbündeter in Afghanistan. Was als kleine Operation beginnt, schwillt schnell zu einem Waffendeal über mehrere Millionen Dollar an — mit zwielichtigen Lieferanten, illegaler Munition und genug Spesenabrechnungen, um eine kleine Armee zu ernähren. Während das Geld sich türmt und die Deals immer dunkler werden, müssen die zwei Freunde entscheiden, wie weit sie zu gehen bereit sind, bevor das ganze Konstrukt zusammenbricht. Der amerikanische Traum war noch nie so fettig.",
+
+
+
+      'top-bun-maverick':"Pete \"Maverick\" Mitchell ist der heißeste Pilot der US Navy — und er weiß es. Tollkühn, überheblich und befeuert von einem Ego in Flugzeugträgergröße, ergattert er sich einen Platz in der Elite-Kampfwaffenschule Top Bun, wo die Besten der Besten ausmachen, wem der Himmel gehört. Doch zwischen brenzligen Dogfights, einer eiskalten Rivalität mit dem Iceman und einer Romanze, die schneller heißläuft als die Nachbrenner, muss Maverick entscheiden, ob er nach Regeln spielt oder nach eigenen Regeln fliegt. Der Drang nach Speed ist echt. Der Drang nach Futter auch.",
     },
     news: {
       title:'Fat Films GIFs sind da!',
@@ -1633,6 +1723,30 @@ const TRANSLATIONS = {
 
 
       'drive-thru':"一名神秘、没有名字的特技司机,业余时间在洛杉矶为罪犯做逃跑司机。他话不多,吃得也不多,但每次都能漂亮收工。可当他爱上了邻居和她的小儿子时,被卷进了一场失败的劫案,把他在乎的每个人都置于险境。如今他必须开车冲出霓虹闪烁的洛杉矶街头 — 燃料只是沉默、一根牙签,以及对得来速车道近乎不健康的痴迷。",
+
+
+
+      'stocky':"Stocky Balboa 是一个来自费城的小拳手,有一颗大大的心,胃口比心还大。当世界重量级冠军给他争夺金腰带的机会时,没人看好他。但靠着生鸡蛋、半夜偷袭冰箱和一股打不垮的劲儿,Stocky 训练得比谁都狠。费城艺术博物馆的台阶从未这样颤抖过。重要的不是你出拳有多重,而是你能扑多少自助餐,然后继续向前。",
+
+
+
+      'pie-rates-of-the-caribbean':"Jack Sparrow 船长是大家听说过的最差劲的海盗 — 但至少大家听说过他。带着一只永远指向他最想要之物(通常是最近的小酒馆)的罗盘,他踉跄着穿过加勒比海,夹在一支被诅咒的不死海盗船员、一个为爱痴狂的铁匠,以及一位不甘于胸衣和小份配菜的总督女儿之间。除了魅力、朗姆酒和一个储备奇怪丰富的厨房,Jack 船长别无他物 — 却得把他们全部耍得团团转。朗姆酒为什么总是没了?因为 Jack 喝完了。一滴不剩。",
+
+
+
+      'the-fatinator':"一个机械刺客被从反乌托邦的未来送回过去,任务只有一个:找到 Sarah Connor,在她能生下人类抵抗军的领袖之前将她终结。Fatinator 体型如工业冰箱、被编程为永不停下,在 1984 年的洛杉矶横冲直撞,身后留下一路毁灭和被吃空的得来速。一名士兵也穿越回来保护 Sarah,但没有什么能让他们做好准备 — 面对一台靠纯粹、不知疲倦的饥饿驱动的机器。他说他会回来。他指的是回来吃第二份。",
+
+
+
+      'john-thick':"John Thick 退出江湖了。退休。和他的回忆、他的狗以及一间塞满食物的厨房一起,过着安静日子。但当一群混混闯进他家、偷走他的车、吃掉他的剩饭时,他们无意中唤醒了地下世界听过最可怕的杀手。如今 John 回来了,凭着纯粹的意志、剪裁完美的西装,以及一份与他的卡路里账单不相上下的死亡名单,横扫纽约黑社会。他们夺走了他的一切。现在所有人都要付出代价 — 用硬币、用鲜血、用午餐钱。",
+
+
+
+      'war-hogs':"改编自真实事件。两个迈阿密海滩的年轻投机分子拿下了一份与美国政府的合同 — 向美国在阿富汗的盟友供应武器。原本是小打小闹的生意,很快滚成数百万美元的军火大单,牵扯进灰色供应商、非法弹药,以及足以喂饱一支小型军队的报销单。随着钱越堆越多、交易越搞越脏,两个朋友必须决定:在一切轰然崩塌前,他们愿意走多远。美国梦从未如此油腻。",
+
+
+
+      'top-bun-maverick':"Pete「Maverick」Mitchell 是美国海军最炙手可热的飞行员,他自己也很清楚。鲁莽、自负,被一颗航空母舰大小的自我驱动着,他赢得了进入精英战机武器学校 Top Bun 的资格 — 高手中的高手在那里比拼,看谁才是天空的主人。然而在危险的缠斗、与冷酷如冰的 Iceman 之间炽热的较量,以及比加力燃烧器升温还快的恋情之间,Maverick 必须决定:他是要守规矩,还是按自己的方式飞。对速度的渴望是真实的。对吃的渴望,也一样。",
     },
     news: {
       title:'Fat Films GIF 上线了!',
@@ -1707,6 +1821,30 @@ const TRANSLATIONS = {
 
 
       'drive-thru':"名もなき謎のスタントドライバーは、副業としてロサンゼルス中の犯罪者たちのために逃走車を走らせている。あまり喋らないし、あまり食べない。それでも仕事はいつも完璧にこなす。だが隣人の女性と幼い息子に惹かれた瞬間、彼は失敗した強盗事件に巻き込まれ、大切な相手たちを危険にさらしてしまう。ネオンに濡れた LA の街を、彼は走りで切り抜けねばならない ── 燃料は沈黙と一本のつまようじ、そしてドライブスルー・レーンへの不健康な執着だけだ。",
+
+
+
+      'stocky':"Stocky Balboa はフィラデルフィアの三流ボクサー。心はでかく、胃袋はもっとでかい。世界ヘビー級王者からタイトル戦を申し込まれても、誰も勝ち目があるとは思わない。だが生卵と深夜の冷蔵庫襲撃と不屈の闘志を燃料に、Stocky は誰も思っていなかったほどの猛特訓を積む。フィラデルフィア美術館の階段がこれほど震えたことはない。大事なのはどれだけ強く打てるかじゃない。どれだけバイキングを叩きのめしても前に進めるかだ。",
+
+
+
+      'pie-rates-of-the-caribbean':"Jack Sparrow 船長は誰もが聞いたことのある最悪の海賊 ── ともあれ、聞いたことだけはある。一番欲しいもの(たいてい最寄りの酒場)を指すコンパス片手にカリブ海をふらつくジャックは、呪われた不死の海賊団と、恋に落ちた鍛冶屋と、コルセットと小皿料理だけの人生にうんざりした総督の娘の間に挟まれる。武器はチャームとラム酒、そしてやけに食糧が豊富な船室だけ。それでもジャックは全員を出し抜かねばならない。なぜラム酒はいつもなくなっているのか?ジャックが飲み干したからだ。全部。",
+
+
+
+      'the-fatinator':"ディストピアの未来から、たった一つの任務を背負って送られてきたサイバネティック暗殺者がいる。Sarah Connor を見つけ、人類抵抗軍のリーダーを産む前に終わらせろ。Fatinator は業務用冷蔵庫のような体軀と「決して止まらない」プログラムを携え、1984 年のロサンゼルスを突き進む。残されるのは破壊の跡と空っぽになったドライブスルー。Sarah を守るために一人の兵士も時を遡るが、純粋で容赦ない飢えで動く機械に立ち向かう準備など、誰にもできていない。「また来る」と彼は言った。意味はおかわりに来る、だ。",
+
+
+
+      'john-thick':"John Thick は足を洗っていた。引退して、思い出と犬と、よく満たされたキッチンと共に静かに暮らしていた。だが一団のチンピラが家に押し入り、車を奪い、残り物を平らげたとき、彼らは無意識のうちに、裏社会が知る限り最も恐れられた殺し屋を起こしてしまう。今や John は帰ってきた ── ニューヨークの裏社会を、鋼の意志と完璧な仕立てのスーツ、そしてカロリーカウントに匹敵する死体の数で切り裂きながら。奪われたものは全部。今度は全員が払う。コインで、血で、そして昼食代で。",
+
+
+
+      'war-hogs':"実話に基づく物語。マイアミビーチの若き食わせ者ふたりが、アフガニスタンのアメリカ同盟国に武器を供給する米政府との契約を取りつける。零細な仕事として始まったものが、瞬く間に数百万ドル規模の武器取引へと膨れ上がる ── 怪しげな業者、違法な弾薬、そして小規模な軍隊を養えるほどの経費精算書つきで。金が積み上がり、取引が黒くなっていく中で、二人の友人はすべてが崩れ落ちる前にどこまで踏み込むかを決めねばならない。アメリカン・ドリームがこれほど脂ぎっていたことはない。",
+
+
+
+      'top-bun-maverick':"ピート「マーヴェリック」ミッチェルは米海軍最高の戦闘機パイロットで、本人もそれを十分わかっている。無謀でうぬぼれが強く、空母並みのエゴを燃料に飛ぶ彼は、エリート戦闘兵器学校 Top Bun に席を勝ち取る。そこでは精鋭中の精鋭たちが空の覇者の座をかけて競い合う。だが、危険な空中戦と、冷徹なアイスマンとの激しいライバル関係、そしてアフターバーナーよりも速くヒートアップする恋愛模様の合間で、マーヴェリックはルールに従うのか、自分のやり方で飛ぶのかを決めねばならない。スピードへの欲求は本物だ。食欲も、また本物だ。",
     },
     news: {
       title:'Fat Films の GIF が登場!',
@@ -1781,6 +1919,30 @@ const TRANSLATIONS = {
 
 
       'drive-thru':"이름도 없는 신비로운 스턴트 드라이버는 로스앤젤레스를 무대로 범죄자들의 도주 운전을 부업으로 합니다. 말수도 적고, 먹는 양도 적지만, 일은 언제나 깔끔하게 끝내죠. 하지만 이웃 여자와 그녀의 어린 아들에게 마음을 빼앗기는 순간, 그는 어긋난 강도 사건에 휘말려 자신이 아끼는 모든 사람을 위험에 빠뜨리고 맙니다. 이제 그는 네온이 번지는 LA 거리를 운전해 빠져나가야 합니다 — 연료는 침묵, 이쑤시개 하나, 그리고 드라이브 스루 차선에 대한 그다지 건강하지 못한 집착뿐.",
+
+
+
+      'stocky':"Stocky Balboa는 큰 마음과 그보다 더 큰 식욕을 지닌, 필라델피아의 무명 복서입니다. 세계 헤비급 챔피언이 타이틀전을 제안하지만 아무도 그에게 가능성을 주지 않습니다. 하지만 생계란과 한밤중 냉장고 습격, 꺾이지 않는 정신을 연료 삼아 Stocky는 누구도 가능하다고 생각하지 못한 강도로 훈련합니다. 필라델피아 미술관 계단이 이렇게까지 흔들린 적은 없습니다. 중요한 건 얼마나 세게 때리느냐가 아닙니다 — 뷔페를 몇 군데 박살내면서도 계속 앞으로 나아갈 수 있느냐죠.",
+
+
+
+      'pie-rates-of-the-caribbean':"Jack Sparrow 선장은 누구나 들어본 적 있는 최악의 해적입니다 — 적어도 들어본 적은 있다는 점이 핵심이죠. 가장 갈망하는 것(보통은 가장 가까운 술집)을 가리키는 나침반을 들고 카리브해를 비틀거리며 누비던 그는 저주받은 언데드 해적단, 사랑에 빠진 대장장이, 그리고 코르셋과 작은 음식 한 접시로는 만족 못 하는 총독의 딸 사이에 끼게 됩니다. 가진 것이라곤 매력과 럼주, 그리고 수상하리만큼 잘 채워진 갤리뿐인 Jack 선장은 모두를 따돌려야 합니다. 럼주는 왜 늘 사라져 있을까요? Jack이 다 마셨거든요. 한 방울도 남기지 않고요.",
+
+
+
+      'the-fatinator':"디스토피아적 미래에서 보내진 사이버네틱 암살자에게 주어진 임무는 단 하나 — Sarah Connor를 찾아내 그녀가 인류 저항군의 지도자를 낳기 전에 제거하는 것입니다. 산업용 냉장고처럼 만들어졌고 결코 멈추지 않도록 프로그램된 Fatinator는 1984년의 로스앤젤레스를 헤집고 다니며 파괴의 흔적과 텅 빈 드라이브 스루를 남깁니다. 한 병사가 Sarah를 지키기 위해 시간을 거슬러 따라오지만, 순수하고 가차 없는 굶주림으로 작동하는 기계 앞에 두 사람을 준비시킬 수 있는 것은 아무것도 없습니다. 그는 다시 오겠다고 말했습니다. 두 그릇째를 먹으러요.",
+
+
+
+      'john-thick':"John Thick는 손을 뗐습니다. 은퇴 후 그는 추억과 자신의 개, 그리고 잘 채워둔 부엌과 함께 조용히 살아갑니다. 하지만 한 무리의 불량배들이 그의 집에 침입해 차를 훔치고 남은 음식을 먹어 치우자, 그들은 자신도 모르게 지하 세계가 알아온 가장 두려운 청부 살인자를 깨우고 맙니다. 이제 John이 돌아왔습니다. 순수한 의지와 흠잡을 데 없는 정장 핏, 그리고 그의 칼로리 수치에 맞먹는 사망자 수만 들고 뉴욕의 범죄 지하 세계를 가르고 지나갑니다. 그들은 그에게서 모든 것을 빼앗았습니다. 이제 모두가 대가를 치릅니다 — 동전으로, 피로, 그리고 점심값으로.",
+
+
+
+      'war-hogs':"실화 바탕. 마이애미 비치 출신의 젊은 사기꾼 두 명이 미 정부와 계약을 따내, 아프가니스탄의 미국 동맹국에 무기를 공급하게 됩니다. 소규모 작업으로 시작된 일이 곧바로 수백만 달러짜리 무기 거래로 부풀어 오릅니다 — 수상쩍은 공급업자, 불법 탄약, 그리고 작은 군대 하나를 먹여 살릴 만한 경비 청구서까지 곁들여서요. 돈이 쌓이고 거래가 점점 더 검게 물들어가는 동안, 두 친구는 모든 것이 무너지기 전까지 어디까지 갈 수 있을지를 결정해야 합니다. 아메리칸 드림이 이렇게까지 기름졌던 적은 없습니다.",
+
+
+
+      'top-bun-maverick':"피트 \"매버릭\" 미첼은 미 해군 최고의 파일럿이고, 본인도 그 사실을 잘 압니다. 무모하고 거만하며 항공모함만 한 자존심을 연료로 움직이는 그는 엘리트 전투 무기 학교 Top Bun의 자리를 따냅니다 — 최고 중의 최고들이 모여 누가 하늘의 주인인지를 가리는 곳이죠. 하지만 위험한 공중전과 차가운 아이스맨과의 뜨거운 라이벌 관계, 그리고 애프터버너보다 빠르게 달아오르는 로맨스 사이에서, 매버릭은 규칙을 따를지 자기 방식대로 날지를 결정해야 합니다. 속도에 대한 갈망은 진짜입니다. 먹는 것에 대한 갈망도 마찬가지죠.",
     },
     news: {
       title:'Fat Films GIF가 등장했습니다!',
@@ -1855,6 +2017,30 @@ const TRANSLATIONS = {
 
 
       'drive-thru':"سائق مجازفات غامض بلا اسم يعمل في الخفاء سائقاً للهروب مع المجرمين في أنحاء لوس أنجلوس. لا يتكلم كثيراً، ولا يأكل كثيراً، ودائماً يُنجز المهمة. لكن حين يقع في حب جارته وابنها الصغير، يجد نفسه مزجوجاً في عملية سطو فاشلة تعرّض كل من يحبهم للخطر. عليه الآن أن يشقّ طريقه بالسيارة في شوارع LA المتوهّجة بالنيون، بلا وقودٍ سوى صمتٍ وعود تنظيف للأسنان، وهوسٍ غير صحّي بمسار «الـ Drive-Thru».",
+
+
+
+      'stocky':"Stocky Balboa ملاكم محلي من فيلادلفيا بقلب كبير وشهيّة أكبر. حين يمنحه بطل العالم في الوزن الثقيل فرصة على اللقب، لا يراهن عليه أحد. لكن بوقود من البيض النيء وغارات منتصف الليل على الثلاجة وروح لا تنكسر، يتدرّب Stocky بقسوة لم يحلم بها أحد. لم تهتزّ درجات متحف فيلادلفيا للفنون هكذا من قبل. الأمر ليس في قوة لكمتك. بل في كم بوفيهٍ تستطيع أن تجتاحه وتواصل التقدّم.",
+
+
+
+      'pie-rates-of-the-caribbean':"الكابتن Jack Sparrow أسوأ قرصان سمع به أحد، لكن على الأقل سمعوا به. يتعثّر في أرجاء الكاريبي حاملاً بوصلة تشير إلى ما يشتهيه أكثر (وغالباً ما تكون أقرب حانة)، فيجد نفسه عالقاً بين طاقم ملعون من قراصنة الموتى الأحياء، وحدّاد واقع في الحب، وابنة الحاكم التي تريد من الحياة أكثر من مشدّاتها وأطباقها الصغيرة. لا يملك سوى الكاريزما والروم ومخزن سفينة حافل بشكل مريب، وعليه أن يخدعهم جميعاً. لماذا يختفي الروم دوماً؟ لأن جاك شربه. كلّه.",
+
+
+
+      'the-fatinator':"قاتل آلي يُرسَل عبر الزمن من مستقبل ديستوبي بمهمة واحدة: العثور على Sarah Connor والقضاء عليها قبل أن تنجب قائد المقاومة البشرية. مبنيٌّ كثلاجة صناعية ومُبرمَج كي لا يتوقف، يجتاح Fatinator لوس أنجلوس عام 1984 خلفه أثرٌ من الدمار ومن مطاعم الـ Drive-Thru الفارغة. يلاحقه جندي عبر الزمن لحماية Sarah، لكن لا شيء يهيّئهما لمواجهة آلة تعمل على جوعٍ خالص لا يهدأ. قال إنه سيعود. كان يقصد: للحصة الثانية.",
+
+
+
+      'john-thick':"John Thick كان قد اعتزل. متقاعداً. يعيش بهدوء مع ذكرياته وكلبه ومطبخه الممتلئ. لكن حين يقتحم زمرة من البلطجية بيته، ويسرقون سيارته، ويأكلون بقاياه، يوقظون من حيث لا يدرون أكثر القتلة المأجورين رهبةً في تاريخ العالم السفلي. الآن عاد John، يشقّ طريقه عبر العالم السفلي في نيويورك بلا شيء سوى عزيمة خالصة، وبدلة لا تشوبها شائبة، وعدد ضحايا يضاهي عدد سعراته الحرارية. أخذوا منه كل شيء. الآن يدفع الجميع — بالقطع النقدية، وبالدم، وبمصروف الغداء.",
+
+
+
+      'war-hogs':"مستوحاة من قصة حقيقية. شابّان محتالان من ميامي بيتش يحظيان بعقد مع الحكومة الأميركية لإمداد الحلفاء الأميركيين في أفغانستان بالسلاح. ما يبدأ كعملية صغيرة سرعان ما يتضخّم إلى صفقة سلاح بملايين الدولارات: مورّدون مريبون، وذخيرة غير مشروعة، ومطالبات نفقات تكفي لإطعام جيش صغير. ومع تكدّس المال واتساخ الصفقات، على الصديقين أن يقرّرا إلى أي مدى هما مستعدّان للذهاب قبل أن ينهار كل شيء. لم يكن الحلم الأميركي أكثر دسماً من هذا.",
+
+
+
+      'top-bun-maverick':"بيت «مافريك» ميتشل أهمّ طيّار في البحرية الأميركية، وهو يعلم ذلك. متهوّر ومغرور، يطير بوقود من غرور بحجم حاملة طائرات، فيكسب مقعداً في مدرسة أسلحة المقاتلات النخبوية Top Bun، حيث يتبارى نخبة النخبة لإثبات من يملك السماء. لكن بين الاشتباكات الجوية الخطرة، والمنافسة الملتهبة مع آيسمان الباردِ كالثلج، وقصة حبٍّ ترتفع حرارتها أسرع من الحارقات الخلفية، على مافريك أن يقرّر: هل يتّبع القواعد أم يطير وفق قواعده الخاصة. الحاجة إلى السرعة حقيقية. والحاجة إلى الأكل أيضاً.",
     },
     news: {
       title:'صور Fat Films المتحركة وصلت!',
