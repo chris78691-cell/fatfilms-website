@@ -1141,6 +1141,24 @@ const FILMS = [
   { slug: 'top-bun-maverick', title: 'Top Bun Maverick', video: 'videos/Top Bun.mp4', card: 'titlecards/Top_Bun_Maverick.jpg',
     desc: "Pete \"Maverick\" Mitchell is the hottest pilot in the US Navy and he knows it. Reckless, cocky, and fuelled by an ego the size of an aircraft carrier, he earns a spot at the elite Fighter Weapons School known as Top Bun, where the best of the best compete to prove who owns the skies. But between dangerous dogfights, a heated rivalry with the ice-cold Iceman, and a romance that's heating up faster than the afterburners, Maverick must decide whether he's willing to follow the rules or fly by his own. The need for speed is real. So is the need for feed.",
     cast: [['Tom Chews','Tom Cruise'],['Kelly McGrillis','Kelly McGillis'],['Val Kilomer','Val Kilmer'],['Anthony Breadwards','Anthony Edwards'],['Ton Skerritt','Tom Skerritt']] },
+  { slug: 'mission-indigestible-rogue-bacon', title: 'Mission Indigestible: Rogue Bacon', video: 'videos/Mission Indigestible Rogue Bacon.mp4', card: 'titlecards/Mission_Indigestible_Rogue_Bacon.jpg',
+    desc: "Ethan Munch is back and hungrier than ever. When a shadowy organisation known as the Syndicate threatens global security, Ethan goes rogue to take them down from the inside. Clinging to the side of a cargo plane during takeoff with nothing but sheer grip strength and the remains of an in-flight meal, he embarks on his most physical mission yet. From the opera houses of Vienna to the streets of Casablanca, Ethan must outrun, outfight, and out-eat an enemy who knows his every move. Your mission, should you choose to accept it, comes with a side of fries.",
+    cast: [['Tom Chews','Tom Cruise'],['Rebecca Ferguscone','Rebecca Ferguson'],['Simon Peck','Simon Pegg'],['Jeremy Bigger','Jeremy Renner'],['Alick Baldwin','Alec Baldwin']] },
+  { slug: 'fat-driver', title: 'Fat Driver', video: 'videos/big driver.mp4', card: 'titlecards/Fat_Driver.jpg',
+    desc: "Travis Bickling is a lonely, sleep-deprived cab driver crawling through the greasy streets of 1970s New York City. Disgusted by the filth and corruption he sees through his windshield every night, he begins a slow descent into obsession, fuelled entirely by diner coffee and late-night pizza slices. As the city chews him up and spits him out, Travis decides to take matters into his own oversized hands. You talking to me? You must be, because nobody else is taking my order.",
+    cast: [['Blobert De Niro','Robert De Niro'],['Jodie Feaster','Jodie Foster'],['Cybill Shephards Pie','Cybill Shepherd'],['Heavy Keitel','Harvey Keitel'],['Albert Cooks','Albert Brooks']] },
+  { slug: 'fatface', title: 'Fatface', video: 'videos/Fatface.mp4', card: 'titlecards/Fatface.jpg',
+    desc: "Tony Mountain arrives in Miami with nothing but the clothes on his back and an appetite for the American dream. Starting from the bottom of the criminal food chain, he claws his way to the top through ruthless ambition, mountains of product, and an even bigger mountain of Cuban sandwiches. But the higher he climbs, the more enemies he makes, and the more he eats, the harder he falls. The world is his, and so is everything on the menu. Say hello to my little friend. He works at the drive-thru.",
+    cast: [['Al Cappucino','Al Pacino'],['Michelle Pieffer','Michelle Pfeiffer'],['Stoven Bauer','Steven Bauer'],['Berry Elizabeth Mastrantonio','Mary Elizabeth Mastrantonio'],['Blobert Loggia','Robert Loggia']] },
+  { slug: 'forrest-plump', title: 'Forrest Plump', video: 'videos/Forrest Plump.mp4', card: 'titlecards/Forrest_Plump.jpg',
+    desc: "Forrest Plump isn't the sharpest tool in the shed, but what he lacks in brains he makes up for in heart, determination, and an extraordinary ability to eat his way through every major event in American history. From Vietnam to the White House lawn, from a shrimp boat in Alabama to a cross-country jog that somehow never burned a single calorie, Forrest stumbles through life touching everyone he meets. Mama always said life is like a box of chocolates. Forrest ate the whole box before she could finish the sentence.",
+    cast: [['Ton Hanks','Tom Hanks'],['Robin Wide','Robin Wright'],['Curry Sinise','Gary Sinise'],['Mykelti Filliamson','Mykelti Williamson'],['Sally Field-of-Cakes','Sally Field']] },
+  { slug: 'fat-to-the-future', title: 'Fat to the Future', video: 'videos/Fat to the Future.mp4', card: 'titlecards/Fat_to_the_Future.jpg',
+    desc: "Marty McFry is a regular teenager with a regular life until his eccentric scientist friend Doc Brown unveils a time machine built from a DeLorean and powered by plutonium and an alarming number of breakfast burritos. When Marty accidentally travels back to 1955, he must make sure his parents fall in love, avoid erasing his own existence, and find a way back to the future before the timeline, and his belt, reaches breaking point. Roads? Where we're going, we don't need roads. We need bigger roads.",
+    cast: [['Michael kJ Fox','Michael J. Fox'],['Crustopher Lloyd','Christopher Lloyd'],['Pea Thompson','Lea Thompson'],['Crispin Clover','Crispin Glover'],['Thomas F. Wilscone','Thomas F. Wilson']] },
+  { slug: 'lardy-supreme', title: 'Lardy Supreme', video: 'videos/lardy supreme.mp4', card: 'titlecards/Lardy_Supreme.jpg',
+    desc: "Lardy Supreme is a ping pong hustler operating in the smoky back rooms of 1950s New York City. What starts as a small-time racket quickly escalates as Lardy discovers he has a talent for the game that nobody can match, a relentless competitive hunger that pushes him from underground tables to the biggest stages in the world. But the higher the stakes, the heavier the pressure, and in a world where everyone wants a piece of the action, Lardy must decide whether winning is worth the weight it carries.",
+    cast: [['Timothee Chalameat','Timothee Chalamet'],['Gwyneth Fatrow','Gwyneth Paltrow'],['Henn Badgley','Penn Badgley'],['Maple Tesfaye','Abel Tesfaye'],['Tyler the Eater','Tyler, the Creator']] },
 ];
 
 const BY_SLUG = Object.fromEntries(FILMS.map(f => [f.slug, f]));
@@ -1148,10 +1166,10 @@ const BY_SLUG = Object.fromEntries(FILMS.map(f => [f.slug, f]));
 // Each film appears in exactly one category (16 films / 4 categories = 4 each).
 // `id` is a stable translation key; the displayed title is resolved via t('ui.' + id).
 const BASE_CATEGORIES = [
-  { id: 'biggestHits',  slugs: ['american-chud','fat-club','bulk-fiction','weight-of-wallstreet','whoppenheimer','lord-of-the-onion-rings','the-hungry-games','spider-man-no-weigh-home','fat-wars','joker-xxl','pie-rates-of-the-caribbean','the-fatinator','top-bun-maverick'] },
-  { id: 'exclusives',   slugs: ['donnie-lardo','baking-bad','chewlander','fatsi-driver','dextra-large','the-eating-dead','euporkia','immovable','war-hogs'] },
-  { id: 'freshlyBaked', slugs: ['heavy-potter','the-fatrix','chiplash','bigger-things','superfat','limitmass','skyfull','drive-thru','stocky'] },
-  { id: 'heavyHits',    slugs: ['interbelly','fat-runner','squid-gain','the-bigs','jurassic-pork','fatman','no-country-for-fat-men','iron-mass','john-thick'] },
+  { id: 'biggestHits',  slugs: ['american-chud','fat-club','bulk-fiction','weight-of-wallstreet','whoppenheimer','lord-of-the-onion-rings','the-hungry-games','spider-man-no-weigh-home','fat-wars','joker-xxl','pie-rates-of-the-caribbean','the-fatinator','top-bun-maverick','mission-indigestible-rogue-bacon','fatface'] },
+  { id: 'exclusives',   slugs: ['donnie-lardo','baking-bad','chewlander','fatsi-driver','dextra-large','the-eating-dead','euporkia','immovable','war-hogs','fat-driver','lardy-supreme'] },
+  { id: 'freshlyBaked', slugs: ['heavy-potter','the-fatrix','chiplash','bigger-things','superfat','limitmass','skyfull','drive-thru','stocky','fat-to-the-future'] },
+  { id: 'heavyHits',    slugs: ['interbelly','fat-runner','squid-gain','the-bigs','jurassic-pork','fatman','no-country-for-fat-men','iron-mass','john-thick','forrest-plump'] },
 ];
 
 // The "clean" frames for idle mode — a curated pool from public/frames/
@@ -1257,6 +1275,36 @@ const TRANSLATIONS = {
 
 
       'top-bun-maverick':"Pete \"Maverick\" Mitchell is the hottest pilot in the US Navy and he knows it. Reckless, cocky, and fuelled by an ego the size of an aircraft carrier, he earns a spot at the elite Fighter Weapons School known as Top Bun, where the best of the best compete to prove who owns the skies. But between dangerous dogfights, a heated rivalry with the ice-cold Iceman, and a romance that's heating up faster than the afterburners, Maverick must decide whether he's willing to follow the rules or fly by his own. The need for speed is real. So is the need for feed.",
+
+
+
+
+      'mission-indigestible-rogue-bacon':"Ethan Munch is back and hungrier than ever. When a shadowy organisation known as the Syndicate threatens global security, Ethan goes rogue to take them down from the inside. Clinging to the side of a cargo plane during takeoff with nothing but sheer grip strength and the remains of an in-flight meal, he embarks on his most physical mission yet. From the opera houses of Vienna to the streets of Casablanca, Ethan must outrun, outfight, and out-eat an enemy who knows his every move. Your mission, should you choose to accept it, comes with a side of fries.",
+
+
+
+
+      'fat-driver':"Travis Bickling is a lonely, sleep-deprived cab driver crawling through the greasy streets of 1970s New York City. Disgusted by the filth and corruption he sees through his windshield every night, he begins a slow descent into obsession, fuelled entirely by diner coffee and late-night pizza slices. As the city chews him up and spits him out, Travis decides to take matters into his own oversized hands. You talking to me? You must be, because nobody else is taking my order.",
+
+
+
+
+      'fatface':"Tony Mountain arrives in Miami with nothing but the clothes on his back and an appetite for the American dream. Starting from the bottom of the criminal food chain, he claws his way to the top through ruthless ambition, mountains of product, and an even bigger mountain of Cuban sandwiches. But the higher he climbs, the more enemies he makes, and the more he eats, the harder he falls. The world is his, and so is everything on the menu. Say hello to my little friend. He works at the drive-thru.",
+
+
+
+
+      'forrest-plump':"Forrest Plump isn't the sharpest tool in the shed, but what he lacks in brains he makes up for in heart, determination, and an extraordinary ability to eat his way through every major event in American history. From Vietnam to the White House lawn, from a shrimp boat in Alabama to a cross-country jog that somehow never burned a single calorie, Forrest stumbles through life touching everyone he meets. Mama always said life is like a box of chocolates. Forrest ate the whole box before she could finish the sentence.",
+
+
+
+
+      'fat-to-the-future':"Marty McFry is a regular teenager with a regular life until his eccentric scientist friend Doc Brown unveils a time machine built from a DeLorean and powered by plutonium and an alarming number of breakfast burritos. When Marty accidentally travels back to 1955, he must make sure his parents fall in love, avoid erasing his own existence, and find a way back to the future before the timeline, and his belt, reaches breaking point. Roads? Where we're going, we don't need roads. We need bigger roads.",
+
+
+
+
+      'lardy-supreme':"Lardy Supreme is a ping pong hustler operating in the smoky back rooms of 1950s New York City. What starts as a small-time racket quickly escalates as Lardy discovers he has a talent for the game that nobody can match, a relentless competitive hunger that pushes him from underground tables to the biggest stages in the world. But the higher the stakes, the heavier the pressure, and in a world where everyone wants a piece of the action, Lardy must decide whether winning is worth the weight it carries.",
     },
     news: {
       title:'Fat Films GIFs are here!',
@@ -1355,6 +1403,36 @@ const TRANSLATIONS = {
 
 
       'top-bun-maverick':"Pete \"Maverick\" Mitchell es el piloto más en forma de la Armada de Estados Unidos y lo sabe. Imprudente, chulo y alimentado por un ego del tamaño de un portaaviones, se gana un puesto en la élite de la Escuela de Armas de Caza conocida como Top Bun, donde los mejores de los mejores compiten por demostrar quién manda en los cielos. Pero entre peligrosos combates aéreos, una rivalidad ardiente con el gélido Iceman y un romance que se calienta más rápido que los postcombustores, Maverick debe decidir si está dispuesto a seguir las reglas o a volar a su manera. La necesidad de velocidad es real. La de comer, también.",
+
+
+
+
+      'mission-indigestible-rogue-bacon':"Ethan Munch ha vuelto, y con más hambre que nunca. Cuando una organización en la sombra conocida como el Sindicato amenaza la seguridad global, Ethan se sale del redil para derribarlos desde dentro. Aferrado al costado de un avión de carga durante el despegue, con nada más que pura fuerza de agarre y los restos de un menú de a bordo, emprende la misión más física de su carrera. Desde los teatros de la ópera de Viena hasta las calles de Casablanca, Ethan debe correr más, pelear más y comer más que un enemigo que conoce cada uno de sus movimientos. Su misión, si decide aceptarla, viene con una guarnición de patatas fritas.",
+
+
+
+
+      'fat-driver':"Travis Bickling es un solitario taxista privado de sueño que se arrastra por las grasientas calles del Nueva York de los años 70. Asqueado por la suciedad y la corrupción que ve por su parabrisas cada noche, comienza un lento descenso a la obsesión, alimentado únicamente por café de bar de carretera y porciones de pizza de madrugada. Mientras la ciudad lo mastica y lo escupe, Travis decide tomar cartas en el asunto con sus propias manos descomunales. ¿Me hablas a mí? Pues sí, porque nadie más me toma el pedido.",
+
+
+
+
+      'fatface':"Tony Mountain llega a Miami sin más que la ropa que lleva puesta y un apetito por el sueño americano. Empezando desde el último escalón de la cadena alimentaria criminal, se abre paso a zarpazos hasta la cima mediante una ambición despiadada, montañas de producto y una montaña aún mayor de sándwiches cubanos. Pero cuanto más alto sube, más enemigos se hace, y cuanto más come, más fuerte cae. El mundo es suyo, y también todo lo que hay en la carta. Saluda a mi amiguito. Trabaja en el autoservicio.",
+
+
+
+
+      'forrest-plump':"Forrest Plump no es el más afilado del cajón, pero lo que le falta en cabeza le sobra en corazón, determinación y una extraordinaria capacidad de abrirse paso comiendo a través de todos los grandes acontecimientos de la historia de Estados Unidos. De Vietnam al jardín de la Casa Blanca, de un barco camaronero en Alabama a una carrera campo a través que de algún modo no quemó ni una sola caloría, Forrest tropieza por la vida tocando a todo el que se cruza con él. Mamá siempre decía que la vida es como una caja de bombones. Forrest se comió la caja entera antes de que terminara la frase.",
+
+
+
+
+      'fat-to-the-future':"Marty McFry es un adolescente normal con una vida normal hasta que su excéntrico amigo científico Doc Brown le presenta una máquina del tiempo construida a partir de un DeLorean y alimentada por plutonio y un número alarmante de burritos de desayuno. Cuando Marty viaja por accidente al año 1955, tiene que asegurarse de que sus padres se enamoren, evitar borrarse a sí mismo de la existencia y encontrar una forma de volver al futuro antes de que la línea temporal, y su cinturón, lleguen al límite. ¿Carreteras? A donde vamos no necesitamos carreteras. Necesitamos carreteras más anchas.",
+
+
+
+
+      'lardy-supreme':"Lardy Supreme es un buscavidas del ping pong que opera en las trastiendas llenas de humo del Nueva York de los años 50. Lo que empieza como un negocio de poca monta rápidamente se descontrola cuando Lardy descubre que tiene un talento para el juego que nadie puede igualar y un hambre competitiva implacable que lo lleva de las mesas clandestinas a los escenarios más grandes del mundo. Pero cuanto más se sube la apuesta, más pesa la presión, y en un mundo donde todo el mundo quiere un trozo del pastel, Lardy debe decidir si ganar vale el peso que conlleva.",
     },
     news: {
       title:'¡Los GIFs de Fat Films ya están aquí!',
@@ -1453,6 +1531,36 @@ const TRANSLATIONS = {
 
 
       'top-bun-maverick':"Pete \"Maverick\" Mitchell est le pilote le plus en vue de l'US Navy, et il le sait. Téméraire, prétentieux et alimenté par un ego de la taille d'un porte-avions, il se décroche une place dans l'élite de l'école d'armement de chasse appelée Top Bun, où les meilleurs des meilleurs se mesurent pour prouver qui possède le ciel. Mais entre des combats aériens périlleux, une rivalité brûlante avec le glacial Iceman et une romance qui chauffe plus vite que la post-combustion, Maverick doit décider s'il est prêt à suivre les règles ou à voler selon les siennes. Le besoin de vitesse est réel. Le besoin de manger aussi.",
+
+
+
+
+      'mission-indigestible-rogue-bacon':"Ethan Munch est de retour, plus affamé que jamais. Lorsqu'une organisation occulte appelée le Syndicat menace la sécurité mondiale, Ethan passe en mode rogue pour la démanteler de l'intérieur. Cramponné au flanc d'un avion-cargo au décollage avec rien d'autre que sa force d'agrippement et les restes d'un plateau-repas, il se lance dans la mission la plus physique de sa carrière. Des opéras de Vienne aux ruelles de Casablanca, Ethan doit courir, frapper et manger plus vite qu'un ennemi qui connaît chacun de ses gestes. Votre mission, si vous l'acceptez, est servie avec une portion de frites.",
+
+
+
+
+      'fat-driver':"Travis Bickling est un chauffeur de taxi solitaire et insomniaque qui rampe dans les rues graisseuses du New York des années 70. Dégoûté par la crasse et la corruption qu'il voit chaque nuit à travers son pare-brise, il sombre lentement dans l'obsession, alimenté uniquement par le café d'un diner et des parts de pizza de fin de soirée. À mesure que la ville le mâche et le recrache, Travis décide de prendre les choses en main, avec ses propres mains surdimensionnées. Tu me parles ? Forcément, parce que personne d'autre ne prend ma commande.",
+
+
+
+
+      'fatface':"Tony Mountain débarque à Miami avec rien d'autre que les vêtements qu'il porte et un appétit pour le rêve américain. Parti du bas de la chaîne alimentaire criminelle, il s'arrache vers le sommet à coups d'ambition impitoyable, de montagnes de marchandise et d'une montagne encore plus haute de sandwichs cubains. Mais plus il grimpe, plus il se fait d'ennemis, et plus il mange, plus la chute est dure. Le monde est à lui, et tout le menu aussi. Dites bonjour à mon petit ami. Il bosse au drive.",
+
+
+
+
+      'forrest-plump':"Forrest Plump n'est pas la flèche la plus aiguisée du carquois, mais ce qui lui manque en cervelle, il le rattrape en cœur, en détermination et en une extraordinaire capacité à se frayer un chemin en mangeant à travers tous les grands événements de l'histoire américaine. Du Vietnam à la pelouse de la Maison-Blanche, d'un bateau crevettier en Alabama à une course transcontinentale qui n'a brûlé étrangement aucune calorie, Forrest trébuche dans la vie en touchant tous ceux qu'il croise. Maman disait toujours que la vie c'est comme une boîte de chocolats. Forrest a mangé toute la boîte avant qu'elle ait fini sa phrase.",
+
+
+
+
+      'fat-to-the-future':"Marty McFry est un ado normal avec une vie normale, jusqu'à ce que son ami scientifique excentrique Doc Brown dévoile une machine à voyager dans le temps fabriquée à partir d'une DeLorean et alimentée par du plutonium et un nombre alarmant de burritos du petit-déjeuner. Quand Marty se retrouve par accident en 1955, il doit faire en sorte que ses parents tombent amoureux, éviter d'effacer sa propre existence et trouver le moyen de revenir vers le futur avant que la ligne temporelle, et sa ceinture, n'arrivent à la rupture. Des routes ? Là où on va, on n'a pas besoin de routes. Il nous faut des routes plus larges.",
+
+
+
+
+      'lardy-supreme':"Lardy Supreme est un arnaqueur de ping-pong qui opère dans les arrière-salles enfumées du New York des années 50. Ce qui commence comme une petite combine s'emballe vite : Lardy se découvre un talent pour le jeu que personne ne peut égaler, une faim compétitive incessante qui le pousse des tables clandestines aux plus grandes scènes du monde. Mais plus les enjeux montent, plus la pression pèse lourd, et dans un monde où tout le monde veut sa part du gâteau, Lardy doit décider si la victoire vaut le poids qu'elle traîne avec elle.",
     },
     news: {
       title:'Les GIFs Fat Films sont là !',
@@ -1551,6 +1659,36 @@ const TRANSLATIONS = {
 
 
       'top-bun-maverick':"Pete \"Maverick\" Mitchell è il pilota più in vista della Marina degli Stati Uniti e lo sa benissimo. Spericolato, presuntuoso e alimentato da un ego grande quanto una portaerei, si guadagna un posto nell'élite della Fighter Weapons School chiamata Top Bun, dove i migliori dei migliori si sfidano per stabilire chi possiede i cieli. Ma tra combattimenti aerei pericolosi, una rivalità accesa con il gelido Iceman e una storia d'amore che sale di temperatura più in fretta dei postbruciatori, Maverick deve decidere se è disposto a seguire le regole o a volare a modo suo. Il bisogno di velocità è reale. Anche quello di mangiare.",
+
+
+
+
+      'mission-indigestible-rogue-bacon':"Ethan Munch è tornato, e ha più fame che mai. Quando una losca organizzazione chiamata il Sindacato minaccia la sicurezza globale, Ethan va in rogue per smantellarla dall'interno. Aggrappato al fianco di un aereo cargo al decollo con nient'altro che pura presa e gli avanzi di un pasto a bordo, intraprende la missione più fisica di sempre. Dai teatri d'opera di Vienna alle strade di Casablanca, Ethan deve correre, combattere e mangiare più di un nemico che conosce ogni sua mossa. La sua missione, se decide di accettarla, viene servita con un contorno di patatine.",
+
+
+
+
+      'fat-driver':"Travis Bickling è un solitario tassista insonne che striscia per le strade unte della New York anni '70. Disgustato dalla sporcizia e dalla corruzione che vede ogni notte attraverso il parabrezza, comincia una lenta discesa nell'ossessione, alimentato esclusivamente dal caffè della tavola calda e da spicchi di pizza di mezzanotte. Mentre la città lo mastica e lo sputa fuori, Travis decide di prendere in mano la situazione con le sue grosse mani personali. Parli con me? Per forza, perché nessun altro mi prende l'ordine.",
+
+
+
+
+      'fatface':"Tony Mountain arriva a Miami con nient'altro che i vestiti che ha addosso e una fame del sogno americano. Partendo dal fondo della catena alimentare del crimine, si fa strada verso la cima a forza di ambizione spietata, montagne di merce e una montagna ancora più grossa di sandwich cubani. Ma più sale, più nemici si fa, e più mangia, più rovinosa è la caduta. Il mondo è suo, e così tutto il menu. Saluta il mio piccolo amico. Lavora al drive-thru.",
+
+
+
+
+      'forrest-plump':"Forrest Plump non è il più sveglio della stanza, ma ciò che gli manca in cervello lo compensa con cuore, determinazione e una straordinaria capacità di farsi strada a morsi attraverso ogni grande evento della storia americana. Dal Vietnam al prato della Casa Bianca, da un peschereccio di gamberi in Alabama a una corsa transamericana che, chissà come, non ha bruciato una sola caloria, Forrest si fa avanti barcollando nella vita, toccando chiunque incontri. Mamma diceva sempre che la vita è come una scatola di cioccolatini. Forrest si è mangiato l'intera scatola prima che lei finisse la frase.",
+
+
+
+
+      'fat-to-the-future':"Marty McFry è un adolescente normale con una vita normale, finché il suo amico scienziato eccentrico Doc Brown gli mostra una macchina del tempo costruita partendo da una DeLorean e alimentata da plutonio e da una quantità allarmante di burrito da colazione. Quando Marty finisce per sbaglio nel 1955, deve far sì che i suoi genitori si innamorino, evitare di cancellare la propria esistenza e trovare il modo di tornare al futuro prima che la linea temporale, e la cintura, raggiungano il punto di rottura. Strade? Dove andiamo non servono strade. Servono strade più larghe.",
+
+
+
+
+      'lardy-supreme':"Lardy Supreme è un truffatore del ping pong che opera nelle stanze fumose della New York anni '50. Quella che parte come una piccola truffa esplode in fretta: Lardy scopre di avere per il gioco un talento che nessuno può eguagliare e una fame competitiva inarrestabile che lo spinge dai tavoli clandestini ai palcoscenici più grandi del mondo. Ma più alta è la posta, più pesa la pressione, e in un mondo in cui tutti vogliono la loro fetta, Lardy deve decidere se vincere valga il peso che si porta dietro.",
     },
     news: {
       title:'Le GIF di Fat Films sono arrivate!',
@@ -1649,6 +1787,36 @@ const TRANSLATIONS = {
 
 
       'top-bun-maverick':"Pete \"Maverick\" Mitchell ist der heißeste Pilot der US Navy — und er weiß es. Tollkühn, überheblich und befeuert von einem Ego in Flugzeugträgergröße, ergattert er sich einen Platz in der Elite-Kampfwaffenschule Top Bun, wo die Besten der Besten ausmachen, wem der Himmel gehört. Doch zwischen brenzligen Dogfights, einer eiskalten Rivalität mit dem Iceman und einer Romanze, die schneller heißläuft als die Nachbrenner, muss Maverick entscheiden, ob er nach Regeln spielt oder nach eigenen Regeln fliegt. Der Drang nach Speed ist echt. Der Drang nach Futter auch.",
+
+
+
+
+      'mission-indigestible-rogue-bacon':"Ethan Munch ist zurück — und hungriger denn je. Als eine schattenhafte Organisation namens das Syndikat die globale Sicherheit bedroht, geht Ethan auf eigene Faust und legt sie von innen lahm. An der Seite eines startenden Frachtflugzeugs hängend, mit nichts als roher Griffkraft und den Resten eines Bordmenüs, stürzt er sich in die körperlichste Mission seines Lebens. Von den Opernhäusern Wiens bis zu den Gassen Casablancas muss Ethan einen Feind ausrennen, ausschlagen und überessen, der jeden seiner Schritte kennt. Ihre Mission, sollten Sie sie annehmen, kommt mit einer Beilage Pommes.",
+
+
+
+
+      'fat-driver':"Travis Bickling ist ein einsamer, übermüdeter Taxifahrer, der durch die fettigen Straßen des New York der Siebziger kriecht. Angewidert vom Dreck und der Korruption, die er Nacht für Nacht durch die Windschutzscheibe sieht, beginnt er einen langsamen Abstieg in die Besessenheit — gespeist allein von Dinerkaffee und nächtlichen Pizzastücken. Während die Stadt ihn zerkaut und wieder ausspuckt, entscheidet Travis, die Sache in die eigenen, überdimensionierten Hände zu nehmen. Redest du mit mir? Musst du wohl, weil sonst niemand meine Bestellung annimmt.",
+
+
+
+
+      'fatface':"Tony Mountain landet in Miami mit nichts als den Sachen, die er am Leib trägt, und einem Appetit auf den amerikanischen Traum. Vom untersten Glied der kriminellen Nahrungskette aus krallt er sich nach oben — mit rücksichtsloser Ambition, Bergen von Ware und einem noch größeren Berg kubanischer Sandwiches. Doch je höher er klettert, desto mehr Feinde macht er sich, und je mehr er isst, desto härter fällt er. Die Welt gehört ihm, und alles auf der Speisekarte auch. Sag Hallo zu meinem kleinen Freund. Er arbeitet am Drive-Thru.",
+
+
+
+
+      'forrest-plump':"Forrest Plump ist nicht das hellste Köpfchen, aber was ihm an Verstand fehlt, macht er mit Herz, Entschlossenheit und einer außergewöhnlichen Fähigkeit wett, sich quer durch jedes große Ereignis der amerikanischen Geschichte zu essen. Von Vietnam bis zum Rasen des Weißen Hauses, von einem Garnelenkutter in Alabama bis zu einem Querfeldein-Jog, bei dem irgendwie nicht eine Kalorie verbrannt wurde, stolpert Forrest durchs Leben und berührt dabei jeden, der ihm begegnet. Mama hat immer gesagt, das Leben ist wie eine Schachtel Pralinen. Forrest hatte die Schachtel leer gegessen, bevor sie den Satz zu Ende sprechen konnte.",
+
+
+
+
+      'fat-to-the-future':"Marty McFry ist ein ganz normaler Teenager mit einem ganz normalen Leben — bis sein exzentrischer Wissenschaftlerfreund Doc Brown eine Zeitmaschine vorstellt, gebaut aus einem DeLorean und angetrieben von Plutonium und einer alarmierenden Zahl von Frühstücksburritos. Als Marty versehentlich ins Jahr 1955 reist, muss er dafür sorgen, dass sich seine Eltern verlieben, seine eigene Existenz nicht ausradieren und einen Weg zurück in die Zukunft finden, bevor die Zeitlinie — und sein Gürtel — am Anschlag sind. Straßen? Wo wir hinfahren, brauchen wir keine Straßen. Wir brauchen breitere Straßen.",
+
+
+
+
+      'lardy-supreme':"Lardy Supreme ist ein Tischtennis-Hustler, der in den verrauchten Hinterzimmern des New York der Fünfziger sein Geld macht. Was als kleine Masche beginnt, eskaliert schnell: Lardy entdeckt ein Talent für das Spiel, dem niemand das Wasser reichen kann, und einen unermüdlichen Wettkampfhunger, der ihn von Untergrundtischen auf die größten Bühnen der Welt katapultiert. Doch je höher der Einsatz, desto schwerer der Druck, und in einer Welt, in der jeder ein Stück vom Kuchen will, muss Lardy entscheiden, ob der Sieg sein Gewicht wirklich wert ist.",
     },
     news: {
       title:'Fat Films GIFs sind da!',
@@ -1747,6 +1915,36 @@ const TRANSLATIONS = {
 
 
       'top-bun-maverick':"Pete「Maverick」Mitchell 是美国海军最炙手可热的飞行员,他自己也很清楚。鲁莽、自负,被一颗航空母舰大小的自我驱动着,他赢得了进入精英战机武器学校 Top Bun 的资格 — 高手中的高手在那里比拼,看谁才是天空的主人。然而在危险的缠斗、与冷酷如冰的 Iceman 之间炽热的较量,以及比加力燃烧器升温还快的恋情之间,Maverick 必须决定:他是要守规矩,还是按自己的方式飞。对速度的渴望是真实的。对吃的渴望,也一样。",
+
+
+
+
+      'mission-indigestible-rogue-bacon':"Ethan Munch 回来了,而且比以往更饿。当一个名为辛迪加的黑暗组织威胁全球安全时,Ethan 自行脱队,从内部把他们拆掉。在货机起飞时只凭一双手抓住机身,加上一份机餐残骸,他踏上了职业生涯中最硬核的一次任务。从维也纳的歌剧院到卡萨布兰卡的街头,Ethan 必须跑得更快、打得更狠、吃得更多,才能赢过一个对他了如指掌的敌人。你的任务,如果你愿意接受,附赠一份薯条。",
+
+
+
+
+      'fat-driver':"Travis Bickling 是一个孤独、严重缺觉的出租车司机,缓慢穿行在 70 年代纽约油腻的街头。每晚透过挡风玻璃看到的污秽和腐败让他作呕,他开始慢慢滑入痴迷的深渊 — 仅靠小餐馆咖啡和深夜披萨片维持。当这座城市把他嚼烂、再吐出来时,Travis 决定亲自动手 — 用他那双特大号的手。你在跟我说话?那一定是,因为没有别人来接我的单。",
+
+
+
+
+      'fatface':"Tony Mountain 抵达迈阿密时一无所有,只剩身上这身衣服,以及对美国梦的胃口。从犯罪食物链的最底层起步,他靠着无情的野心、堆积如山的货,以及更高一座的古巴三明治山,一路爬到顶端。但他爬得越高、树敌越多,吃得越多、摔得越惨。这个世界是他的,菜单上的每一道也是。来,跟我的小朋友打个招呼 — 他在得来速窗口打工。",
+
+
+
+
+      'forrest-plump':"Forrest Plump 算不上最聪明的那一个,但他脑子里缺的那一点,他用心、用毅力,以及一边吃一边横穿美国近代史的非凡本事,通通补了回来。从越南战场到白宫草坪,从阿拉巴马的捕虾船到莫名其妙一卡路里都没消耗掉的横跨美国的慢跑,Forrest 跌跌撞撞地走过一生,顺手感动了所遇见的每一个人。妈妈总说人生就像一盒巧克力。Forrest 在她说完这句话之前,就已经把整盒吃光了。",
+
+
+
+
+      'fat-to-the-future':"Marty McFry 是个生活很普通的普通青少年 — 直到他古怪的科学家朋友 Doc Brown 揭开一台时间机器:由一辆 DeLorean 改造,靠钚元素和一个令人担忧数量的早餐玉米卷供能。Marty 不小心穿越回 1955 年,他必须确保父母彼此相爱,避免把自己从存在里抹掉,并赶在时间线和他的腰带双双崩断之前,找到回到未来的方法。路?我们要去的地方,不需要路。我们需要更宽的路。",
+
+
+
+
+      'lardy-supreme':"Lardy Supreme 是个乒乓球老千,在 50 年代纽约烟雾缭绕的密室里讨生活。原本只是小打小闹的勾当,很快失控 — Lardy 发现自己在球桌上无人可敌,那股不知疲倦的求胜饥渴把他从地下球桌一路推上世界最大的舞台。但筹码越高,压力越重,在一个人人都想分一杯羹的世界里,Lardy 必须决定:赢,值不值得它所带来的重量。",
     },
     news: {
       title:'Fat Films GIF 上线了!',
@@ -1845,6 +2043,36 @@ const TRANSLATIONS = {
 
 
       'top-bun-maverick':"ピート「マーヴェリック」ミッチェルは米海軍最高の戦闘機パイロットで、本人もそれを十分わかっている。無謀でうぬぼれが強く、空母並みのエゴを燃料に飛ぶ彼は、エリート戦闘兵器学校 Top Bun に席を勝ち取る。そこでは精鋭中の精鋭たちが空の覇者の座をかけて競い合う。だが、危険な空中戦と、冷徹なアイスマンとの激しいライバル関係、そしてアフターバーナーよりも速くヒートアップする恋愛模様の合間で、マーヴェリックはルールに従うのか、自分のやり方で飛ぶのかを決めねばならない。スピードへの欲求は本物だ。食欲も、また本物だ。",
+
+
+
+
+      'mission-indigestible-rogue-bacon':"Ethan Munch が帰ってきた ── かつてないほど腹をすかせて。シンジケートと呼ばれる暗黒組織が世界の安全を脅かすと、Ethan は組織を内部から崩すべく単独行動に出る。離陸する貨物機の側面に、握力と機内食の残りだけを頼みにしがみつき、彼はキャリア最大の肉体派ミッションへと飛び込む。ウィーンの歌劇場からカサブランカの路地まで、彼は自分の一挙手一投足を知り尽くす敵を、走り抜き、殴り抜き、食べ抜かなければならない。あなたのミッション、引き受けるならフライドポテト付きで。",
+
+
+
+
+      'fat-driver':"Travis Bickling は孤独で寝不足のタクシードライバー、70 年代ニューヨークの脂ぎった街をのろのろと這うように走る。フロントガラス越しに毎夜目にする汚れと腐敗にうんざりした彼は、ダイナーのコーヒーと深夜のピザだけを燃料に、ゆっくりと執着の底へと沈んでいく。街に噛み砕かれ、吐き出されたとき、Travis は事を自分の超特大の手で片付けると決める。俺に話しかけてんのか?そうに違いない。だって、ほかに俺の注文を取りに来るやつはいないんだから。",
+
+
+
+
+      'fatface':"Tony Mountain は身につけている服とアメリカン・ドリームへの食欲だけを抱え、マイアミに降り立つ。犯罪の食物連鎖の底辺から出発し、容赦ない野心と、山のような「品物」、そしてさらに高く積み上がるキューバ・サンドの山を武器に、頂点へと這い上がる。だが上に行けば行くほど敵は増え、食べれば食べるほど落ちる時は重い。世界は彼のものになる。メニューの上のすべてもまた。俺の小さな友だちにご挨拶を。彼はドライブスルーで働いてる。",
+
+
+
+
+      'forrest-plump':"Forrest Plump は決して頭脳明晰なほうじゃない。だが頭で足りない分は、心と決意と、アメリカ史のあらゆる大事件を「食いながら」突き抜けていく異常な才能で補ってしまう。ベトナムからホワイトハウスの芝生まで、アラバマの海老漁船から、なぜか一カロリーも消費しなかった大陸横断ジョギングまで、Forrest はつまずきながら人生を歩き、出会った人々全員に何かを残していく。ママはいつも言ってた、人生はチョコレートの箱みたいなものだって。フォレストはママが言い終わる前に箱ごと食べた。",
+
+
+
+
+      'fat-to-the-future':"Marty McFry はごく普通の人生を歩むごく普通のティーンエイジャー ── 風変わりな科学者の友人 Doc Brown が DeLorean 改造のタイムマシンを披露するまでは。動力はプルトニウムと、不安になるほど大量の朝食ブリトー。Marty が事故で 1955 年に飛ばされると、両親をきちんと恋に落とし、自分自身の存在を消さずに、そして時系列とベルトが限界に達する前に未来に戻る方法を見つけなければならない。道路だって?俺たちが向かう先に、道路なんて要らない。要るのはもっと太い道路だ。",
+
+
+
+
+      'lardy-supreme':"Lardy Supreme は 50 年代ニューヨーク、煙の充ちた裏部屋で稼ぐ卓球ハスラーだ。ちっぽけな小遣い稼ぎとして始まったものは瞬く間にスケールアップする。誰にも真似のできない卓球の才能と、止まることを知らない勝負への飢えが、Lardy を地下のテーブルから世界最大の舞台へと押し上げていく。だが賭け金が大きくなるほど、のしかかる圧力も重くなる。誰もが分け前を欲しがる世界で、Lardy は「勝つこと」に伴う重みに見合うのかを決めねばならない。",
     },
     news: {
       title:'Fat Films の GIF が登場!',
@@ -1943,6 +2171,36 @@ const TRANSLATIONS = {
 
 
       'top-bun-maverick':"피트 \"매버릭\" 미첼은 미 해군 최고의 파일럿이고, 본인도 그 사실을 잘 압니다. 무모하고 거만하며 항공모함만 한 자존심을 연료로 움직이는 그는 엘리트 전투 무기 학교 Top Bun의 자리를 따냅니다 — 최고 중의 최고들이 모여 누가 하늘의 주인인지를 가리는 곳이죠. 하지만 위험한 공중전과 차가운 아이스맨과의 뜨거운 라이벌 관계, 그리고 애프터버너보다 빠르게 달아오르는 로맨스 사이에서, 매버릭은 규칙을 따를지 자기 방식대로 날지를 결정해야 합니다. 속도에 대한 갈망은 진짜입니다. 먹는 것에 대한 갈망도 마찬가지죠.",
+
+
+
+
+      'mission-indigestible-rogue-bacon':"Ethan Munch가 돌아왔습니다 — 그 어느 때보다도 굶주린 채로요. Syndicate라 불리는 그림자 조직이 세계 안보를 위협하자, Ethan은 그들을 내부에서부터 무너뜨리기 위해 단독 행동에 나섭니다. 이륙하는 화물기 옆에 매달려, 손아귀의 힘과 기내식 잔반만 의지한 채 그는 인생 최고의 육탄전 미션에 뛰어듭니다. 비엔나의 오페라 하우스에서 카사블랑카의 거리까지, Ethan은 자신의 모든 움직임을 꿰뚫고 있는 적을 따돌리고, 두들겨 패고, 먹어 치워야 합니다. 당신의 임무는 — 받아들이기로 한다면 — 감자튀김 한 접시와 함께 옵니다.",
+
+
+
+
+      'fat-driver':"Travis Bickling는 외롭고 잠도 제대로 못 자는 택시 운전사로, 1970년대 뉴욕의 기름진 거리들을 기어가듯 운전합니다. 매일 밤 앞 유리 너머로 보이는 더러움과 부패에 진절머리가 난 그는, 다이너 커피와 늦은 밤의 피자 한 조각만을 연료 삼아 천천히 집착의 바닥으로 가라앉습니다. 도시가 그를 씹다 뱉어내자, Travis는 자신의 거대한 두 손으로 직접 해결하기로 합니다. 나한테 말한 거야? 그래야지 — 내 주문을 받으러 오는 사람은 아무도 없으니까.",
+
+
+
+
+      'fatface':"Tony Mountain은 마이애미에 도착할 때 등에 걸친 옷과 아메리칸 드림을 향한 식욕 외에는 아무것도 가진 게 없습니다. 범죄 먹이사슬의 맨 밑바닥에서 출발한 그는 무자비한 야망과 산더미 같은 \"물건\", 그리고 그보다 더 큰 쿠바 샌드위치 산을 발판 삼아 정상까지 기어 올라갑니다. 하지만 높이 오를수록 적은 늘고, 많이 먹을수록 추락은 가혹해집니다. 세상은 그의 것입니다 — 메뉴판 위의 모든 것도요. 내 작은 친구한테 인사하시죠. 그는 드라이브 스루에서 일합니다.",
+
+
+
+
+      'forrest-plump':"Forrest Plump는 그렇게 똑똑한 편은 아니지만, 머리로 부족한 부분을 마음과 끈기, 그리고 미국 현대사의 모든 큰 사건을 \"먹어 치우며\" 통과해버리는 비범한 능력으로 메웁니다. 베트남에서 백악관 잔디밭까지, 앨라배마의 새우잡이 배에서 어쩐 일인지 칼로리 한 톨 태우지 않은 대륙 횡단 조깅까지, Forrest는 비틀거리며 인생을 걸어가면서 만나는 모든 사람에게 흔적을 남깁니다. 엄마는 늘 인생은 초콜릿 상자 같다고 하셨죠. Forrest는 엄마가 그 문장을 끝내기도 전에 상자를 통째로 먹어 치웠습니다.",
+
+
+
+
+      'fat-to-the-future':"Marty McFry는 평범한 인생을 사는 평범한 십대입니다 — 괴짜 과학자 친구 Doc Brown이 DeLorean으로 만든 타임머신을 공개하기 전까지는요. 동력은 플루토늄과, 걱정스러울 만큼 많은 양의 아침식사용 부리토. 실수로 1955년으로 떨어진 Marty는 부모님이 사랑에 빠지도록 해야 하고, 자신의 존재가 지워지지 않게 해야 하며, 타임라인과 그의 벨트가 한계에 다다르기 전에 미래로 돌아갈 방법을 찾아야 합니다. 도로요? 우리가 갈 곳엔 도로 같은 건 필요 없습니다. 더 넓은 도로가 필요할 뿐이죠.",
+
+
+
+
+      'lardy-supreme':"Lardy Supreme는 1950년대 뉴욕의 매캐한 뒷방에서 활동하는 탁구 사기꾼입니다. 처음에는 자잘한 한탕으로 시작했지만, 누구도 따라잡을 수 없는 그의 재능과 멈출 줄 모르는 승부욕이 그를 지하 탁구대에서 세계 최대 규모의 무대로 밀어 올리면서 일은 빠르게 커집니다. 하지만 판돈이 커질수록 압박은 무거워지고, 모두가 한몫 챙기려는 세계에서 Lardy는 결정해야 합니다 — 승리가 그것이 지고 가는 무게만큼의 값어치가 있는지를요.",
     },
     news: {
       title:'Fat Films GIF가 등장했습니다!',
@@ -2041,6 +2299,36 @@ const TRANSLATIONS = {
 
 
       'top-bun-maverick':"بيت «مافريك» ميتشل أهمّ طيّار في البحرية الأميركية، وهو يعلم ذلك. متهوّر ومغرور، يطير بوقود من غرور بحجم حاملة طائرات، فيكسب مقعداً في مدرسة أسلحة المقاتلات النخبوية Top Bun، حيث يتبارى نخبة النخبة لإثبات من يملك السماء. لكن بين الاشتباكات الجوية الخطرة، والمنافسة الملتهبة مع آيسمان الباردِ كالثلج، وقصة حبٍّ ترتفع حرارتها أسرع من الحارقات الخلفية، على مافريك أن يقرّر: هل يتّبع القواعد أم يطير وفق قواعده الخاصة. الحاجة إلى السرعة حقيقية. والحاجة إلى الأكل أيضاً.",
+
+
+
+
+      'mission-indigestible-rogue-bacon':"عاد Ethan Munch، وأكثر جوعاً من أي وقتٍ مضى. حين تهدّد منظمة غامضة تُعرف بـ«السنديكا» الأمنَ العالمي، يخرج Ethan عن السيطرة كي يدمّرها من الداخل. متعلّقاً بجانب طائرة شحن أثناء إقلاعها بلا شيء سوى قوة قبضته وبقايا وجبة على متن الطائرة، ينطلق في أكثر مهامه إرهاقاً جسدياً. من دور الأوبرا في فيينا إلى شوارع الدار البيضاء، عليه أن يتفوّق في الجري والقتال والأكل على عدوٍّ يعرف كل خطوة من خطواته. مهمتك، إن قرّرت قبولها، تأتيك مع طبق بطاطس مقلية جانبي.",
+
+
+
+
+      'fat-driver':"Travis Bickling سائق أجرة وحيد قليل النوم، يزحف عبر شوارع نيويورك الدهنية في السبعينيات. تشمئزه القذارة والفساد اللذان يراهما كل ليلة من خلف الزجاج الأمامي، فيبدأ بانحدار بطيء نحو الهوس، لا يقتاته إلا قهوة المطاعم الصغيرة وشرائح بيتزا منتصف الليل. وفيما تمضغه المدينة ثم تبصقه، يقرّر Travis أن يأخذ الأمر بيديه الضخمتين. أتكلّمني؟ لا بد أنك تكلّمني، فلا أحد آخر يأتي ليأخذ طلبي.",
+
+
+
+
+      'fatface':"يصل Tony Mountain إلى ميامي بلا شيء سوى ثيابه ورغبةٍ لا تُشبَع بالحلم الأميركي. ينطلق من قاع السلسلة الإجرامية ويشقّ طريقه إلى القمة بطموح بلا رحمة، وجبالٍ من البضاعة، وجبلٍ أكبر منها من ساندوتشات كوبا. لكن كلّما ارتفع، تكاثر أعداؤه، وكلّما أكل، صار سقوطه أعنف. العالم له، وكل ما في القائمة كذلك. سلّموا على صديقي الصغير. إنه يعمل في الـ Drive-Thru.",
+
+
+
+
+      'forrest-plump':"Forrest Plump ليس أحدّ الناس ذكاءً، لكن ما ينقصه عقلاً يعوّضه قلباً وعزماً، وقدرةً استثنائية على شقّ طريقه بالأكل عبر كل حدث كبير في تاريخ أميركا. من فيتنام إلى مرج البيت الأبيض، من قارب جمبري في ألاباما إلى ركضة عبر القارة لم تحرق بطريقةٍ ما ولو سعرة حرارية واحدة، يتعثّر Forrest في حياته فيلامس كل من يلتقيه. كانت ماما تقول دائماً إن الحياة كعلبة شوكولاتة. أما Forrest فقد التهم العلبة كلها قبل أن تنهي ماما جملتها.",
+
+
+
+
+      'fat-to-the-future':"Marty McFry مراهق عادي يعيش حياةً عادية، إلى أن يكشف صديقه العالِم الغريب الأطوار Doc Brown عن آلة زمن مصنوعة من سيارة DeLorean، تعمل على البلوتونيوم وعدد مقلق من أرغفة البوريتو الإفطارية. حين يسافر Marty عن طريق الخطأ إلى عام 1955، عليه أن يحرص على أن يقع والداه في الحب، وأن يتفادى محو وجوده، وأن يجد طريقاً للعودة إلى المستقبل قبل أن يبلغ الخط الزمني وحزامه نقطة الانهيار. طُرُق؟ المكان الذي نتجه إليه لا يحتاج إلى طُرُق. يحتاج إلى طُرُق أعرض.",
+
+
+
+
+      'lardy-supreme':"Lardy Supreme محتالٌ في تنس الطاولة يعمل في الغرف الخلفية المُدخّنة بنيويورك الخمسينيات. ما بدأ كحيلة صغيرة سرعان ما يتصاعد: يكتشف Lardy أن لديه موهبة لا تُجارى في اللعبة، وجوعاً تنافسياً لا يهدأ يدفعه من الطاولات السرية إلى أكبر منصّات العالم. لكن كلّما ارتفع الرهان، ثقل الضغط، وفي عالمٍ يريد فيه الجميع نصيباً من الكعكة، على Lardy أن يقرّر إن كان الفوز يستحقّ الثقل الذي يجرّه خلفه.",
     },
     news: {
       title:'صور Fat Films المتحركة وصلت!',
