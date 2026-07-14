@@ -72,6 +72,16 @@ img { display: block; max-width: 100%; }
 .socials svg { width: 20px; height: 20px; fill: currentColor; }
 .seo-blurb { color: rgba(255,255,255,0.3); font-size: 12px; line-height: 1.6; max-width: 900px; margin: 0 auto; letter-spacing: 0.2px; }
 @media (max-width: 640px) { .seo-footer { padding: 36px 20px 20px; } .socials { gap: 22px; } }
+    /* BEGIN mobile socials collapse — hide the text labels below 640px and show
+       only the four icons on a single line, slightly enlarged. Only
+       affects mobile; desktop remains unchanged. Placed at the end of
+       the stylesheet so it wins the cascade against earlier rules. */
+    @media (max-width: 640px) {
+      .socials { gap: 30px; margin-bottom: 20px; flex-wrap: nowrap; }
+      .socials a { gap: 0; }
+      .socials a span { display: none; }
+      .socials svg { width: 30px; height: 30px; }
+    }
 </style>
 </head>
 <body>

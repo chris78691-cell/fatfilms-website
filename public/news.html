@@ -243,6 +243,16 @@ img { display: block; max-width: 100%; }
     .news-card { padding: 22px; }
     .news-gifs { grid-template-columns: 1fr; }
   }
+    /* BEGIN mobile socials collapse — hide the text labels below 640px and show
+       only the four icons on a single line, slightly enlarged. Only
+       affects mobile; desktop remains unchanged. Placed at the end of
+       the stylesheet so it wins the cascade against earlier rules. */
+    @media (max-width: 640px) {
+      .socials { gap: 30px; margin-bottom: 20px; flex-wrap: nowrap; }
+      .socials a { gap: 0; }
+      .socials a span { display: none; }
+      .socials svg { width: 30px; height: 30px; }
+    }
 </style>
 </head>
 <body>

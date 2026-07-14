@@ -259,6 +259,16 @@ img { display: block; max-width: 100%; }
     background: rgba(255,255,255,0.06); padding: 5px 12px; border-radius: 14px;
   }
   .lb-empty { text-align: center; padding: 26px; color: #666; font-size: 0.9rem; }
+    /* BEGIN mobile socials collapse — hide the text labels below 640px and show
+       only the four icons on a single line, slightly enlarged. Only
+       affects mobile; desktop remains unchanged. Placed at the end of
+       the stylesheet so it wins the cascade against earlier rules. */
+    @media (max-width: 640px) {
+      .socials { gap: 30px; margin-bottom: 20px; flex-wrap: nowrap; }
+      .socials a { gap: 0; }
+      .socials a span { display: none; }
+      .socials svg { width: 30px; height: 30px; }
+    }
 </style>
 </head>
 <body>
