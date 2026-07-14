@@ -1173,6 +1173,15 @@ const FILMS = [
   { slug: 'lardy-supreme', title: 'Lardy Supreme', video: 'videos/lardy supreme.mp4', card: 'titlecards/Lardy_Supreme.jpg',
     desc: "Lardy Supreme is a ping pong hustler operating in the smoky back rooms of 1950s New York City. What starts as a small-time racket quickly escalates as Lardy discovers he has a talent for the game that nobody can match, a relentless competitive hunger that pushes him from underground tables to the biggest stages in the world. But the higher the stakes, the heavier the pressure, and in a world where everyone wants a piece of the action, Lardy must decide whether winning is worth the weight it carries.",
     cast: [['Timothee Chalameat','Timothee Chalamet'],['Gwyneth Fatrow','Gwyneth Paltrow'],['Henn Badgley','Penn Badgley'],['Maple Tesfaye','Abel Tesfaye'],['Tyler the Eater','Tyler, the Creator']] },
+  { slug: 'the-fatrooms', title: 'The Fatrooms', video: 'videos/The Fatrooms.mp4', card: 'titlecards/The_Fatrooms.jpg',
+    desc: "The Fatrooms is a place you were never meant to find. If you're not careful and noclip out of reality, you'll end up here: endless yellow hallways, buzzing fluorescent lights, and the overwhelming smell of damp carpet and stale vending machine snacks. There are no exits, no maps, and no restaurants. Just miles and miles of identical rooms stretching into infinity, with something lurking around every corner that sounds hungry. The only rule: keep moving and don't eat anything you find on the floor. Millions have entered the Fatrooms. The vending machines are always empty. Nobody knows who keeps refilling them.",
+    cast: [] },
+  { slug: 'donut', title: 'Donut', video: 'videos/Donut.mp4', card: 'titlecards/Donut.jpg',
+    desc: "On the desert planet of Arrakis, the most valuable substance in the universe isn't gold or oil, it's the spice. Control the spice, control the universe. When young Paul Atreides and his noble family are sent to oversee spice production on this brutal, sand-covered world, they walk straight into a trap set by their enemies. Betrayed and left for dead in the desert, Paul must survive among the Fremen, a fierce warrior people who have been living off the land and its giant sandworms for generations. As Paul rises from exile to legend, he discovers that his destiny is bigger than any empire and heavier than any donut. The spice must flow. So must the gravy.",
+    cast: [['Timothee Chalameat','Timothee Chalamet'],['Zendoughya','Zendaya'],['Oscar Snack','Oscar Isaac'],['Josh Brownie','Josh Brolin'],['Bacon Momoa','Jason Momoa']] },
+  { slug: 'saturday-bite-fever', title: 'Saturday Bite Fever', video: 'videos/saturdaybitefever.mp4', card: 'titlecards/Saturday_Bite_Fever.jpg',
+    desc: "Tony Manero works a dead-end job at a hardware store in Brooklyn during the week, but when Saturday night comes around, he transforms into the king of the dance floor at the local disco. Under the spinning lights and pounding bass, Tony is untouchable, gliding across the floor in a white suit that somehow still fits despite everything he ate for dinner. But as the weekend highs clash with his weekday reality, Tony must figure out whether the dance floor is an escape or a trap, and whether the fever he's catching is from the music or from the all-you-can-eat buffet beforehand. Stayin' alive has never been this filling.",
+    cast: [['John Truffolta','John Travolta'],['Karen Lynn Greedy','Karen Lynn Gorney'],['Barry Griller','Barry Miller'],['Joseph California Rolls','Joseph Cali'],['Donna Pesto','Donna Pescow']] },
 ];
 
 const BY_SLUG = Object.fromEntries(FILMS.map(f => [f.slug, f]));
@@ -1180,9 +1189,9 @@ const BY_SLUG = Object.fromEntries(FILMS.map(f => [f.slug, f]));
 // Each film appears in exactly one category (16 films / 4 categories = 4 each).
 // `id` is a stable translation key; the displayed title is resolved via t('ui.' + id).
 const BASE_CATEGORIES = [
-  { id: 'biggestHits',  slugs: ['american-chud','fat-club','bulk-fiction','weight-of-wallstreet','whoppenheimer','lord-of-the-onion-rings','the-hungry-games','spider-man-no-weigh-home','fat-wars','joker-xxl','pie-rates-of-the-caribbean','the-fatinator','top-bun-maverick','mission-indigestible-rogue-bacon','fatface'] },
-  { id: 'exclusives',   slugs: ['donnie-lardo','baking-bad','chewlander','fatsi-driver','dextra-large','the-eating-dead','euporkia','immovable','war-hogs','fat-driver','lardy-supreme'] },
-  { id: 'freshlyBaked', slugs: ['heavy-potter','the-fatrix','chiplash','bigger-things','superfat','limitmass','skyfull','drive-thru','stocky','fat-to-the-future'] },
+  { id: 'biggestHits',  slugs: ['american-chud','fat-club','bulk-fiction','weight-of-wallstreet','whoppenheimer','lord-of-the-onion-rings','the-hungry-games','spider-man-no-weigh-home','fat-wars','joker-xxl','pie-rates-of-the-caribbean','the-fatinator','top-bun-maverick','mission-indigestible-rogue-bacon','fatface','donut'] },
+  { id: 'exclusives',   slugs: ['donnie-lardo','baking-bad','chewlander','fatsi-driver','dextra-large','the-eating-dead','euporkia','immovable','war-hogs','fat-driver','lardy-supreme','saturday-bite-fever'] },
+  { id: 'freshlyBaked', slugs: ['heavy-potter','the-fatrix','chiplash','bigger-things','superfat','limitmass','skyfull','drive-thru','stocky','fat-to-the-future','the-fatrooms'] },
   { id: 'heavyHits',    slugs: ['interbelly','fat-runner','squid-gain','the-bigs','jurassic-pork','fatman','no-country-for-fat-men','iron-mass','john-thick','forrest-plump'] },
 ];
 
@@ -1319,6 +1328,24 @@ const TRANSLATIONS = {
 
 
       'lardy-supreme':"Lardy Supreme is a ping pong hustler operating in the smoky back rooms of 1950s New York City. What starts as a small-time racket quickly escalates as Lardy discovers he has a talent for the game that nobody can match, a relentless competitive hunger that pushes him from underground tables to the biggest stages in the world. But the higher the stakes, the heavier the pressure, and in a world where everyone wants a piece of the action, Lardy must decide whether winning is worth the weight it carries.",
+
+
+
+
+
+      'the-fatrooms':"The Fatrooms is a place you were never meant to find. If you're not careful and noclip out of reality, you'll end up here: endless yellow hallways, buzzing fluorescent lights, and the overwhelming smell of damp carpet and stale vending machine snacks. There are no exits, no maps, and no restaurants. Just miles and miles of identical rooms stretching into infinity, with something lurking around every corner that sounds hungry. The only rule: keep moving and don't eat anything you find on the floor. Millions have entered the Fatrooms. The vending machines are always empty. Nobody knows who keeps refilling them.",
+
+
+
+
+
+      'donut':"On the desert planet of Arrakis, the most valuable substance in the universe isn't gold or oil, it's the spice. Control the spice, control the universe. When young Paul Atreides and his noble family are sent to oversee spice production on this brutal, sand-covered world, they walk straight into a trap set by their enemies. Betrayed and left for dead in the desert, Paul must survive among the Fremen, a fierce warrior people who have been living off the land and its giant sandworms for generations. As Paul rises from exile to legend, he discovers that his destiny is bigger than any empire and heavier than any donut. The spice must flow. So must the gravy.",
+
+
+
+
+
+      'saturday-bite-fever':"Tony Manero works a dead-end job at a hardware store in Brooklyn during the week, but when Saturday night comes around, he transforms into the king of the dance floor at the local disco. Under the spinning lights and pounding bass, Tony is untouchable, gliding across the floor in a white suit that somehow still fits despite everything he ate for dinner. But as the weekend highs clash with his weekday reality, Tony must figure out whether the dance floor is an escape or a trap, and whether the fever he's catching is from the music or from the all-you-can-eat buffet beforehand. Stayin' alive has never been this filling.",
     },
     news: {
       title:'Fat Films GIFs are here!',
@@ -1447,6 +1474,24 @@ const TRANSLATIONS = {
 
 
       'lardy-supreme':"Lardy Supreme es un buscavidas del ping pong que opera en las trastiendas llenas de humo del Nueva York de los años 50. Lo que empieza como un negocio de poca monta rápidamente se descontrola cuando Lardy descubre que tiene un talento para el juego que nadie puede igualar y un hambre competitiva implacable que lo lleva de las mesas clandestinas a los escenarios más grandes del mundo. Pero cuanto más se sube la apuesta, más pesa la presión, y en un mundo donde todo el mundo quiere un trozo del pastel, Lardy debe decidir si ganar vale el peso que conlleva.",
+
+
+
+
+
+      'the-fatrooms':"The Fatrooms es un lugar al que nunca se suponía que llegaras. Si no tienes cuidado y haces noclip fuera de la realidad, acabarás aquí: pasillos amarillos interminables, fluorescentes zumbantes, y un olor abrumador a moqueta húmeda y aperitivos rancios de máquina expendedora. No hay salidas, ni mapas, ni restaurantes. Solo kilómetros y kilómetros de habitaciones idénticas que se extienden hasta el infinito, con algo acechando en cada esquina que suena hambriento. La única regla: sigue moviéndote y no comas nada que encuentres en el suelo. Millones han entrado en los Fatrooms. Las máquinas expendedoras siempre están vacías. Nadie sabe quién sigue llenándolas.",
+
+
+
+
+
+      'donut':"En el planeta desértico de Arrakis, la sustancia más valiosa del universo no es el oro ni el petróleo: es la especia. Controlar la especia es controlar el universo. Cuando el joven Paul Atreides y su noble familia son enviados a supervisar la producción de especia en este brutal mundo cubierto de arena, caen directos en la trampa que les han tendido sus enemigos. Traicionado y abandonado a su suerte en el desierto, Paul debe sobrevivir entre los Fremen, un feroz pueblo guerrero que ha vivido de la tierra y de sus gigantes gusanos de arena durante generaciones. Mientras Paul pasa del exilio a la leyenda, descubre que su destino es más grande que cualquier imperio y más pesado que cualquier donut. La especia debe fluir. Y la salsa también.",
+
+
+
+
+
+      'saturday-bite-fever':"Tony Manero trabaja entre semana en un empleo sin futuro en una ferretería de Brooklyn, pero cuando llega el sábado por la noche se transforma en el rey de la pista de baile de la discoteca del barrio. Bajo las luces giratorias y el bajo retumbante, Tony es intocable, deslizándose por la pista con un traje blanco que, contra todo pronóstico, sigue apretándole del todo después de todo lo que se ha zampado para cenar. Pero cuando los subidones de fin de semana chocan con la realidad de sus días laborables, Tony debe averiguar si la pista es una vía de escape o una trampa, y si la fiebre que le sube es por la música o por el bufé libre previo. Sobrevivir nunca había sido tan llenador.",
     },
     news: {
       title:'¡Los GIFs de Fat Films ya están aquí!',
@@ -1575,6 +1620,24 @@ const TRANSLATIONS = {
 
 
       'lardy-supreme':"Lardy Supreme est un arnaqueur de ping-pong qui opère dans les arrière-salles enfumées du New York des années 50. Ce qui commence comme une petite combine s'emballe vite : Lardy se découvre un talent pour le jeu que personne ne peut égaler, une faim compétitive incessante qui le pousse des tables clandestines aux plus grandes scènes du monde. Mais plus les enjeux montent, plus la pression pèse lourd, et dans un monde où tout le monde veut sa part du gâteau, Lardy doit décider si la victoire vaut le poids qu'elle traîne avec elle.",
+
+
+
+
+
+      'the-fatrooms':"Les Fatrooms sont un endroit que tu n'étais jamais censé trouver. Si tu ne fais pas attention et que tu noclip hors de la réalité, tu finiras ici : d'interminables couloirs jaunes, des néons qui bourdonnent, et une odeur écrasante de moquette humide et de snacks rances de distributeurs automatiques. Pas de sorties, pas de cartes, pas de restaurants. Juste des kilomètres et des kilomètres de pièces identiques qui s'étirent à l'infini, avec quelque chose qui rôde à chaque angle et qui a l'air affamé. Une seule règle : continue à avancer et ne mange rien de ce que tu trouves par terre. Des millions sont entrés dans les Fatrooms. Les distributeurs sont toujours vides. Personne ne sait qui continue à les remplir.",
+
+
+
+
+
+      'donut':"Sur la planète désertique d'Arrakis, la substance la plus précieuse de l'univers n'est ni l'or ni le pétrole, c'est l'épice. Contrôler l'épice, c'est contrôler l'univers. Quand le jeune Paul Atreides et sa noble famille sont envoyés superviser la production d'épice sur ce monde brutal recouvert de sable, ils tombent en plein dans un piège tendu par leurs ennemis. Trahi et laissé pour mort dans le désert, Paul doit survivre parmi les Fremen, un peuple guerrier féroce qui vit de la terre et de ses gigantesques vers des sables depuis des générations. À mesure que Paul passe de l'exil à la légende, il découvre que son destin est plus grand que n'importe quel empire et plus lourd que n'importe quel donut. L'épice doit couler. Et la sauce aussi.",
+
+
+
+
+
+      'saturday-bite-fever':"Tony Manero enchaîne les semaines dans un boulot sans avenir chez un quincaillier de Brooklyn, mais dès que le samedi soir arrive, il devient le roi de la piste de la discothèque du coin. Sous les lumières tournantes et la basse qui martèle, Tony est intouchable, glissant sur la piste dans un costume blanc qui lui va encore, on ne sait comment, malgré tout ce qu'il a englouti au dîner. Mais quand les hauts du week-end se cognent contre la réalité de la semaine, Tony doit décider si la piste est une évasion ou un piège, et si la fièvre qui le prend vient de la musique ou du buffet à volonté avalé juste avant. Rester en vie n'a jamais autant remplé.",
     },
     news: {
       title:'Les GIFs Fat Films sont là !',
@@ -1703,6 +1766,24 @@ const TRANSLATIONS = {
 
 
       'lardy-supreme':"Lardy Supreme è un truffatore del ping pong che opera nelle stanze fumose della New York anni '50. Quella che parte come una piccola truffa esplode in fretta: Lardy scopre di avere per il gioco un talento che nessuno può eguagliare e una fame competitiva inarrestabile che lo spinge dai tavoli clandestini ai palcoscenici più grandi del mondo. Ma più alta è la posta, più pesa la pressione, e in un mondo in cui tutti vogliono la loro fetta, Lardy deve decidere se vincere valga il peso che si porta dietro.",
+
+
+
+
+
+      'the-fatrooms':"Le Fatrooms sono un luogo che non avresti mai dovuto trovare. Se non fai attenzione e fai noclip fuori dalla realtà, finirai qui: corridoi gialli infiniti, neon che ronzano, e l'odore travolgente di moquette umida e snack raffermi dei distributori automatici. Nessuna uscita, nessuna mappa, nessun ristorante. Solo chilometri e chilometri di stanze identiche che si estendono all'infinito, con qualcosa in agguato a ogni angolo che sembra affamato. Unica regola: continua a muoverti e non mangiare nulla di quello che trovi per terra. Milioni sono entrati nelle Fatrooms. I distributori sono sempre vuoti. Nessuno sa chi continua a riempirli.",
+
+
+
+
+
+      'donut':"Sul pianeta desertico di Arrakis, la sostanza più preziosa dell'universo non è l'oro né il petrolio, è la spezia. Chi controlla la spezia controlla l'universo. Quando il giovane Paul Atreides e la sua nobile famiglia vengono mandati a supervisionare la produzione della spezia in questo brutale mondo coperto di sabbia, cadono dritti in una trappola tesa dai loro nemici. Tradito e lasciato morire nel deserto, Paul deve sopravvivere in mezzo ai Fremen, un feroce popolo guerriero che vive della terra e dei suoi giganteschi vermi delle sabbie da generazioni. Mentre Paul passa dall'esilio alla leggenda, scopre che il suo destino è più grande di qualsiasi impero e più pesante di qualsiasi donut. La spezia deve scorrere. E anche il sugo.",
+
+
+
+
+
+      'saturday-bite-fever':"Tony Manero fa un lavoro senza sbocchi in una ferramenta di Brooklyn durante la settimana, ma quando arriva il sabato sera si trasforma nel re della pista da ballo della discoteca del quartiere. Sotto le luci che girano e i bassi che pulsano, Tony è intoccabile, scivolando sulla pista con un abito bianco che, chissà come, continua a starci dentro nonostante tutto quello che si è pappato a cena. Ma quando gli sballi del weekend si scontrano con la sua realtà infrasettimanale, Tony deve capire se la pista è una via di fuga o una trappola, e se la febbre che lo prende è la musica o il buffet a volontà consumato prima. Restare vivi non è mai stato così saziante.",
     },
     news: {
       title:'Le GIF di Fat Films sono arrivate!',
@@ -1831,6 +1912,24 @@ const TRANSLATIONS = {
 
 
       'lardy-supreme':"Lardy Supreme ist ein Tischtennis-Hustler, der in den verrauchten Hinterzimmern des New York der Fünfziger sein Geld macht. Was als kleine Masche beginnt, eskaliert schnell: Lardy entdeckt ein Talent für das Spiel, dem niemand das Wasser reichen kann, und einen unermüdlichen Wettkampfhunger, der ihn von Untergrundtischen auf die größten Bühnen der Welt katapultiert. Doch je höher der Einsatz, desto schwerer der Druck, und in einer Welt, in der jeder ein Stück vom Kuchen will, muss Lardy entscheiden, ob der Sieg sein Gewicht wirklich wert ist.",
+
+
+
+
+
+      'the-fatrooms':"Die Fatrooms sind ein Ort, den du nie hättest finden sollen. Wenn du unvorsichtig bist und aus der Realität hinaus-noclippst, landest du hier: endlose gelbe Flure, brummende Neonröhren und der überwältigende Geruch von feuchtem Teppich und abgestandenen Snacks aus Automaten. Keine Ausgänge, keine Karten, keine Restaurants. Nur meilenlange identische Räume, die sich ins Unendliche ziehen, mit etwas, das um jede Ecke lauert und hungrig klingt. Die einzige Regel: Weiterlaufen und nichts essen, was du am Boden findest. Millionen haben die Fatrooms betreten. Die Automaten sind immer leer. Niemand weiß, wer sie ständig nachfüllt.",
+
+
+
+
+
+      'donut':"Auf dem Wüstenplaneten Arrakis ist die wertvollste Substanz des Universums weder Gold noch Öl — es ist das Spice. Wer das Spice kontrolliert, kontrolliert das Universum. Als der junge Paul Atreides und seine noble Familie geschickt werden, um die Spice-Produktion auf dieser brutalen, sandbedeckten Welt zu überwachen, laufen sie direkt in eine Falle ihrer Feinde. Verraten und in der Wüste dem Tod überlassen, muss Paul unter den Fremen überleben — einem wilden Kriegervolk, das seit Generationen vom Land und seinen gigantischen Sandwürmern lebt. Als Paul vom Exil zur Legende wird, erkennt er, dass sein Schicksal größer ist als jedes Imperium und schwerer als jeder Donut. Das Spice muss fließen. Und die Soße auch.",
+
+
+
+
+
+      'saturday-bite-fever':"Tony Manero schuftet unter der Woche in einem aussichtslosen Job in einem Eisenwarenladen in Brooklyn, aber wenn der Samstagabend kommt, verwandelt er sich in den König der Tanzfläche der örtlichen Disco. Unter den kreisenden Lichtern und dem hämmernden Bass ist Tony unantastbar und gleitet in einem weißen Anzug über die Fläche, der ihm irgendwie immer noch passt — trotz allem, was er zum Abendessen verputzt hat. Doch als die Wochenendhochs an seiner Alltagsrealität zerschellen, muss Tony herausfinden, ob die Tanzfläche eine Flucht oder eine Falle ist, und ob das Fieber, das ihn packt, von der Musik kommt oder vom All-you-can-eat davor. Am Leben zu bleiben war noch nie so sättigend.",
     },
     news: {
       title:'Fat Films GIFs sind da!',
@@ -1959,6 +2058,24 @@ const TRANSLATIONS = {
 
 
       'lardy-supreme':"Lardy Supreme 是个乒乓球老千,在 50 年代纽约烟雾缭绕的密室里讨生活。原本只是小打小闹的勾当,很快失控 — Lardy 发现自己在球桌上无人可敌,那股不知疲倦的求胜饥渴把他从地下球桌一路推上世界最大的舞台。但筹码越高,压力越重,在一个人人都想分一杯羹的世界里,Lardy 必须决定:赢,值不值得它所带来的重量。",
+
+
+
+
+
+      'the-fatrooms':"Fatrooms 是一个你本来不该找到的地方。如果你不小心,noclip 出现实之外,你就会来到这里 — 无尽的黄色走廊、嗡嗡作响的荧光灯,以及潮湿地毯和自动售货机里发霉零食那股压倒性的味道。没有出口,没有地图,没有餐厅。只有绵延不绝、一间接一间相同的房间无限延伸,而每个转角都有听起来饥饿的东西潜伏着。唯一的规则:继续前进,不要吃你在地上找到的任何东西。数百万人进入了 Fatrooms。自动售货机永远都是空的。没人知道是谁一直在往里加货。",
+
+
+
+
+
+      'donut':"在沙漠星球阿拉基斯上,宇宙中最珍贵的物质既不是黄金也不是石油,而是香料。掌控香料,就掌控宇宙。当年轻的 Paul Atreides 和他高贵的家族被派去监管这片被沙覆盖的残酷世界的香料生产时,他们直接踏进了敌人设下的陷阱。遭到背叛、被丢在沙漠等死的 Paul 必须在弗雷曼人之间求生 — 一支代代靠这片土地和它的巨型沙虫过活的凶猛战士民族。当 Paul 从流亡者变为传奇,他发现自己的命运比任何帝国都更宏大、比任何甜甜圈都更沉重。香料必须流动。肉汁也是。",
+
+
+
+
+
+      'saturday-bite-fever':"Tony Manero 平日在布鲁克林一家五金店做着没有前途的工作,但每到周六晚,他就变身成本地迪斯科舞厅舞池上的国王。在旋转的灯光和轰鸣的低音下,Tony 无人能挡,穿着一身白西装在地板上滑行 — 尽管晚餐吃了那么多,那套西装居然还能穿得上。可是当周末的高光撞上周内的现实,Tony 必须搞清楚:舞池到底是逃避,还是陷阱?他发的这场热,究竟是被音乐点燃的,还是被舞池之前那顿吃到饱的自助餐撑出来的?Stayin' Alive 从未如此让人有饱腹感。",
     },
     news: {
       title:'Fat Films GIF 上线了!',
@@ -2087,6 +2204,24 @@ const TRANSLATIONS = {
 
 
       'lardy-supreme':"Lardy Supreme は 50 年代ニューヨーク、煙の充ちた裏部屋で稼ぐ卓球ハスラーだ。ちっぽけな小遣い稼ぎとして始まったものは瞬く間にスケールアップする。誰にも真似のできない卓球の才能と、止まることを知らない勝負への飢えが、Lardy を地下のテーブルから世界最大の舞台へと押し上げていく。だが賭け金が大きくなるほど、のしかかる圧力も重くなる。誰もが分け前を欲しがる世界で、Lardy は「勝つこと」に伴う重みに見合うのかを決めねばならない。",
+
+
+
+
+
+      'the-fatrooms':"Fatrooms は本来なら決して見つけてはならない場所だ。うっかりして現実から noclip してしまうと、辿り着くのはここ。果てしなく続く黄色い廊下、ジーッと鳴る蛍光灯、湿ったカーペットと自販機の古びたおやつの、頭が痺れるような匂い。出口はない、地図もない、レストランもない。ただ、同じ部屋がどこまでも果てしなく続き、角の向こうには何かが潜んでいて、それは腹を空かせているように聞こえる。唯一のルール ── 立ち止まるな、床に落ちているものは絶対に食うな。何百万もの人間が Fatrooms に入った。自販機はいつも空だ。誰が補充しているのかは、誰も知らない。",
+
+
+
+
+
+      'donut':"砂漠の惑星アラキスにおいて、宇宙で最も価値ある物質は黄金でも石油でもない ── スパイスだ。スパイスを制する者は宇宙を制する。若き Paul Atreides と高貴なる一族が、この砂に覆われた過酷な世界のスパイス生産を統括すべく送り込まれたとき、彼らは敵の仕掛けた罠へと真っ直ぐに歩み込む。裏切られ、砂漠に見捨てられた Paul は、代々この土地と巨大な砂虫たちに寄って生きてきた獰猛な戦士民族フレメンの中で生き延びねばならない。追放から伝説へと駆け上がるうちに、Paul は自らの運命がどの帝国よりも大きく、どんなドーナツよりも重いことを知る。スパイスは流れねばならぬ。グレイビーもまた。",
+
+
+
+
+
+      'saturday-bite-fever':"Tony Manero は平日、ブルックリンの金物屋で先の見えない仕事をしている。だが土曜の夜が来るや、彼は地元のディスコのダンスフロアの王に変身する。回るライトと打ちつけるベースの下で Tony は無敵、白いスーツでフロアを滑る ── ディナーであれだけ食い散らかしたのに、なぜかそれがまだ入るのだ。だが週末のハイと平日の現実がぶつかり合うとき、Tony はダンスフロアが逃避なのか罠なのか、そして自分の熱が音楽から来ているのか、その直前のオール・ユー・キャン・イート・ビュッフェから来ているのかを見極めねばならない。Stayin' alive がこれほど腹持ちのいいものだったとは。",
     },
     news: {
       title:'Fat Films の GIF が登場!',
@@ -2215,6 +2350,24 @@ const TRANSLATIONS = {
 
 
       'lardy-supreme':"Lardy Supreme는 1950년대 뉴욕의 매캐한 뒷방에서 활동하는 탁구 사기꾼입니다. 처음에는 자잘한 한탕으로 시작했지만, 누구도 따라잡을 수 없는 그의 재능과 멈출 줄 모르는 승부욕이 그를 지하 탁구대에서 세계 최대 규모의 무대로 밀어 올리면서 일은 빠르게 커집니다. 하지만 판돈이 커질수록 압박은 무거워지고, 모두가 한몫 챙기려는 세계에서 Lardy는 결정해야 합니다 — 승리가 그것이 지고 가는 무게만큼의 값어치가 있는지를요.",
+
+
+
+
+
+      'the-fatrooms':"Fatrooms는 애초에 발견해서는 안 되는 곳입니다. 조심하지 않아 현실 밖으로 노클립되면, 당신은 여기에 도착하게 됩니다 — 끝없이 이어지는 노란 복도, 웅웅거리는 형광등, 그리고 축축한 카펫과 자판기 속 눅눅해진 과자에서 나는 압도적인 냄새. 출구도, 지도도, 식당도 없습니다. 그저 몇 킬로미터씩 같은 방들이 무한히 뻗어 있을 뿐이며, 모퉁이마다 무언가가 도사리고 있는데 — 그것은 굶주려 있는 것처럼 들립니다. 유일한 규칙: 계속 움직여라, 그리고 바닥에 떨어진 어떤 것도 먹지 마라. 수백만이 Fatrooms에 발을 들였습니다. 자판기는 언제나 비어 있습니다. 누가 계속 채워 넣는지는 아무도 모릅니다.",
+
+
+
+
+
+      'donut':"사막의 행성 아라키스에서 우주 최고의 가치를 지닌 물질은 금도 석유도 아닙니다 — 바로 스파이스입니다. 스파이스를 지배하는 자가 우주를 지배합니다. 젊은 Paul Atreides와 그의 고귀한 가문이 이 잔혹한 모래로 뒤덮인 세계의 스파이스 생산을 감독하러 파견되지만, 그들은 곧장 적들이 놓아둔 함정 속으로 걸어 들어갑니다. 배신당한 채 사막에 죽으라고 버려진 Paul은 프레멘 사이에서 살아남아야 합니다 — 대대로 이 땅과 거대한 모래벌레들에 기대어 살아온 사나운 전사 부족이죠. 유배자에서 전설로 올라서는 동안, Paul은 자신의 운명이 그 어떤 제국보다 크고, 그 어떤 도넛보다 무겁다는 사실을 깨닫습니다. 스파이스는 흘러야 합니다. 그레이비도 마찬가지고요.",
+
+
+
+
+
+      'saturday-bite-fever':"Tony Manero는 평일에는 브루클린의 철물점에서 미래 없는 일을 하지만, 토요일 밤이 오면 동네 디스코의 댄스 플로어 위 왕으로 탈바꿈합니다. 회전하는 조명과 쿵쿵 울리는 베이스 아래에서 Tony는 누구도 건드릴 수 없는 존재입니다 — 저녁으로 그렇게 먹어치웠는데도 어쩐 일인지 아직도 몸에 맞는 흰 정장을 입고 플로어 위를 미끄러지죠. 하지만 주말의 하이가 평일의 현실과 부딪히자, Tony는 결정해야 합니다. 댄스 플로어는 도피처인가 함정인가. 그리고 그를 사로잡은 이 열기는 음악 때문인지, 아니면 그 전에 먹은 무한 뷔페 때문인지를요. Stayin' alive가 이렇게까지 든든했던 적은 없습니다.",
     },
     news: {
       title:'Fat Films GIF가 등장했습니다!',
@@ -2343,6 +2496,24 @@ const TRANSLATIONS = {
 
 
       'lardy-supreme':"Lardy Supreme محتالٌ في تنس الطاولة يعمل في الغرف الخلفية المُدخّنة بنيويورك الخمسينيات. ما بدأ كحيلة صغيرة سرعان ما يتصاعد: يكتشف Lardy أن لديه موهبة لا تُجارى في اللعبة، وجوعاً تنافسياً لا يهدأ يدفعه من الطاولات السرية إلى أكبر منصّات العالم. لكن كلّما ارتفع الرهان، ثقل الضغط، وفي عالمٍ يريد فيه الجميع نصيباً من الكعكة، على Lardy أن يقرّر إن كان الفوز يستحقّ الثقل الذي يجرّه خلفه.",
+
+
+
+
+
+      'the-fatrooms':"الـ Fatrooms مكانٌ لم يكن يُفترض بك أن تجده أبداً. إن لم تكن حذراً وقمت بعمل noclip خارج الواقع، ستنتهي هنا: ممرات صفراء بلا نهاية، وأنابيب نيون تطنّ، ورائحة طاغية لسجّاد رطب ووجبات خفيفة قديمة من آلات بيع. لا مخارج، ولا خرائط، ولا مطاعم. فقط أميال وأميال من غرف متطابقة تمتد إلى ما لا نهاية، وعند كل زاوية شيءٌ يترصّد يبدو صوته جائعاً. القاعدة الوحيدة: استمرّ في التحرّك ولا تأكل أي شيء تجده على الأرض. دخل الـ Fatrooms الملايين. آلات البيع دائماً فارغة. لا أحد يعرف من يواصل إعادة تعبئتها.",
+
+
+
+
+
+      'donut':"على كوكب الصحراء أراكيس، ليست أثمن مادةٍ في الكون هي الذهب أو النفط، بل هي «التوابل». من يسيطر على التوابل يسيطر على الكون. حين يُرسَل الشاب Paul Atreides وعائلته النبيلة للإشراف على إنتاج التوابل في هذا العالم القاسي المغطى بالرمال، يمشون مباشرةً إلى فخٍّ نصبه لهم أعداؤهم. مخذولاً ومتروكاً للموت في الصحراء، على Paul أن ينجو بين الفرمن ــ شعب محاربين ضاري يعيشون منذ أجيال على الأرض وعلى ديدان الرمل العملاقة. ومع صعوده من المنفى إلى الأسطورة، يكتشف أن قدره أكبر من أي إمبراطورية وأثقل من أي دونات. لا بد أن تتدفق التوابل. والمَرَق كذلك.",
+
+
+
+
+
+      'saturday-bite-fever':"يعمل Tony Manero في وظيفة بلا مستقبل في متجر أدوات في بروكلين خلال الأسبوع، لكن ما إن يحلّ ليل السبت حتى يتحوّل إلى ملكِ حلبة الرقص في ديسكو الحي. تحت الأضواء الدوّارة والباس المدوّي، يصبح Tony منيعاً، ينزلق على الأرضية ببدلة بيضاء لا يزال يرتديها بشكلٍ ما رغم كل ما التهمه على العشاء. لكن حين يصطدم صعود عطلة نهاية الأسبوع بواقع أيام العمل، على Tony أن يعرف: هل حلبة الرقص مهربٌ أم فخ؟ وهل الحمّى التي تأخذه من الموسيقى أم من بوفيه «كل ما تستطيع أكله» الذي سبق السهرة؟ لم يكن البقاء حيّاً بهذا الإشباع من قبل.",
     },
     news: {
       title:'صور Fat Films المتحركة وصلت!',
@@ -2951,7 +3122,13 @@ function openInfo(film) {
   document.getElementById('info-title').textContent = film.title;
   document.getElementById('info-desc').textContent = getDescription(film.slug);
   document.getElementById('info-play').onclick = () => { hideModal('info-modal'); openPlayer(film); };
-  document.getElementById('info-cast').onclick = () => { hideModal('info-modal'); openCast(film); };
+  // Hide the Cast button when a film has no cast list (e.g. The Fatrooms —
+  // the parody source has no on-screen characters). Restore it on films
+  // that DO have a cast so switching between them behaves correctly.
+  const castBtn = document.getElementById('info-cast');
+  const hasCast = Array.isArray(film.cast) && film.cast.length > 0;
+  castBtn.style.display = hasCast ? '' : 'none';
+  castBtn.onclick = () => { hideModal('info-modal'); openCast(film); };
 
   // Wire the heart button inside the info modal. data-like-for + data-count-for
   // let the same toggleLike flow keep every instance in sync.
