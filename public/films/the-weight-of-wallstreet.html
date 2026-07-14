@@ -217,14 +217,20 @@ img { display: block; max-width: 100%; }
   .socials { gap: 22px; }
 }
     /* BEGIN mobile socials collapse — hide the text labels below 640px and show
-       only the four icons on a single line, slightly enlarged. Only
-       affects mobile; desktop remains unchanged. Placed at the end of
-       the stylesheet so it wins the cascade against earlier rules. */
+       only the four icons on a single line. Also shrinks the fixed
+       footer / SEO footer padding so the bar wraps the icons snugly
+       instead of taking up a large chunk of the viewport. Desktop is
+       untouched (the whole block only fires below 640px). Placed at
+       the end of the stylesheet so it wins the cascade against
+       earlier rules. */
     @media (max-width: 640px) {
-      .socials { gap: 30px; margin-bottom: 20px; flex-wrap: nowrap; }
+      .footer { padding: 8px 16px; }
+      .seo-footer { padding: 20px 16px 12px; margin-top: 24px; }
+      .seo-footer .seo-blurb { margin-bottom: 14px; }
+      .socials { gap: 28px; margin-bottom: 0; flex-wrap: nowrap; }
       .socials a { gap: 0; }
       .socials a span { display: none; }
-      .socials svg { width: 30px; height: 30px; }
+      .socials svg { width: 28px; height: 28px; }
     }
 </style>
 </head>
