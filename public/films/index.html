@@ -216,6 +216,22 @@ img { display: block; max-width: 100%; }
   .seo-footer { padding: 36px 20px 20px; }
   .socials { gap: 22px; }
 }
+    /* BEGIN mobile socials collapse — hide the text labels below 640px and show
+       only the four icons on a single line. Also shrinks the fixed
+       footer / SEO footer padding so the bar wraps the icons snugly
+       instead of taking up a large chunk of the viewport. Desktop is
+       untouched (the whole block only fires below 640px). Placed at
+       the end of the stylesheet so it wins the cascade against
+       earlier rules. */
+    @media (max-width: 640px) {
+      .footer { padding: 8px 16px; }
+      .seo-footer { padding: 20px 16px 12px; margin-top: 24px; }
+      .seo-footer .seo-blurb { margin-bottom: 14px; }
+      .socials { gap: 28px; margin-bottom: 0; flex-wrap: nowrap; }
+      .socials a { gap: 0; }
+      .socials a span { display: none; }
+      .socials svg { width: 28px; height: 28px; }
+    }
 </style>
 </head>
 <body>
@@ -418,6 +434,18 @@ img { display: block; max-width: 100%; }
     <a class="card" href="/films/lardy-supreme">
       <img src="/titlecards/Lardy_Supreme.jpg" alt="Lardy Supreme - Marty Supreme parody" loading="lazy">
       <div class="card-body"><div class="card-fake">Lardy Supreme</div><div class="card-orig">parody of Marty Supreme</div></div>
+    </a>
+    <a class="card" href="/films/the-fatrooms">
+      <img src="/titlecards/The_Fatrooms.jpg" alt="The Fatrooms - The Backrooms parody" loading="lazy">
+      <div class="card-body"><div class="card-fake">The Fatrooms</div><div class="card-orig">parody of The Backrooms</div></div>
+    </a>
+    <a class="card" href="/films/donut">
+      <img src="/titlecards/Donut.jpg" alt="Donut - Dune parody" loading="lazy">
+      <div class="card-body"><div class="card-fake">Donut</div><div class="card-orig">parody of Dune</div></div>
+    </a>
+    <a class="card" href="/films/saturday-bite-fever">
+      <img src="/titlecards/Saturday_Bite_Fever.jpg" alt="Saturday Bite Fever - Saturday Night Fever parody" loading="lazy">
+      <div class="card-body"><div class="card-fake">Saturday Bite Fever</div><div class="card-orig">parody of Saturday Night Fever</div></div>
     </a>
   </div>
 </section>
